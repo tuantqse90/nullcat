@@ -344,6 +344,8 @@ footer {
   margin-top: 96px; border-top: 1px solid var(--line); padding-top: 24px;
   color: var(--muted); line-height: 2;
 }
+footer a { color: var(--fg); text-decoration: none; }
+footer a:hover { color: var(--avax); }
 """
 
 JS = """
@@ -581,7 +583,10 @@ def build():
 
     h.append('<footer>TEAM AVALANCHE · TEAM1 VN 🇻🇳 — PREVIEW BUILD FOR APPROVAL, '
              'NOT THE FINAL DROP. APPROVE → LOCK SUPPLY + SEED → RUN THE '
-             'FINAL BATCH. NFA · DYOR 🏔️😼</footer>')
+             'FINAL BATCH. NFA · DYOR 🏔️😼<br>'
+             '<a href="https://t.me/Team1VNbuilders" target="_blank" rel="noreferrer">TELEGRAM @TEAM1VNBUILDERS</a> · '
+             '<a href="https://x.com/Team1VN" target="_blank" rel="noreferrer">X @TEAM1VN</a> · '
+             '<a href="https://build.avax.network/?ref=HVHXK&amp;utm_source=team1" target="_blank" rel="noreferrer">BUILDER HUB</a></footer>')
     h.append('</div>')
 
 
