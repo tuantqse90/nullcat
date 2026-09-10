@@ -8,6 +8,7 @@ import {
   BUILDER_HUB,
   CONSOLE,
   DOCS,
+  GITHUB,
   NETWORK_STATUS,
   TELEGRAM_BUILDERS,
   TELEGRAM_COMMUNITY,
@@ -137,6 +138,7 @@ export function Footer({ contract, isConfigured, onViewContract, padBottom = fal
               <li><FooterLink href={TELEGRAM_COMMUNITY}>Telegram · Avalanche VN community</FooterLink></li>
               <li><FooterLink href={TELEGRAM_BUILDERS}>Telegram · Team1 VN builders</FooterLink></li>
               <li><FooterLink href={X_ACCOUNT}>X @Team1VN</FooterLink></li>
+              <li><FooterLink href={GITHUB}>GitHub · source code</FooterLink></li>
               <li>
                 Generator <code className="font-mono text-xs text-fg">nullcat</code>
               </li>
@@ -150,6 +152,7 @@ export function Footer({ contract, isConfigured, onViewContract, padBottom = fal
             <a className="transition-colors hover:text-fg" href={TELEGRAM_COMMUNITY} target="_blank" rel="noreferrer">Community</a>
             <a className="transition-colors hover:text-fg" href={TELEGRAM_BUILDERS} target="_blank" rel="noreferrer">Builders</a>
             <a className="transition-colors hover:text-fg" href={X_ACCOUNT} target="_blank" rel="noreferrer">X</a>
+            <a className="transition-colors hover:text-fg" href={GITHUB} target="_blank" rel="noreferrer">GitHub</a>
             <span>Built on Avalanche</span>
           </span>
         </div>

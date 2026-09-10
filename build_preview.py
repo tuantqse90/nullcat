@@ -588,7 +588,8 @@ def build():
              '<a href="https://t.me/Team1VNbuilders" target="_blank" rel="noreferrer">TELEGRAM · TEAM1 VN BUILDERS</a> · '
              '<a href="https://x.com/Team1VN" target="_blank" rel="noreferrer">X @TEAM1VN</a> · '
              '<a href="https://build.avax.network/?ref=HVHXK&amp;utm_source=team1" target="_blank" rel="noreferrer">BUILDER HUB</a> · '
-             '<a href="https://build.avax.network/academy?ref=HVHXK&amp;utm_source=team1" target="_blank" rel="noreferrer">ACADEMY</a></footer>')
+             '<a href="https://build.avax.network/academy?ref=HVHXK&amp;utm_source=team1" target="_blank" rel="noreferrer">ACADEMY</a> · '
+             '<a href="https://github.com/tuantqse90/nullcat" target="_blank" rel="noreferrer">GITHUB</a></footer>')
     h.append('</div>')
 
 

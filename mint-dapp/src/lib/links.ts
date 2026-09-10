@@ -6,3 +6,4 @@ export const NETWORK_STATUS = "https://status.avax.network/";
 export const TELEGRAM_COMMUNITY = "https://t.me/avalanche_vn";
 export const TELEGRAM_BUILDERS = "https://t.me/Team1VNbuilders";
 export const X_ACCOUNT = "https://x.com/Team1VN";
+export const GITHUB = "https://github.com/tuantqse90/nullcat";

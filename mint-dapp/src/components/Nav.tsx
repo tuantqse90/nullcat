@@ -1,5 +1,5 @@
 import { CHAIN_LABEL, EXPLORER, FAUCET } from "@/lib/chains";
-import { ACADEMY, BUILDER_HUB, CONSOLE, DOCS } from "@/lib/links";
+import { ACADEMY, BUILDER_HUB, CONSOLE, DOCS, GITHUB } from "@/lib/links";
 import { Logo } from "./Logo";
 import { ThemeToggle } from "./ThemeToggle";
 import { Icon } from "./ui";
@@ -11,6 +11,7 @@ const LINKS = [
   { label: "Console", href: CONSOLE },
   { label: "Faucet", href: FAUCET },
   ...(EXPLORER ? [{ label: "Snowtrace", href: EXPLORER }] : []),
+  { label: "GitHub", href: GITHUB },
 ];
 
 export function Nav() {
