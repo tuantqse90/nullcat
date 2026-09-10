@@ -1,151 +1,151 @@
 # AvaxCats Mint dApp — Next.js · Anvil (local) → Avalanche Fuji
 
-dApp mint NFT hoàn chỉnh cho lớp academy của **Team Avalanche — Team1 VN** 🇻🇳.
-Stack chuẩn ngành 2026, đúng những gì các dự án web3 thật đang dùng:
+A complete NFT mint dApp for the academy class of **Team Avalanche — Team1 VN** 🇻🇳.
+An industry-standard 2026 stack — exactly what real web3 projects use today:
 
-| Lớp | Công nghệ | Vai trò |
+| Layer | Technology | Role |
 |---|---|---|
-| Frontend | **Next.js 16** (App Router) + **TypeScript** | Framework React, render + routing |
-| Styling | **Tailwind CSS v4** | Theme AVAX đen–đỏ qua `@theme` token |
-| Web3 | **wagmi v3** + **viem 2** | Hook kết nối ví, đọc/ghi contract |
-| Data | **TanStack Query** | Cache + tự refetch dữ liệu on-chain |
-| Contract | **Solidity 0.8 + OpenZeppelin** (ERC-721) | Compile solc + deploy viem, 1 lệnh |
-| Chain (học) | **Anvil** (31337) — foundry | Blockchain local: mint miễn phí, tức thì |
-| Chain (demo) | **Avalanche Fuji C-Chain** (43113) | Testnet thật — AVAX xin từ faucet |
+| Frontend | **Next.js 16** (App Router) + **TypeScript** | React framework, rendering + routing |
+| Styling | **Tailwind CSS v4** | Black-and-red AVAX theme via `@theme` tokens |
+| Web3 | **wagmi v3** + **viem 2** | Wallet connection hooks, contract reads/writes |
+| Data | **TanStack Query** | Caching + automatic refetching of on-chain data |
+| Contract | **Solidity 0.8 + OpenZeppelin** (ERC-721) | Compiled with solc + deployed with viem, in one command |
+| Chain (learning) | **Anvil** (31337) — foundry | Local blockchain: free, instant mints |
+| Chain (demo) | **Avalanche Fuji C-Chain** (43113) | Real testnet — AVAX from the faucet |
 
-**Cùng một code chạy được cả 2 mạng** — đổi 1 dòng trong `.env.local`.
-Học và test trên anvil cho nhanh, khi demo thì bật sang Fuji.
+**The same code runs on both networks** — change one line in `.env.local`.
+Learn and test on anvil for speed, then switch to Fuji for the demo.
 
 ```
 mint-dapp/
-├── contracts/AvaxCats.sol        # contract ERC-721
+├── contracts/AvaxCats.sol        # ERC-721 contract
 ├── scripts/
-│   ├── chains.mjs                # khai báo 2 mạng cho phía terminal
+│   ├── chains.mjs                # declares both networks for the terminal side
 │   ├── compile.mjs               # solc: .sol → ABI + bytecode
-│   ├── anvil.mjs                 # bật blockchain local đúng cổng app đang trỏ
-│   ├── build-artifact.mjs        # compile .sol → src/lib/artifact.ts cho nút DEPLOY trên web
-│   ├── deploy.mjs                # deploy + tự ghi địa chỉ vào .env.local
-│   └── test-contract.mjs         # 24 test end-to-end chạy trên anvil
-├── public/                       # register.html, CNAME, .nojekyll → đi thẳng vào out/
-├── .env.example                  # mẫu biến môi trường
+│   ├── anvil.mjs                 # starts the local blockchain on the port the app points to
+│   ├── build-artifact.mjs        # compiles .sol → src/lib/artifact.ts for the web DEPLOY button
+│   ├── deploy.mjs                # deploys + writes the address to .env.local automatically
+│   └── test-contract.mjs         # 24 end-to-end tests run on anvil
+├── public/                       # register.html, CNAME, .nojekyll → copied straight into out/
+├── .env.example                  # environment variable template
 └── src/
     ├── app/
-    │   ├── layout.tsx            # khung trang + <Providers>
+    │   ├── layout.tsx            # page shell + <Providers>
     │   ├── providers.tsx         # WagmiProvider + QueryClientProvider
-    │   ├── page.tsx              # trang mint chính (hero + stats strip + 3 bước)
-    │   └── globals.css           # Tailwind v4 + design tokens theo Avalanche Builder Hub
+    │   ├── page.tsx              # main mint page (hero + stats strip + 3 steps)
+    │   └── globals.css           # Tailwind v4 + design tokens modeled on Avalanche Builder Hub
     ├── components/
     │   ├── ui.tsx                # primitives: Button (sweep), Card, Pillar, Stat, Chapter, Eyebrow…
-    │   ├── Nav.tsx / Footer.tsx  # khung Builder Hub: nav sticky, footer 4 cột
-    │   ├── Logo.tsx              # logo Avalanche (SVG)
+    │   ├── Nav.tsx / Footer.tsx  # Builder Hub shell: sticky nav, 4-column footer
+    │   ├── Logo.tsx              # Avalanche logo (SVG)
     │   ├── ThemeToggle.tsx       # light / dark (localStorage + prefers-color-scheme)
-    │   ├── WalletBar.tsx         # stats strip: mạng · ví · số dư · đã mint + nút kết nối
-    │   ├── SupplyBadge.tsx       # đọc totalMinted/MAX_SUPPLY on-chain
-    │   ├── CatGrid.tsx           # lưới 48 con mèo
-    │   ├── MintPanel.tsx         # gửi tx mint + đọc event lấy tokenId
-    │   └── MyCats.tsx            # đọc NGƯỢC NFT của bạn từ chain về
+    │   ├── WalletBar.tsx         # stats strip: network · wallet · balance · minted + connect button
+    │   ├── SupplyBadge.tsx       # reads totalMinted/MAX_SUPPLY on-chain
+    │   ├── CatGrid.tsx           # grid of 48 cats
+    │   ├── MintPanel.tsx         # sends the mint tx + reads the event to get the tokenId
+    │   └── MyCats.tsx            # reads your NFTs BACK from the chain
     └── lib/
-        ├── links.ts              # link Builder Hub (ref Team1), docs, console, status
-        ├── artifact.ts           # bytecode + source contract (sinh tự động)
-        ├── deployed.ts           # địa chỉ contract của bạn (localStorage)
-        ├── chains.ts             # anvil + Fuji, chọn bằng NEXT_PUBLIC_CHAIN
-        ├── wagmi.ts              # config chain + connector (injected / ví dev)
-        ├── contract.ts           # địa chỉ (từ env) + ABI as const
+        ├── links.ts              # Builder Hub links (Team1 ref), docs, console, status
+        ├── artifact.ts           # contract bytecode + source (auto-generated)
+        ├── deployed.ts           # your contract address (localStorage)
+        ├── chains.ts             # anvil + Fuji, selected via NEXT_PUBLIC_CHAIN
+        ├── wagmi.ts              # chain + connector config (injected / dev wallet)
+        ├── contract.ts           # address (from env) + ABI as const
         ├── metadata.ts           # build & parse tokenURI (JSON ↔ base64)
-        └── cats.ts               # 48 con mèo (auto-generate, đừng sửa tay)
+        └── cats.ts               # 48 cats (auto-generated, don't edit by hand)
 ```
 
-Code để trần, không comment. Phần giải thích nằm ở mục **lộ trình đọc code**
-bên dưới và trong README này.
+The code is left bare, with no comments. The explanations live in the **code reading path**
+section below and in this README.
 
 ---
 
-## Bước 0 — Yêu cầu
+## Step 0 — Requirements
 
-**Chạy local (khuyến nghị làm trước):**
+**Running locally (recommended first):**
 
 - **Node.js 20+** — `node --version`
-- **Foundry** (để có lệnh `anvil`) — `anvil --version`.
-  Chưa có thì cài:
+- **Foundry** (for the `anvil` command) — `anvil --version`.
+  If you don't have it, install it:
   ```bash
   curl -L https://foundry.paradigm.xyz | bash
   foundryup
   ```
-- **Không cần ví, không cần faucet, không cần internet.**
+- **No wallet, no faucet, no internet needed.**
 
-**Khi demo trên Fuji, cần thêm:**
+**For the Fuji demo, you also need:**
 
-- Ví **Core Wallet** (<https://core.app>) hoặc **MetaMask** — ví học tập,
-  không chứa tiền thật
-- AVAX test trên Fuji C-Chain: <https://build.avax.network/console/primary-network/faucet>
+- A **Core Wallet** (<https://core.app>) or **MetaMask** wallet — a learning wallet,
+  with no real funds
+- Test AVAX on Fuji C-Chain: <https://build.avax.network/console/primary-network/faucet>
 
 ---
 
-## Cách 1 — Chạy local với anvil (3 lệnh, 30 giây)
+## Option 1 — Run locally with anvil (3 commands, 30 seconds)
 
 ```bash
 cd mint-dapp
 npm install
 ```
 
-**Tab terminal 1** — bật blockchain local, để nguyên đó:
+**Terminal tab 1** — start the local blockchain and leave it running:
 
 ```bash
 npm run anvil
 ```
 
-**Tab terminal 2** — deploy contract rồi chạy web:
+**Terminal tab 2** — deploy the contract, then run the web app:
 
 ```bash
-npm run deploy:anvil     # compile + deploy + tự ghi .env.local
+npm run deploy:anvil     # compile + deploy + write .env.local automatically
 npm run dev
 ```
 
-Mở <http://localhost:3000> → bấm **DÙNG VÍ DEV (ANVIL)** → chọn mèo →
-**MINT NFT**. Xong. Không popup ví, không mất phí, xác nhận tức thì.
+Open <http://localhost:3000> → click **Dev wallet (anvil)** → pick a cat →
+**Mint NFT**. Done. No wallet popup, no fees, instant confirmation.
 
-> **Vì sao không cần cài ví?** Anvil mở sẵn 10 tài khoản và tự ký hộ mọi
-> giao dịch gửi tới nó. Nút "ví dev" chỉ nói chuyện thẳng với anvil bằng
-> `eth_sendTransaction`. Cách này chỉ hoạt động với chain local — mạng
-> thật không bao giờ ký hộ ai cả, đó chính là lý do phải có ví.
+> **Why is no wallet needed?** Anvil comes with 10 unlocked accounts and signs
+> every transaction sent to it on their behalf. The "dev wallet" button simply talks
+> to anvil directly via `eth_sendTransaction`. This only works on a local chain — a
+> real network never signs for anyone, which is exactly why wallets exist.
 
-Muốn tập dùng ví thật ngay trên anvil cũng được: thêm mạng thủ công
-trong MetaMask (RPC `http://127.0.0.1:8545`, chainId `31337`, ký hiệu
-`AVAX`) rồi bấm **KẾT NỐI VÍ** như bình thường.
+You can also practice with a real wallet right on anvil: add the network manually
+in MetaMask (RPC `http://127.0.0.1:8545`, chainId `31337`, symbol
+`AVAX`), then click **Connect wallet** as usual.
 
-> ⚠️ Ví thật trên anvil có số dư **0** — anvil chỉ phát 10000 AVAX cho 10 tài
-> khoản mặc định của nó, không biết ví bạn là ai. Bấm MINT sẽ dính
-> `insufficient funds for intrinsic transaction cost`. Nạp cho ví đó bằng:
+> ⚠️ A real wallet on anvil has a balance of **0** — anvil only hands out 10000 AVAX
+> to its 10 default accounts and has no idea who your wallet is. Clicking MINT will hit
+> `insufficient funds for intrinsic transaction cost`. Fund that wallet with:
 >
 > ```bash
-> npm run fund 0xĐịaChỉVíCủaBạn
+> npm run fund 0xYourWalletAddress
 > ```
 >
-> Trang cũng tự hiện đúng lệnh này kèm địa chỉ ví khi thấy số dư bằng 0.
-> (Trên Fuji thì không có lệnh nào in tiền được — phải đi xin faucet. Đó chính
-> là điểm khác nhau đáng để lớp thảo luận.)
+> The page also shows this exact command, with your wallet address filled in, whenever it sees a zero balance.
+> (On Fuji there is no command that prints money — you have to go to the faucet. That
+> difference is worth discussing in class.)
 
-### Chạy test contract
+### Running the contract tests
 
 ```bash
-npm run test:contract     # cần anvil đang chạy ở tab kia
+npm run test:contract     # needs anvil running in the other tab
 ```
 
-24 test end-to-end: deploy → mint → đọc lại `ownerOf`/`tokenURI` và so
-khớp từng byte với dữ liệu đã gửi lên, kiểm tra tokenId tăng đúng, 2 ví
-mint không đụng nhau, token chưa tồn tại phải revert. Test tự deploy
-contract riêng nên không đụng vào contract bạn đang dùng.
+24 end-to-end tests: deploy → mint → read back `ownerOf`/`tokenURI` and compare
+byte-for-byte with the data that was sent, check that tokenId increments correctly,
+that two wallets minting don't collide, and that a non-existent token reverts. The
+tests deploy their own contract, so they never touch the one you're using.
 
-### ⚠️ Tắt anvil là mất sạch
+### ⚠️ Stopping anvil wipes everything
 
-Anvil giữ state trong RAM. Đóng tab đó → contract biến mất → trang báo
-"không đọc được contract". Bật lại `npm run anvil` rồi chạy lại
-`npm run deploy:anvil` là xong.
+Anvil keeps its state in RAM. Close that tab → the contract disappears → the page says
+"cannot read contract". Start `npm run anvil` again, then rerun
+`npm run deploy:anvil`, and you're back.
 
-### Cổng 8545 đã bị chiếm?
+### Port 8545 already taken?
 
-Thêm vào `.env.local` (cả anvil lẫn app đều đọc dòng này nên chỉ cần sửa
-1 chỗ):
+Add this to `.env.local` (both anvil and the app read this line, so there's only one
+place to change):
 
 ```
 NEXT_PUBLIC_RPC_URL=http://127.0.0.1:8546
@@ -153,238 +153,238 @@ NEXT_PUBLIC_RPC_URL=http://127.0.0.1:8546
 
 ---
 
-## Mint trên điện thoại (Core mobile / MetaMask mobile)
+## Minting on a phone (Core mobile / MetaMask mobile)
 
-Trên điện thoại, Safari/Chrome **không có ví inject** — Core mobile và MetaMask
-mobile kết nối dApp qua **WalletConnect**. Trang đã có sẵn nút này, chỉ cần
-một Project ID (miễn phí):
+On a phone, Safari/Chrome **have no injected wallet** — Core mobile and MetaMask
+mobile connect to dApps via **WalletConnect**. The page already has this button; it
+just needs a (free) Project ID:
 
-1. Vào <https://dashboard.reown.com> → tạo project (loại *AppKit / WalletConnect*),
-   thêm domain `team1vn.xyz` (và `localhost` khi dev) vào *Allowed domains*.
-2. Dán Project ID vào `.env.local`:
+1. Go to <https://dashboard.reown.com> → create a project (type *AppKit / WalletConnect*),
+   and add the domain `team1vn.xyz` (plus `localhost` for dev) to *Allowed domains*.
+2. Paste the Project ID into `.env.local`:
    ```
    NEXT_PUBLIC_WC_PROJECT_ID=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
    ```
-3. Build lại (`npm run build`) và deploy. Trên điện thoại sẽ có nút
-   **Core / MetaMask** → chọn ví → app ví tự mở để duyệt kết nối và ký giao dịch.
-   Trên máy tính nút này hiện QR để quét bằng Core mobile (tab Portfolio → Scan).
+3. Rebuild (`npm run build`) and deploy. On a phone you'll see a
+   **Core / MetaMask** button → pick a wallet → the wallet app opens to approve the connection and sign transactions.
+   On desktop, this button shows a QR code to scan with Core mobile (Portfolio tab → Scan).
 
-Không có Project ID thì vẫn mint được bằng cách mở trang **bên trong app Core**:
-Core → tab **Browser** → dán link `https://team1vn.xyz` (thanh trạng thái trên
-trang có nút *Sao chép link*). MetaMask mobile có link "Mở trong MetaMask"
-tương tự.
+Without a Project ID you can still mint by opening the page **inside the Core app**:
+Core → **Browser** tab → paste the link `https://team1vn.xyz` (the status bar on the
+page has a *Copy link* button). MetaMask mobile has a similar "Open in MetaMask"
+link.
 
 ---
 
-## Cách 2 — Deploy lên Avalanche Fuji (demo có proof trên Snowtrace)
+## Option 2 — Deploy to Avalanche Fuji (a demo with proof on Snowtrace)
 
-Mint trên Fuji là giao dịch thật: có tx hash, xem được trên
-[Snowtrace](https://testnet.snowtrace.io), NFT hiện trong ví. Đây là thứ mang
-đi demo được.
+Minting on Fuji is a real transaction: it has a tx hash, shows up on
+[Snowtrace](https://testnet.snowtrace.io), and the NFT appears in your wallet. This is
+the one you can take to a demo.
 
-**Chuẩn bị:** ví Core/MetaMask (ví testnet riêng!) + AVAX test từ
-<https://build.avax.network/console/primary-network/faucet> (chọn mạng **Fuji C-Chain**).
+**Prerequisites:** a Core/MetaMask wallet (a separate testnet wallet!) + test AVAX from
+<https://build.avax.network/console/primary-network/faucet> (select the **Fuji C-Chain** network).
 
 ```bash
 # .env.local
 NEXT_PUBLIC_CHAIN=fuji
-NEXT_PUBLIC_CONTRACT_ADDRESS=      # để trống — mỗi người tự deploy trên web
+NEXT_PUBLIC_CONTRACT_ADDRESS=      # leave empty — everyone deploys their own on the web
 ```
 
 ```bash
 npm run dev
 ```
 
-Vào <http://localhost:3000> → **KẾT NỐI VÍ** → màn hình **Bước 1** hiện nguyên
-contract `.sol` → bấm **🚀 DEPLOY CONTRACT** → ký trong ví → xong là có contract
-của riêng mình, bấm **VÀO MÀN HÌNH MINT →** rồi mint.
+Go to <http://localhost:3000> → **Connect wallet** → the **Step 1** screen shows the full
+`.sol` contract → click **🚀 Deploy contract** → sign in your wallet → you now have your
+own contract; click **Go to mint** and mint.
 
-**Không cần Remix, không cần private key, không cần sửa file nào.** Sinh viên
-chỉ cần trình duyệt + ví + một ít AVAX test.
+**No Remix, no private key, no files to edit.** Students only need a
+browser + a wallet + a little test AVAX.
 
-> **Tốn bao nhiêu?** Base fee Fuji hiện ~10 wei nên gần như miễn phí. Kể cả
-> tính theo mức lịch sử 25 nAVAX: deploy ~0.03 AVAX, mỗi lần mint ~0.035 AVAX
-> (tokenURI ~1.8KB nằm hẳn trên chain nên tốn ~1.4M gas). Một lần faucet là
-> thừa.
+> **How much does it cost?** Fuji's base fee is currently ~10 wei, so it's nearly free. Even
+> at the historical 25 nAVAX rate: deploying ~0.03 AVAX, each mint ~0.035 AVAX
+> (the ~1.8KB tokenURI lives fully on-chain, so it costs ~1.4M gas). One faucet visit is
+> more than enough.
 
-### Đi lại giữa 2 bước
+### Moving between the two steps
 
-Deploy xong sẽ có thanh **① CONTRACT · ② CHỌN & MINT** ở đầu trang — bấm qua
-lại thoải mái. Quay về bước 1 vẫn thấy nguyên code `.sol` cùng địa chỉ contract
-đang dùng (kèm link Snowtrace), và 2 lựa chọn: **VÀO MÀN HÌNH MINT →** để quay
-lại, hoặc **QUÊN CONTRACT NÀY** nếu muốn deploy cái mới. Footer cũng có link
-**XEM CONTRACT**.
+After deploying, a **01 Contract · 02 Pick & mint · 03 Register** bar appears at the top of the page — switch
+back and forth freely. Going back to step 1 still shows the full `.sol` code along with the
+contract address in use (with a Snowtrace link), and two options: **Go to mint** to
+return, or **Forget this contract** if you want to deploy a new one. The footer also has a
+**View contract** link.
 
-### Contract của bạn lưu ở đâu
+### Where your contract is stored
 
-Địa chỉ nằm trong `localStorage` của trình duyệt (khoá
-`avaxcats:contract:<chainId>`), nên F5 vẫn còn. Muốn làm lại từ đầu thì bấm
-**DEPLOY CONTRACT KHÁC** ở footer.
+The address lives in the browser's `localStorage` (key
+`avaxcats:contract:<chainId>`), so it survives a refresh. To start over, click
+**Deploy another contract** in the footer.
 
-Bytecode được compile sẵn lúc build (`npm run artifact` → `src/lib/artifact.ts`,
-5.7KB) nên bấm DEPLOY là gửi luôn, không phải tải solc 9MB về máy.
+The bytecode is precompiled at build time (`npm run artifact` → `src/lib/artifact.ts`,
+5.7KB), so clicking DEPLOY sends it immediately — no need to download the 9MB solc.
 
 <details>
-<summary><b>Cách khác — cả lớp dùng chung 1 contract</b></summary>
+<summary><b>Alternative — the whole class shares one contract</b></summary>
 
-Giảng viên deploy một lần rồi cho cả lớp dùng chung, mỗi con mèo chỉ một người
-lấy được — hết 48 con là hết, nhìn lưới xám dần rất đã.
+The instructor deploys once and the whole class shares it; each cat can only be claimed
+by one person — once all 48 are gone, they're gone, and watching the grid gray out is very satisfying.
 
 ```bash
-npm run set-contract 0xĐịaChỉContractChung
+npm run set-contract 0xSharedContractAddress
 ```
 
-Lệnh này kiểm tra địa chỉ (có bytecode chưa, đúng AvaxCats chưa, đúng 48 con
-chưa) rồi mới ghi vào `.env.local` và `../mint-site/config.js`. Ai đã tự deploy
-contract riêng thì bấm **DEPLOY CONTRACT KHÁC** ở footer để quay về contract
-chung.
+This command verifies the address (does it have bytecode, is it really AvaxCats, does it
+have exactly 48 cats) before writing it to `.env.local` and `../mint-site/config.js`. Anyone who
+already deployed their own contract can click **Deploy another contract** in the footer to return
+to the shared one.
 </details>
 
 <details>
-<summary><b>Cách khác — deploy bằng Remix hoặc bằng CLI</b></summary>
+<summary><b>Alternative — deploy with Remix or the CLI</b></summary>
 
-**Remix:** mở <https://remix.ethereum.org>, copy
-[`contracts/AvaxCats.sol`](contracts/AvaxCats.sol), Compile `0.8.20`+,
-Environment **Injected Provider** (ví đang ở Fuji), **Deploy** → copy địa chỉ ở
-mục *Deployed Contracts* → `npm run set-contract 0x...`.
+**Remix:** open <https://remix.ethereum.org>, copy
+[`contracts/AvaxCats.sol`](contracts/AvaxCats.sol), Compile with `0.8.20`+,
+Environment **Injected Provider** (wallet on Fuji), **Deploy** → copy the address under
+*Deployed Contracts* → `npm run set-contract 0x...`.
 
-**CLI:** điền `DEPLOYER_PRIVATE_KEY=0x...` (ví testnet rác!) vào `.env.local`
-rồi `npm run deploy:fuji`. Nhanh nhưng phải để private key trong file text.
+**CLI:** put `DEPLOYER_PRIVATE_KEY=0x...` (a throwaway testnet wallet!) in `.env.local`,
+then `npm run deploy:fuji`. Fast, but it means keeping a private key in a text file.
 </details>
 
-## Thu thập KPI (Bước 3 — form đăng ký)
+## Collecting KPIs (Step 3 — registration form)
 
-Sau khi mint xong, sinh viên bấm **③ ĐĂNG KÝ** và điền:
+After minting, students click **03 Register** and fill in:
 
-| Ô | Nguồn |
+| Field | Source |
 |---|---|
-| GitHub / Gmail (đã đăng ký Builder Hub) | gõ tay |
-| Tên | gõ tay |
-| Telegram | gõ tay — `@handle`, `t.me/handle` hay handle trơn đều được, app tự chuẩn hoá về `@handle` |
-| Contract đã deploy | **tự điền** từ Bước 1 |
-| Ví | **tự điền** từ ví đang kết nối |
-| Số NFT đã mint | **tự đọc** `balanceOf` trên chain |
+| GitHub / Gmail (registered on Builder Hub) | typed manually |
+| Name | typed manually |
+| Telegram | typed manually — `@handle`, `t.me/handle` or a bare handle all work; the app normalizes to `@handle` |
+| Deployed contract | **auto-filled** from Step 1 |
+| Wallet | **auto-filled** from the connected wallet |
+| NFTs minted | **auto-read** from `balanceOf` on-chain |
 
-Dữ liệu chảy thẳng vào một Google Sheet. Dựng trong 2 phút:
+The data flows straight into a Google Sheet. Set it up in 2 minutes:
 
-1. Tạo Google Sheet mới → menu **Tiện ích mở rộng → Apps Script**
-2. Xoá hết code mẫu, dán nội dung [`docs/kpi-apps-script.gs`](docs/kpi-apps-script.gs)
-3. **Triển khai → Tuỳ chọn triển khai mới → Ứng dụng web**
-   - Thực thi với tư cách: **Tôi**
-   - Ai có quyền truy cập: **Bất kỳ ai** ← bắt buộc, không thì trình duyệt sinh viên bị chặn
-4. Copy URL `https://script.google.com/macros/s/…/exec` → dán vào `.env.local`:
+1. Create a new Google Sheet → menu **Extensions → Apps Script**
+2. Delete the sample code and paste in the contents of [`docs/kpi-apps-script.gs`](docs/kpi-apps-script.gs)
+3. **Deploy → New deployment → Web app**
+   - Execute as: **Me**
+   - Who has access: **Anyone** ← required, otherwise students' browsers get blocked
+4. Copy the URL `https://script.google.com/macros/s/…/exec` → paste it into `.env.local`:
    ```
    NEXT_PUBLIC_KPI_ENDPOINT=https://script.google.com/macros/s/…/exec
    ```
 5. Restart `npm run dev`
 
-Sheet tự tạo tab **KPI** với đủ 10 cột ngay lần gửi đầu tiên.
+The Sheet creates a **KPI** tab with all 10 columns on the first submission.
 
-> **Một điểm phải biết:** Apps Script trả lời POST bằng một chuỗi redirect
-> (302 → `script.googleusercontent.com` → …). Nếu để trình duyệt tự đi hết
-> chuỗi đó, tài khoản Google đang đăng nhập có thể làm hop cuối trả 404 dù dòng
-> đã ghi vào Sheet. App gửi với `redirect: "manual"`: nhận được 302 đầu tiên
-> (`opaqueredirect`) nghĩa là script đã chạy → báo "đã gửi". Không có 302 (dán
-> nhầm URL) thì rơi xuống `no-cors` và nói thẳng "chưa xác nhận được — kiểm tra
-> Sheet". Đừng sửa thành báo "thành công" vô điều kiện.
+> **One thing you must know:** Apps Script answers a POST with a chain of redirects
+> (302 → `script.googleusercontent.com` → …). If the browser follows that whole
+> chain, the signed-in Google account can make the last hop return 404 even though the
+> row was written to the Sheet. The app sends with `redirect: "manual"`: receiving the first 302
+> (`opaqueredirect`) means the script ran → it reports "sent". No 302 (wrong URL
+> pasted) falls through to `no-cors` and says plainly "could not confirm — check the
+> Sheet". Don't change this to report "success" unconditionally.
 
-Chưa cấu hình endpoint thì form vẫn hiện, có cảnh báo vàng, và nút gửi báo lỗi
-rõ ràng chứ không im lặng.
+If the endpoint isn't configured, the form still appears with a yellow warning, and the submit
+button reports a clear error instead of failing silently.
 
-## Bảng lệnh
+## Command reference
 
-| Lệnh | Việc nó làm |
+| Command | What it does |
 |---|---|
-| `npm run anvil` | Bật blockchain local (cổng lấy từ `.env.local`) |
-| `npm run compile` | Chỉ compile contract để kiểm tra cú pháp |
-| `npm run deploy:anvil` | Deploy lên anvil (dùng sẵn tài khoản #0, không cần key) |
-| `npm run deploy:fuji` | Deploy lên Fuji (cần `DEPLOYER_PRIVATE_KEY`) |
-| `npm run fund 0x...` | Nạp AVAX giả cho ví của bạn trên anvil (chỉ local) |
-| `npm run set-contract 0x...` | Trỏ app vào contract deploy sẵn — kiểm tra rồi mới ghi `.env.local` |
-| `npm run artifact` | Compile lại contract thành `src/lib/artifact.ts` (tự chạy trước `dev`/`build`) |
-| `npm run deploy` | Deploy lên mạng đang ghi trong `NEXT_PUBLIC_CHAIN` |
-| `npm run test:contract` | 24 test end-to-end trên anvil |
-| `npm run dev` | Chạy web ở <http://localhost:3000> |
-| `npm run local` | Gộp: `deploy:anvil` rồi `dev` |
-| `npm run build` | Build production + kiểm tra TypeScript |
+| `npm run anvil` | Starts the local blockchain (port taken from `.env.local`) |
+| `npm run compile` | Compiles the contract only, to check syntax |
+| `npm run deploy:anvil` | Deploys to anvil (uses built-in account #0, no key needed) |
+| `npm run deploy:fuji` | Deploys to Fuji (needs `DEPLOYER_PRIVATE_KEY`) |
+| `npm run fund 0x...` | Funds your wallet with fake AVAX on anvil (local only) |
+| `npm run set-contract 0x...` | Points the app at an already-deployed contract — verifies it before writing `.env.local` |
+| `npm run artifact` | Recompiles the contract into `src/lib/artifact.ts` (runs automatically before `dev`/`build`) |
+| `npm run deploy` | Deploys to the network set in `NEXT_PUBLIC_CHAIN` |
+| `npm run test:contract` | 24 end-to-end tests on anvil |
+| `npm run dev` | Runs the web app at <http://localhost:3000> |
+| `npm run local` | Combined: `deploy:anvil`, then `dev` |
+| `npm run build` | Production build + TypeScript check |
 
-## Biến trong `.env.local`
+## Variables in `.env.local`
 
-| Biến | Ý nghĩa |
+| Variable | Meaning |
 |---|---|
-| `NEXT_PUBLIC_CHAIN` | `anvil` (mặc định) hoặc `fuji` |
-| `NEXT_PUBLIC_CONTRACT_ADDRESS` | Địa chỉ contract — script deploy tự ghi |
-| `NEXT_PUBLIC_RPC_URL` | RPC của anvil, chỉ cần khi đổi cổng |
-| `DEPLOYER_PRIVATE_KEY` | Chỉ bắt buộc khi deploy Fuji |
+| `NEXT_PUBLIC_CHAIN` | `anvil` (default) or `fuji` |
+| `NEXT_PUBLIC_CONTRACT_ADDRESS` | Contract address — written automatically by the deploy script |
+| `NEXT_PUBLIC_RPC_URL` | Anvil's RPC, only needed when changing the port |
+| `DEPLOYER_PRIVATE_KEY` | Only required when deploying to Fuji |
 
-Sửa `.env.local` xong nhớ **restart `npm run dev`**.
+After editing `.env.local`, remember to **restart `npm run dev`**.
 
 ---
 
-## dApp hoạt động thế nào? (lộ trình đọc code)
+## How the dApp works (code reading path)
 
-1. **`lib/chains.ts`** — khai báo 2 mạng, chọn 1 bằng biến môi trường.
-   Nhờ vậy không component nào hardcode "Fuji" cả.
-2. **`lib/wagmi.ts`** — `createConfig` là "1 nguồn sự thật" cho mọi hook:
-   chain nào, connector nào, RPC nào. Connector `mock()` (ví dev) chỉ được
-   thêm vào khi chạy anvil.
-3. **`app/providers.tsx`** — `WagmiProvider` + `QueryClientProvider` bọc
-   app; mọi hook wagmi bên dưới đều đọc config từ đây.
-4. **`components/WalletBar.tsx`** — `useConnect` xin quyền ví,
-   `useAccount` theo dõi địa chỉ/chainId, `useSwitchChain` xin ví nhảy
-   sang đúng mạng, `useBalance` đọc số dư.
-5. **`components/SupplyBadge.tsx`** — `useReadContract` gọi view function
-   qua RPC (không cần ví!), `refetchInterval` tự cập nhật khi cả lớp mint.
-6. **`lib/metadata.ts`** — dựng tokenURI chuẩn ERC-721:
-   `data:application/json;base64,...` — ảnh nhúng luôn, không cần IPFS.
-7. **`components/MintPanel.tsx`** — `useWriteContract` gửi tx →
-   `useWaitForTransactionReceipt` chờ xác nhận → `parseEventLogs` (viem)
-   móc event `Minted` ra lấy `tokenId`.
-8. **`components/MyCats.tsx`** — chiều ngược lại: `useReadContracts` gọi
-   `ownerOf` + `tokenURI` cho N token gần nhất, giải mã base64 và vẽ ra.
-   Ảnh hiện ở mục này đến TỪ blockchain, không phải từ `cats.ts`.
+1. **`lib/chains.ts`** — declares both networks and picks one via an environment variable.
+   That way no component hardcodes "Fuji".
+2. **`lib/wagmi.ts`** — `createConfig` is the single source of truth for every hook:
+   which chain, which connector, which RPC. The `mock()` connector (dev wallet) is only
+   added when running on anvil.
+3. **`app/providers.tsx`** — `WagmiProvider` + `QueryClientProvider` wrap the
+   app; every wagmi hook below reads its config from here.
+4. **`components/WalletBar.tsx`** — `useConnect` requests wallet access,
+   `useAccount` tracks the address/chainId, `useSwitchChain` asks the wallet to switch
+   to the right network, `useBalance` reads the balance.
+5. **`components/SupplyBadge.tsx`** — `useReadContract` calls a view function
+   over RPC (no wallet needed!), `refetchInterval` keeps it updated as the whole class mints.
+6. **`lib/metadata.ts`** — builds a standard ERC-721 tokenURI:
+   `data:application/json;base64,...` — the image is embedded, no IPFS needed.
+7. **`components/MintPanel.tsx`** — `useWriteContract` sends the tx →
+   `useWaitForTransactionReceipt` waits for confirmation → `parseEventLogs` (viem)
+   pulls the `Minted` event out to get the `tokenId`.
+8. **`components/MyCats.tsx`** — the reverse direction: `useReadContracts` calls
+   `ownerOf` + `tokenURI` for the N most recent tokens, decodes the base64 and renders them.
+   The images shown here come FROM the blockchain, not from `cats.ts`.
 
-## Câu hỏi thảo luận cho lớp
+## Discussion questions for the class
 
-- Vì sao `SupplyBadge` đọc được dữ liệu khi CHƯA kết nối ví?
-  (gợi ý: read qua RPC ≠ write cần chữ ký)
-- Anvil ký hộ giao dịch được, còn Fuji thì không. Điều đó nói lên ví
-  thật sự làm gì cho ta?
-- Nhúng ảnh vào tokenURI vs. dùng IPFS — ưu nhược điểm? Mint 1 con tốn
-  ~1.39 triệu gas (xem output `npm run test:contract`); trên mainnet
-  chừng đó là bao nhiêu tiền?
-- `_safeMint` khác gì `_mint`? Chuyện gì xảy ra nếu `to` là contract
-  không nhận được ERC-721?
-- 2 sinh viên mint cùng 1 con mèo thì sao? (tokenId khác nhau — NFT là
-  token, không phải bức ảnh — xem test số 6)
-- Bài tập: sửa contract giới hạn mỗi ví 1 lần mint; thêm phí mint
-  0.01 AVAX (`payable`); viết thêm test cho luật vừa thêm.
+- Why can `SupplyBadge` read data BEFORE a wallet is connected?
+  (hint: reads over RPC ≠ writes that need a signature)
+- Anvil can sign transactions on your behalf, but Fuji can't. What does that tell us
+  about what a wallet actually does for us?
+- Embedding the image in the tokenURI vs. using IPFS — pros and cons? Minting one cat costs
+  ~1.39 million gas (see the `npm run test:contract` output); how much money
+  is that on mainnet?
+- How does `_safeMint` differ from `_mint`? What happens if `to` is a contract
+  that can't receive ERC-721 tokens?
+- What if two students mint the same cat? (different tokenIds — an NFT is a
+  token, not the picture — see test 6)
+- Exercise: modify the contract to limit each wallet to one mint; add a 0.01 AVAX
+  mint fee (`payable`); write tests for the new rules.
 
-## Sự cố thường gặp
+## Common issues
 
-| Triệu chứng | Nguyên nhân / cách sửa |
+| Symptom | Cause / fix |
 |---|---|
-| "chưa deploy — chạy npm run deploy:anvil" | Chưa deploy, hoặc sửa `.env.local` mà chưa restart `npm run dev` |
-| "không đọc được contract — anvil còn chạy chứ?" | Anvil đã tắt/restart (mất state) → bật lại rồi `npm run deploy:anvil` |
-| `deploy:anvil` báo "Không kết nối được anvil" | Chưa chạy `npm run anvil` ở tab khác |
-| `deploy:anvil` báo "chainId 143, không phải 31337" | Cổng 8545 đang bị một anvil/node khác chiếm → đặt `NEXT_PUBLIC_RPC_URL=http://127.0.0.1:8546` |
-| `deploy:fuji` báo thiếu key | Điền `DEPLOYER_PRIVATE_KEY=0x...` (ví testnet riêng) vào `.env.local` |
-| "Sai mạng" | Bấm nút CHUYỂN SANG…, ví sẽ tự thêm mạng nếu chưa có |
-| Mint fail "insufficient funds" **trên anvil** | Bạn bấm KẾT NỐI VÍ bằng Core/MetaMask — anvil chỉ phát tiền cho 10 tài khoản của chính nó, ví bạn có số dư 0. Dùng nút **VÍ DEV (ANVIL)**, hoặc `npm run fund <địa chỉ ví>` |
-| Mint fail "insufficient funds" **trên Fuji** | Ví hết AVAX test — quay lại faucet |
-| Bấm nút không ăn gì, console 403 | Đang mở bằng IP lạ — dùng `localhost:3000`, hoặc thêm host vào `allowedDevOrigins` trong `next.config.ts` |
-| Trang trắng khi build | `npm run build` để xem lỗi TypeScript |
+| "not deployed — run npm run deploy:anvil" | Not deployed yet, or `.env.local` was edited without restarting `npm run dev` |
+| "cannot read contract — is anvil still running?" | Anvil was stopped/restarted (state lost) → start it again, then `npm run deploy:anvil` |
+| `deploy:anvil` says "Cannot connect to anvil" | `npm run anvil` isn't running in another tab |
+| `deploy:anvil` says "chainId 143, not 31337" | Port 8545 is taken by another anvil/node → set `NEXT_PUBLIC_RPC_URL=http://127.0.0.1:8546` |
+| `deploy:fuji` says the key is missing | Put `DEPLOYER_PRIVATE_KEY=0x...` (a separate testnet wallet) in `.env.local` |
+| "Wrong network" | Click the SWITCH TO… button; the wallet adds the network if it doesn't have it yet |
+| Mint fails with "insufficient funds" **on anvil** | You clicked Connect wallet with Core/MetaMask — anvil only funds its own 10 accounts, so your wallet has a balance of 0. Use the **Dev wallet (anvil)** button, or `npm run fund <wallet address>` |
+| Mint fails with "insufficient funds" **on Fuji** | The wallet is out of test AVAX — go back to the faucet |
+| Buttons do nothing, console shows 403 | You're opening it via an unfamiliar IP — use `localhost:3000`, or add the host to `allowedDevOrigins` in `next.config.ts` |
+| Blank page after build | Run `npm run build` to see the TypeScript errors |
 
-## Phiên bản HTML thuần
+## Plain HTML version
 
-Bản tối giản không framework (1 file `index.html` + ethers.js CDN) nằm ở
-`../mint-site/` — cũng chạy được cả anvil lẫn Fuji, dùng cho buổi đầu để
-hiểu bản chất trước khi lên Next.js + wagmi.
+A minimal, framework-free version (one `index.html` file + ethers.js from a CDN) lives in
+`../mint-site/` — it also runs on both anvil and Fuji, and is meant for the first session to
+understand the fundamentals before moving up to Next.js + wagmi.
 
-## Sinh lại bộ mèo
+## Regenerating the cat set
 
 ```bash
-# từ thư mục gốc nullcat/
+# from the nullcat/ root directory
 python3 generate.py --count 48 --seed 1337
-python3 build_mint_site.py     # ghi cả mint-site/cats.js lẫn mint-dapp/src/lib/cats.ts
+python3 build_mint_site.py     # writes both mint-site/cats.js and mint-dapp/src/lib/cats.ts
 ```

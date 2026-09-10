@@ -73,29 +73,29 @@ export function MyCats() {
   return (
     <section className="anim-rise mt-16">
       <h2 className="display text-[1.75rem] text-fg sm:text-3xl md:text-5xl">
-        Đã lên chain<span className="text-avax">.</span>
+        On chain<span className="text-avax">.</span>
       </h2>
       <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted md:text-base">
-        Đọc thẳng từ contract bằng{" "}
+        Read straight from the contract via{" "}
         <code className="font-mono text-[13px] text-fg">ownerOf</code> +{" "}
-        <code className="font-mono text-[13px] text-fg">tokenURI</code>. Ảnh dưới đây
-        giải mã từ dữ liệu nằm trên chain, không phải từ cats.ts.
+        <code className="font-mono text-[13px] text-fg">tokenURI</code>. The images below
+        are decoded from on-chain data, not from cats.ts.
       </p>
 
       <div className="mt-8 border-y border-line bg-surface-solid px-5 py-4 md:px-6">
         <div className={`grid ${cols} items-center gap-4 border-b border-line-strong pb-2`}>
           <span className="eyebrow text-fg">Token</span>
           <span />
-          <span className="eyebrow text-muted">Tên</span>
-          <span className="eyebrow hidden text-right text-muted sm:block">Chủ sở hữu</span>
+          <span className="eyebrow text-muted">Name</span>
+          <span className="eyebrow hidden text-right text-muted sm:block">Owner</span>
           <span className="eyebrow text-right text-muted">Explorer</span>
         </div>
 
         {mine.length === 0 ? (
           <p className="py-6 text-sm text-muted">
             {isLoading
-              ? "Đang đọc chain…"
-              : `Chưa thấy NFT nào của ví này trong ${LOOKBACK} token gần nhất.`}
+              ? "Reading the chain…"
+              : `No NFTs for this wallet in the last ${LOOKBACK} tokens.`}
           </p>
         ) : (
           mine.map(({ id, meta }) => {

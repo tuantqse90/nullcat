@@ -30,10 +30,10 @@ export function WalletBar() {
   const online = mounted && isConnected;
 
   return (
-    <section className="border-y border-line" aria-label="Trạng thái ví">
+    <section className="border-y border-line" aria-label="Wallet status">
       <div className="mx-auto grid w-full max-w-7xl grid-cols-2 gap-px bg-line lg:grid-cols-[1.2fr_1fr_1fr_1fr_auto]">
         <Stat
-          label="Mạng"
+          label="Network"
           wrap
           dot={
             <PulseDot
@@ -48,22 +48,22 @@ export function WalletBar() {
             !mounted
               ? "…"
               : wrongChain
-                ? `Sai mạng — cần ${CHAIN_LABEL}`
+                ? `Wrong network — need ${CHAIN_LABEL}`
                 : CHAIN_LABEL
           }
         />
         <Stat
-          label="Ví"
+          label="Wallet"
           value={
             online && address ? (
               `${address.slice(0, 6)}…${address.slice(-4)}`
             ) : (
-              <span className="text-muted">Chưa kết nối</span>
+              <span className="text-muted">Not connected</span>
             )
           }
         />
         <Stat
-          label="Số dư"
+          label="Balance"
           value={
             online && balance ? (
               <>
@@ -84,11 +84,11 @@ export function WalletBar() {
               disabled={switching}
               onClick={() => switchChain({ chainId: activeChain.id })}
             >
-              {switching ? "Đang chuyển" : "Chuyển mạng"}
+              {switching ? "Switching…" : "Switch network"}
             </Button>
           ) : isConnected ? (
             <Button variant="ghost" onClick={() => disconnect()}>
-              Ngắt kết nối
+              Disconnect
             </Button>
           ) : (
             <ConnectButtons />
@@ -104,7 +104,7 @@ export function WalletBar() {
             <Icon name="alert" />
             {isLocal ? (
               <span>
-                Ví này chưa có AVAX trên anvil. Dùng <b>Ví dev (anvil)</b>, hoặc chạy{" "}
+                This wallet has no AVAX on anvil. Use <b>Dev wallet (anvil)</b>, or run{" "}
                 <code className="border border-amber-500/30 px-1.5 py-0.5 font-mono text-[12px] break-all">
                   npm run fund {address}
                 </code>
@@ -116,7 +116,7 @@ export function WalletBar() {
                 target="_blank"
                 rel="noreferrer"
               >
-                Ví chưa có AVAX test — xin ở faucet
+                No test AVAX yet — get some from the faucet
                 <Icon name="external" />
               </a>
             )}

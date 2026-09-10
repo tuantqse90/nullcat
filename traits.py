@@ -48,12 +48,12 @@ def _neck(g, fur, x0=7, x1=24):
 
 
 def _sym(g, y, x, c):
-    """Vẽ 1 pixel và bản đối xứng của nó qua trục giữa mặt (x=15.5)."""
+    """Draw one pixel and its mirror across the face's center axis (x=15.5)."""
     P(g, x, y, c); P(g, 31 - x, y, c)
 
 
 def _symh(g, y, x0, x1, c):
-    """Vẽ đoạn ngang và bản đối xứng của nó."""
+    """Draw a horizontal run and its mirror."""
     H(g, y, x0, x1, c); H(g, y, 31 - x1, 31 - x0, c)
 
 
@@ -73,7 +73,7 @@ def _ear_pointy(ctx):
 
 
 def _ear_round(ctx):
-    """Tai tròn, thấp — kiểu mèo Anh lông ngắn."""
+    """Round, low ears — British Shorthair style."""
     g, fur = ctx["cat"], ctx["fur"]
     o, f, e = fur["o"], fur["f"], fur["e"]
     for x0 in (7, 18):
@@ -84,7 +84,7 @@ def _ear_round(ctx):
 
 
 def _ear_folded(ctx):
-    """Tai cụp — Scottish Fold, gập xuống trước."""
+    """Folded ears — Scottish Fold, bent down and forward."""
     g, fur = ctx["cat"], ctx["fur"]
     o, f, e = fur["o"], fur["f"], fur["e"]
     for x0 in (7, 18):
@@ -96,7 +96,7 @@ def _ear_folded(ctx):
 
 
 def _ear_tufted(ctx):
-    """Tai linh miêu — nhọn, có túm lông chĩa xiên ra ngoài."""
+    """Lynx ears — pointed, with a tuft of fur angling outward."""
     g, fur = ctx["cat"], ctx["fur"]
     o, f = fur["o"], fur["f"]
     _ear_pointy(ctx)
@@ -108,7 +108,7 @@ def _ear_tufted(ctx):
 
 
 def _ear_big(ctx):
-    """Tai to bản — tam giác loe hẳn ra ngoài đầu, kiểu tai dơi."""
+    """Big ears — wide triangles flaring well past the head, bat-like."""
     g, fur = ctx["cat"], ctx["fur"]
     o, f, e = fur["o"], fur["f"], fur["e"]
     _symh(g, 0, 6, 7, o)
@@ -122,7 +122,7 @@ def _ear_big(ctx):
 
 
 def _ear_notched(ctx):
-    """Tai sứt — mèo hoang đã đánh nhau vài trận."""
+    """Notched ears — a stray that has been in a few fights."""
     g, fur = ctx["cat"], ctx["fur"]
     o, f, e = fur["o"], fur["f"], fur["e"]
     _ear_pointy(ctx)
@@ -136,7 +136,7 @@ def _ear_notched(ctx):
 
 
 def _tail_curl(g, fur):
-    """Đuôi cong bên trái, ôm sát thân ngồi."""
+    """Tail curled on the left, hugging the sitting body."""
     o, f = fur["o"], fur["f"]
     H(g, 18, 3, 5, o)
     for y in range(19, 24):
@@ -146,7 +146,7 @@ def _tail_curl(g, fur):
 
 
 def _tail_up(g, fur, x=3, top=10, bottom=20):
-    """Đuôi dựng thẳng đứng, đầu đuôi móc sang trái."""
+    """Tail standing straight up, tip hooked to the left."""
     o, f = fur["o"], fur["f"]
     H(g, top, x + 1, x + 2, o)
     for y in range(top + 1, bottom):
@@ -156,7 +156,7 @@ def _tail_up(g, fur, x=3, top=10, bottom=20):
 
 
 def _tail_fat(g, fur):
-    """Đuôi to xù cuộn dưới thân béo."""
+    """Big fluffy tail curled under the chubby body."""
     o, f = fur["o"], fur["f"]
     H(g, 20, 2, 4, o)
     for y in range(21, 26):
@@ -165,7 +165,7 @@ def _tail_fat(g, fur):
 
 
 def _tail_tuck(g, fur):
-    """Đuôi giấu dưới bụng, chỉ ló đầu mút."""
+    """Tail tucked under the belly, only the tip peeking out."""
     o, f = fur["o"], fur["f"]
     H(g, 24, 2, 4, o)
     P(g, 1, 25, o); H(g, 25, 2, 4, f); P(g, 5, 25, o)
@@ -188,7 +188,7 @@ def _body_sitting(ctx):
 
 
 def _body_chonk(ctx):
-    """Mèo béo — thân phình ra hai bên, không thấy chân."""
+    """Chubby cat — body bulges out on both sides, no visible legs."""
     g, fur = ctx["cat"], ctx["fur"]
     o, f, b = fur["o"], fur["f"], fur["b"]
     _neck(g, fur)
@@ -204,7 +204,7 @@ def _body_chonk(ctx):
 
 
 def _body_slim(ctx):
-    """Mèo gầy — vai vẫn rộng (để áo vừa) rồi thóp dần xuống chân dài."""
+    """Slim cat — shoulders stay wide (so clothes fit) then taper down to long legs."""
     g, fur = ctx["cat"], ctx["fur"]
     o, f, b = fur["o"], fur["f"], fur["b"]
     _neck(g, fur)
@@ -223,7 +223,7 @@ def _body_slim(ctx):
 
 
 def _body_loaf(ctx):
-    """Ổ bánh mì — không chân, thân bè thấp, đầu đặt thẳng lên."""
+    """Loaf — no legs, low wide body, head sitting straight on top."""
     g, fur = ctx["cat"], ctx["fur"]
     o, f, b = fur["o"], fur["f"], fur["b"]
     _neck(g, fur, 8, 23)
@@ -240,7 +240,7 @@ def _body_loaf(ctx):
 
 
 def _body_standing(ctx):
-    """Đứng bằng hai chân sau, đuôi dựng — dáng cảnh giác."""
+    """Standing on hind legs, tail up — an alert pose."""
     g, fur = ctx["cat"], ctx["fur"]
     o, f, b = fur["o"], fur["f"], fur["b"]
     _neck(g, fur)
@@ -258,7 +258,7 @@ def _body_standing(ctx):
 
 
 def _body_wisp(ctx):
-    """Không chân — thân tan dần thành khói ở đáy."""
+    """No legs — the body dissolves into smoke at the bottom."""
     g, fur = ctx["cat"], ctx["fur"]
     o, f, b = fur["o"], fur["f"], fur["b"]
     _neck(g, fur)
@@ -281,7 +281,7 @@ def _head_normal(ctx):
 
 
 def _head_round(ctx):
-    """Má phính — đầu nở rộng thêm 1px mỗi bên."""
+    """Chubby cheeks — head widened by 1px on each side."""
     g, fur = ctx["cat"], ctx["fur"]
     o, f = fur["o"], fur["f"]
     for y in range(6, 15):
@@ -292,7 +292,7 @@ def _head_round(ctx):
 
 
 def _head_narrow(ctx):
-    """Mặt thon — thu đầu vào 1px mỗi bên."""
+    """Narrow face — head pulled in by 1px on each side."""
     g, fur = ctx["cat"], ctx["fur"]
     o = fur["o"]
     for y in range(6, 15):
@@ -301,7 +301,7 @@ def _head_narrow(ctx):
 
 
 def _head_fluffy(ctx):
-    """Lông má xù, chĩa ra hai bên."""
+    """Fluffy cheek fur sticking out to both sides."""
     g, fur = ctx["cat"], ctx["fur"]
     o, f = fur["o"], fur["f"]
     for y in (7, 9, 11, 13):
@@ -312,7 +312,7 @@ def _head_fluffy(ctx):
 
 
 def _head_square(ctx):
-    """Đầu vuông, hàm bạnh — kiểu mèo già gân."""
+    """Square head, broad jaw — a tough old tomcat."""
     g, fur = ctx["cat"], ctx["fur"]
     o, f = fur["o"], fur["f"]
     for y in range(12, 16):
@@ -335,7 +335,7 @@ def _mane_none(ctx):
 
 
 def _mane_lion(ctx):
-    """Bờm sư tử — vòng lông dày bao quanh cả khuôn mặt."""
+    """Lion mane — a thick ring of fur framing the whole face."""
     g, fur = ctx["cat"], ctx["fur"]
     m, d = darken(fur["f"], 0.72), darken(fur["f"], 0.46)
     spans = {7: (5, 5), 8: (4, 5), 9: (3, 5), 10: (3, 5), 11: (2, 5),
@@ -349,7 +349,7 @@ def _mane_lion(ctx):
 
 
 def _mane_ruff(ctx):
-    """Vòng lông quanh cổ — rìa dưới răng cưa cho ra chất lông, không phải cái ván."""
+    """Neck ruff — jagged lower edge so it reads as fur, not a plank."""
     g, fur = ctx["cat"], ctx["fur"]
     m, d = lighten(fur["f"], 0.3), darken(fur["f"], 0.62)
     _sym(g, 15, 6, m); _sym(g, 15, 8, m); _sym(g, 15, 11, m); _sym(g, 15, 14, m)
@@ -362,7 +362,7 @@ def _mane_ruff(ctx):
 
 
 def _mane_beard(ctx):
-    """Râu cằm — chòm lông dưới mõm."""
+    """Goatee — a tuft of fur under the muzzle."""
     g, fur = ctx["cat"], ctx["fur"]
     m, d = lighten(fur["f"], 0.42), darken(fur["f"], 0.6)
     H(g, 16, 12, 19, m)
@@ -373,7 +373,7 @@ def _mane_beard(ctx):
 
 
 def _mane_sideburns(ctx):
-    """Tóc mai xù hai bên má."""
+    """Fluffy sideburns on both cheeks."""
     g, fur = ctx["cat"], ctx["fur"]
     m, d = darken(fur["f"], 0.78), darken(fur["f"], 0.52)
     for y in range(10, 16):
@@ -442,7 +442,7 @@ def _belly_classic(ctx):
 
 
 def _belly_bib(ctx):
-    """Yếm trắng trước ngực, thuôn xuống như giọt nước."""
+    """White bib on the chest, tapering down like a teardrop."""
     g, b = ctx["cat"], ctx["fur"]["b"]
     H(g, 17, 12, 19, b)
     H(g, 18, 11, 20, b)
@@ -464,7 +464,7 @@ def _belly_socks(ctx):
 
 
 def _belly_star(ctx):
-    """Ngôi sao 5 cánh trước ngực."""
+    """Five-pointed star on the chest."""
     g = ctx["cat"]
     b, hl = ctx["fur"]["b"], WHITE
     H(g, 18, 15, 16, hl)
@@ -508,9 +508,9 @@ HEAD_BY_NAME = {t["name"]: t for t in HEADS}
 
 
 def draw_base_cat(ctx, body=None, ears=None, head=None):
-    """Vẽ con mèo trần: thân+đuôi (Body) → đầu (cố định) → dáng đầu → tai.
+    """Draw the bare cat: body+tail (Body) → head (fixed) → head shape → ears.
 
-    Trả về toạ độ neo đuôi để trait Tail bám theo đúng dáng.
+    Returns the tail anchor coordinates so the Tail trait follows the right pose.
     """
     g, fur = ctx["cat"], ctx["fur"]
     tail_tip = (body or _body_sitting)(ctx)

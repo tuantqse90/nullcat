@@ -20,7 +20,7 @@ export function CatGrid({ selected, onSelect, taken, rolling }: Props) {
           <button
             key={cat.name}
             type="button"
-            title={gone ? `${cat.name} — đã có người mint` : cat.name}
+            title={gone ? `${cat.name} — already minted` : cat.name}
             aria-pressed={on}
             onClick={() => onSelect(i)}
             className={`relative cursor-pointer p-1.5 transition-colors duration-150 ${

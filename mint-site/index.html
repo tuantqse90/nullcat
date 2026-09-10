@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -320,7 +320,7 @@
     <span class="grow"></span>
     <span class="eyebrow chip net" id="ft-net">—</span>
     <details class="menu">
-      <summary aria-label="Mở menu">
+      <summary aria-label="Open menu">
         <svg class="ic-menu" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M2.5 4.5h11M2.5 8h11M2.5 11.5h11"/></svg>
         <svg class="ic-x" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg>
       </summary>
@@ -337,57 +337,57 @@
 
 <header class="hero">
   <div class="wrap">
-    <span class="eyebrow"><span class="dot"></span>Team Avalanche · Team1 VN · Bài 1</span>
-    <h1 class="display">Mint mèo<br>lên Avalanche<span class="red">.</span></h1>
-    <p class="sub">48 con mèo pixel sinh từ generator <code>nullcat</code>. Chọn một con, bấm mint,
-      NFT về ví của bạn. Ảnh và thuộc tính nhúng thẳng vào tokenURI — không cần IPFS.</p>
+    <span class="eyebrow"><span class="dot"></span>Team Avalanche · Team1 VN · Lesson 1</span>
+    <h1 class="display">Mint a cat<br>on Avalanche<span class="red">.</span></h1>
+    <p class="sub">48 pixel cats from the <code>nullcat</code> generator. Pick one, hit mint,
+      and the NFT lands in your wallet. Image and traits are embedded straight into the tokenURI — no IPFS.</p>
     <div class="cta-row">
-      <a class="cta" href="#chon">Chọn mèo</a>
+      <a class="cta" href="#pick">Pick a cat</a>
       <a class="cta dark" href="https://build.avax.network/?ref=HVHXK&utm_source=team1" target="_blank" rel="noreferrer">Builder Hub</a>
     </div>
-    <a class="readmore" href="https://build.avax.network/docs" target="_blank" rel="noreferrer">ĐỌC DOCS AVALANCHE →</a>
+    <a class="readmore" href="https://build.avax.network/docs" target="_blank" rel="noreferrer">READ THE AVALANCHE DOCS →</a>
   </div>
   <div class="marquee"><div class="track" id="marquee"></div></div>
 </header>
 
-<section class="bar" aria-label="Trạng thái ví">
+<section class="bar" aria-label="Wallet status">
   <div class="cells">
-    <div class="stat"><span class="eyebrow lbl"><span class="dot off" id="net-dot"></span>Mạng</span><span class="val st" id="net">Chưa kết nối</span></div>
-    <div class="stat"><span class="eyebrow lbl">Ví</span><span class="val" id="addr"></span></div>
-    <div class="stat"><span class="eyebrow lbl">Số dư</span><span class="val" id="bal"></span></div>
-    <div class="stat"><span class="eyebrow lbl">Đã mint</span><span class="val" id="supply"></span></div>
+    <div class="stat"><span class="eyebrow lbl"><span class="dot off" id="net-dot"></span>Network</span><span class="val st" id="net">Not connected</span></div>
+    <div class="stat"><span class="eyebrow lbl">Wallet</span><span class="val" id="addr"></span></div>
+    <div class="stat"><span class="eyebrow lbl">Balance</span><span class="val" id="bal"></span></div>
+    <div class="stat"><span class="eyebrow lbl">Minted</span><span class="val" id="supply"></span></div>
     <div class="actions">
-      <button id="btn-dev" class="cta outline sm" hidden>Ví dev (anvil)</button>
-      <button id="btn-connect" class="cta sm">Kết nối ví</button>
+      <button id="btn-dev" class="cta outline sm" hidden>Dev wallet (anvil)</button>
+      <button id="btn-connect" class="cta sm">Connect wallet</button>
     </div>
   </div>
 </section>
 
-<main class="wrap content" id="chon">
+<main class="wrap content" id="pick">
   <div class="chapter">
     <div>
-      <span class="eyebrow"><span class="red">01</span> · Chọn &amp; mint</span>
-      <h2 class="display">Chọn mèo của bạn<span class="red">.</span></h2>
-      <p class="hint">Mỗi con chỉ mint được một lần — luật nằm trong contract, không phải giao diện.
-        Con nào đã có chủ sẽ mờ đi và khoá lại.</p>
+      <span class="eyebrow"><span class="red">01</span> · Pick &amp; mint</span>
+      <h2 class="display">Pick your cat<span class="red">.</span></h2>
+      <p class="hint">Each cat can be minted once — the rule lives in the contract, not the UI.
+        Claimed cats fade out and lock.</p>
     </div>
   </div>
   <div class="grid" id="grid"></div>
 
   <div class="mintbox">
-    <div class="num"><span>02</span><span class="horiz">MÈO ĐANG CHỌN</span><span class="vert">MÈO ĐANG CHỌN</span></div>
-    <img class="px" id="sel-img" alt="Mèo đang chọn">
+    <div class="num"><span>02</span><span class="horiz">SELECTED CAT</span><span class="vert">SELECTED CAT</span></div>
+    <img class="px" id="sel-img" alt="Selected cat">
     <div class="info">
       <div class="nm" id="sel-name">—</div>
       <details class="attrs" id="attrs" open>
-        <summary><span id="attrs-n">Thuộc tính</span></summary>
+        <summary><span id="attrs-n">Traits</span></summary>
         <dl class="stats" id="sel-attrs"></dl>
       </details>
       <div id="log"></div>
     </div>
     <div class="btns">
       <button id="btn-mint" class="cta" disabled>Mint NFT</button>
-      <button id="btn-random" class="cta inverse">Ngẫu nhiên</button>
+      <button id="btn-random" class="cta inverse">Random</button>
     </div>
   </div>
 </main>
@@ -403,7 +403,7 @@
         <b>AVAXCATS · BUILDER HUB</b>
       </a>
       <div class="status eyebrow">
-        <span><span class="dot off" id="ft-dot"></span><span id="ft-status">Chưa có contract</span></span>
+        <span><span class="dot off" id="ft-dot"></span><span id="ft-status">No contract yet</span></span>
         <a href="https://status.avax.network/" target="_blank" rel="noreferrer"><span class="dot ok"></span>Network status</a>
       </div>
     </div>
@@ -419,14 +419,14 @@
       </div>
       <div class="ft-col">
         <h3 class="eyebrow">Contract</h3>
-        <ul><li class="mono" id="ft-contract">chưa cấu hình</li></ul>
+        <ul><li class="mono" id="ft-contract">not configured</li></ul>
       </div>
       <div class="ft-col">
         <h3 class="eyebrow">Team</h3>
         <ul>
           <li>Team Avalanche · Team1 VN</li>
-          <li>Testnet, không có giá trị thật</li>
-          <li>Bài 1 — mint page thuần HTML + ethers.js</li>
+          <li>Testnet only — nothing here has real value</li>
+          <li>Lesson 1 — plain HTML + ethers.js mint page</li>
         </ul>
       </div>
     </div>
@@ -455,7 +455,7 @@ const NETWORKS = {
     nativeCurrency: { name: "Avalanche", symbol: "AVAX", decimals: 18 },
     rpcUrls: ["http://127.0.0.1:8545"],
     label: "ANVIL LOCAL (31337)",
-    explorer: "",                                      // local không có explorer
+    explorer: "",                                      // no explorer for the local chain
   },
   fuji: {
     chainId: "0xa869",                                 // 43113
@@ -514,7 +514,7 @@ function select(i) {
   document.querySelectorAll(".grid button")
     .forEach((b, j) => b.classList.toggle("sel", j === i));
   log(taken[i]
-    ? '<span class="warn">🔒 Con này đã có người mint rồi</span> — mỗi con chỉ 1-of-1, chọn con khác nhé.'
+    ? '<span class="warn">🔒 This cat is already minted</span> — each one is 1-of-1, pick another.'
     : "");
   $("sel-img").src = c.image;
   $("sel-name").textContent = c.name;
@@ -523,16 +523,16 @@ function select(i) {
   const esc = (v) => String(v).replace(/&/g, "&amp;").replace(/</g, "&lt;");
   $("sel-attrs").innerHTML = c.attributes
     .map((a) => `<div><dt>${esc(a.trait_type)}</dt><dd>${esc(a.value)}</dd></div>`).join("");
-  $("attrs-n").textContent = c.attributes.length + " thuộc tính";
+  $("attrs-n").textContent = c.attributes.length + " traits";
   setBarStatus("", "");
   updateMintButton();
 }
 
 async function connect() {
   if (!window.ethereum) {
-    log('<span class="err">Chưa cài ví!</span> Cài Core Wallet ' +
-        '(<a href="https://core.app" target="_blank">core.app</a>) hoặc MetaMask rồi tải lại trang.' +
-        (isLocal ? ' Hoặc bấm <b>DÙNG VÍ DEV (ANVIL)</b> — không cần ví.' : ''));
+    log('<span class="err">No wallet found.</span> Install Core Wallet ' +
+        '(<a href="https://core.app" target="_blank">core.app</a>) or MetaMask and reload the page.' +
+        (isLocal ? ' Or use <b>Dev wallet (anvil)</b> — no wallet needed.' : ''));
     return;
   }
   try {
@@ -553,9 +553,9 @@ async function connect() {
 
     provider = new ethers.BrowserProvider(window.ethereum);
     signer = await provider.getSigner();
-    await afterConnect("ĐÃ KẾT NỐI ✓");
+    await afterConnect("Connected ✓");
   } catch (e) {
-    log('<span class="err">Lỗi kết nối:</span> ' + (e.shortMessage || e.message));
+    log('<span class="err">Connection error:</span> ' + (e.shortMessage || e.message));
   }
 }
 
@@ -565,10 +565,10 @@ async function connectDev() {
       staticNetwork: true,
     });
     signer = await provider.getSigner(0);
-    await afterConnect("VÍ DEV ✓");
+    await afterConnect("Dev wallet ✓");
   } catch (e) {
-    log('<span class="err">Không kết nối được anvil</span> ở ' + NET.rpcUrls[0] +
-        ' — đã chạy <code>npm run anvil</code> chưa? (' + (e.shortMessage || e.message) + ')');
+    log('<span class="err">Could not reach anvil</span> at ' + NET.rpcUrls[0] +
+        ' — is <code>npm run anvil</code> running? (' + (e.shortMessage || e.message) + ')');
   }
 }
 
@@ -586,7 +586,7 @@ async function afterConnect(btnLabel) {
   await Promise.all([refreshSupply(), refreshTaken()]);
   updateMintButton();
   if (bal === 0n && !isLocal) {
-    log('<span class="warn">Ví chưa có AVAX test.</span> Xin tại faucet: ' +
+    log('<span class="warn">No test AVAX yet.</span> Get some from the faucet: ' +
         '<a href="https://build.avax.network/console/primary-network/faucet" target="_blank">build.avax.network/console → faucet</a>');
   }
 }
@@ -596,7 +596,7 @@ async function refreshBalance() {
   try {
     const bal = await provider.getBalance(await signer.getAddress());
     $("bal").textContent = (+ethers.formatEther(bal)).toFixed(3) + " AVAX";
-  } catch (e) { /* mất kết nối RPC — bỏ qua */ }
+  } catch (e) { /* RPC connection lost — ignore */ }
 }
 
 async function refreshTaken() {
@@ -607,7 +607,7 @@ async function refreshTaken() {
     document.querySelectorAll(".grid button")
       .forEach((b, i) => b.classList.toggle("gone", taken[i]));
     updateMintButton();
-  } catch (e) { /* contract chưa deploy hoặc sai địa chỉ */ }
+  } catch (e) { /* contract not deployed or wrong address */ }
 }
 
 async function refreshSupply() {
@@ -617,7 +617,7 @@ async function refreshSupply() {
       contract.totalMinted(), contract.MAX_SUPPLY(),
     ]);
     $("supply").textContent = `${minted} / ${max}`;
-  } catch (e) { /* contract chưa deploy hoặc sai địa chỉ */ }
+  } catch (e) { /* contract not deployed or wrong address */ }
 }
 
 function setBarStatus(text, cls) {
@@ -631,15 +631,15 @@ function updateMintButton() {
   const gone = selected !== null && taken[selected];
   const ready = !!(signer && selected !== null && okContract && !gone);
   $("btn-mint").disabled = !ready;
-  $("btn-mint").textContent = gone ? "Đã có người mint" : "Mint NFT";
+  $("btn-mint").textContent = gone ? "Already minted" : "Mint NFT";
   $("btn-mint-m").disabled = !ready;
-  $("btn-mint-m").textContent = gone ? "Đã mint" : "Mint";
+  $("btn-mint-m").textContent = gone ? "Minted" : "Mint";
   if (!$("sel-status-m").textContent) {
     setBarStatus(
-      gone ? "Đã có người mint — chọn con khác"
-        : !okContract ? "Chưa có địa chỉ contract"
-        : !signer ? "Kết nối ví để mint"
-        : "Sẵn sàng mint",
+      gone ? "Already minted — pick another cat"
+        : !okContract ? "No contract address yet"
+        : !signer ? "Connect a wallet to mint"
+        : "Ready to mint",
       gone || !signer || !okContract ? "warn" : "");
   }
 }
@@ -666,11 +666,11 @@ async function mint() {
   try {
     $("btn-mint").disabled = true;
     $("btn-mint-m").disabled = true;
-    setBarStatus("Đang gửi giao dịch…", "");
-    log("⏳ Đang gửi giao dịch… xác nhận trong ví nhé.");
+    setBarStatus("Sending transaction…", "");
+    log("⏳ Sending transaction… confirm it in your wallet.");
 
     const tx = await contract.mint(selected, buildTokenURI(cat));
-    log("⏳ Đã gửi, chờ block xác nhận…\ntx: " + txLink(tx.hash));
+    log("⏳ Sent, waiting for confirmation…\ntx: " + txLink(tx.hash));
 
     const receipt = await tx.wait();
 
@@ -682,24 +682,24 @@ async function mint() {
       } catch (_) {}
     }
 
-    setBarStatus(`Đã mint · token #${tokenId}`, "ok");
-    log(`<span class="ok">✅ Mint thành công — ${cat.name} là token #${tokenId}!</span>\n` +
+    setBarStatus(`Minted · token #${tokenId}`, "ok");
+    log(`<span class="ok">✅ Minted — ${cat.name} is token #${tokenId}!</span>\n` +
         "tx: " + txLink(tx.hash) + "\n" +
         (NET.explorer
-          ? `NFT: <a href="${NET.explorer}nft/${CONTRACT_ADDRESS}/${tokenId}" target="_blank">xem token trên Snowtrace</a>`
-          : "NFT: đang nằm trong ví của bạn trên chain local — kiểm tra bằng\n" +
+          ? `NFT: <a href="${NET.explorer}nft/${CONTRACT_ADDRESS}/${tokenId}" target="_blank">view the token on Snowtrace</a>`
+          : "NFT: it's in your wallet on the local chain — check with\n" +
             `     cast call ${CONTRACT_ADDRESS} "ownerOf(uint256)(address)" ${tokenId} --rpc-url ${NET.rpcUrls[0]}`));
     await Promise.all([refreshSupply(), refreshBalance(), refreshTaken()]);
   } catch (e) {
     const raw = (e.shortMessage || "") + " " + (e.message || "");
     const why =
-      /CatAlreadyMinted/.test(raw) ? "con này vừa có người khác mint mất rồi — chọn con khác nhé." :
-      /CatDoesNotExist/.test(raw) ? "catId không hợp lệ (bộ sưu tập chỉ có 48 con)." :
-      /insufficient funds/i.test(raw) ? "ví không đủ AVAX để trả gas — xin thêm ở faucet rồi thử lại." :
-      /user rejected|denied/i.test(raw) ? "bạn đã từ chối giao dịch trong ví." :
+      /CatAlreadyMinted/.test(raw) ? "someone just minted this one — pick another cat." :
+      /CatDoesNotExist/.test(raw) ? "invalid catId (the collection has 48 cats)." :
+      /insufficient funds/i.test(raw) ? "not enough AVAX for gas — top up at the faucet and try again." :
+      /user rejected|denied/i.test(raw) ? "you rejected the transaction in your wallet." :
       (e.shortMessage || e.message).slice(0, 180);
-    setBarStatus("Mint thất bại — xem chi tiết bên trên", "err");
-    log('<span class="err">❌ Mint thất bại:</span> ' + why);
+    setBarStatus("Mint failed — see details above", "err");
+    log('<span class="err">❌ Mint failed:</span> ' + why);
   } finally {
     updateMintButton();
   }
@@ -710,10 +710,10 @@ $("marquee").innerHTML = [...CATS, ...CATS]
   .map((c) => `<img class="px" src="${c.image}" alt="" aria-hidden="true">`).join("");
 select(Math.floor(Math.random() * CATS.length));
 if (CONTRACT_ADDRESS.length !== 42) {
-  log('<span class="warn">⚠ Chưa có địa chỉ contract.</span> Deploy bằng Remix ' +
-      '(file <code>../mint-dapp/contracts/AvaxCats.sol</code>) rồi dán địa chỉ ' +
-      'vào <code>config.js</code> — hoặc chạy <code>npm run set-contract 0x…</code> ' +
-      'trong thư mục <code>mint-dapp</code>, nó ghi cho cả hai bài.');
+  log('<span class="warn">⚠ No contract address yet.</span> Deploy with Remix ' +
+      '(file <code>../mint-dapp/contracts/AvaxCats.sol</code>) and paste the address ' +
+      'into <code>config.js</code> — or run <code>npm run set-contract 0x…</code> ' +
+      'inside <code>mint-dapp</code>; it writes it for both lessons.');
 }
 $("ft-net").textContent = NET.label;
 $("m-net").textContent = NET.label;
@@ -729,7 +729,7 @@ $("btn-random").addEventListener("click",
 $("ft-contract").textContent =
   CONTRACT_ADDRESS.length === 42
     ? CONTRACT_ADDRESS
-    : "chưa cấu hình — dán địa chỉ contract vào config.js";
+    : "not configured — paste the contract address into config.js";
 if (CONTRACT_ADDRESS.length === 42) {
   $("ft-dot").className = "dot ok";
   $("ft-status").textContent = "Contract live";

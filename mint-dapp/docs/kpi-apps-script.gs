@@ -4,8 +4,8 @@ function doPost(e) {
 
   if (sheet.getLastRow() === 0) {
     sheet.appendRow([
-      "Thời gian", "Tên", "GitHub/Gmail", "Telegram", "Ví", "Contract",
-      "L1", "Mạng", "ChainId", "Số NFT đã mint"
+      "Time", "Name", "GitHub/Gmail", "Telegram", "Wallet", "Contract",
+      "L1", "Network", "ChainId", "NFTs minted"
     ]);
     sheet.setFrozenRows(1);
   }

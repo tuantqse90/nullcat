@@ -12,8 +12,8 @@ function findImports(path) {
   } catch {
     return {
       error:
-        `Không tìm thấy import: ${path}\n` +
-        "→ Đã chạy `npm install` trong thư mục mint-dapp chưa?",
+        `Import not found: ${path}\n` +
+        "→ Have you run `npm install` in the mint-dapp folder?",
     };
   }
 }
@@ -51,7 +51,7 @@ export function compile({ quiet = false } = {}) {
   if (!quiet) {
     console.log(
       `✅ Compile OK — bytecode ${(bytecode.length - 2) / 2} bytes, ` +
-        `${abi.filter((x) => x.type === "function").length} hàm public`,
+        `${abi.filter((x) => x.type === "function").length} public functions`,
     );
   }
   return { abi, bytecode };

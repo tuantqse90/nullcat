@@ -117,40 +117,40 @@ export function RegisterPanel() {
     if (r.ok) {
       setResult(
         r.confirmed
-          ? "Đã gửi, server xác nhận đã nhận."
-          : "Đã gửi. Trình duyệt không đọc được phản hồi (Apps Script chặn CORS) — kiểm tra Google Sheet xem đã có dòng mới chưa.",
+          ? "Sent — the server confirmed receipt."
+          : "Sent. The browser couldn't read the response (Apps Script blocks CORS) — check the Google Sheet for a new row.",
       );
     } else {
       setFailed(true);
-      setResult(`Gửi thất bại: ${r.reason}`);
+      setResult(`Submission failed: ${r.reason}`);
     }
   }
 
   if (done) {
     return (
       <section className="anim-rise">
-        <Chapter n="03" label="Đăng ký" title="Đã ghi nhận" />
+        <Chapter n="03" label="Register" title="Registered" />
         <Card className="p-5 md:p-6">
           {done.confirmed ? (
-            <Status tone="ok">Đã gửi, server xác nhận đã nhận.</Status>
+            <Status tone="ok">Sent — the server confirmed receipt.</Status>
           ) : (
             <Status tone="warn">
-              Đã gửi đi, nhưng trình duyệt không đọc được phản hồi (Apps Script
-              chặn CORS) nên không chắc chắn — mở Google Sheet kiểm tra, chưa có
-              dòng mới thì gửi lại.
+              Sent, but the browser couldn&apos;t read the response (Apps Script blocks
+              CORS), so it&apos;s unconfirmed — check the Google Sheet; if there is no new
+              row, send again.
             </Status>
           )}
 
           <dl className="mt-6 border-t border-line">
             {[
-              ["Tên", done.name],
+              ["Name", done.name],
               ["Gmail (Builder Hub)", done.contact],
               ["Telegram", done.telegram],
-              ["Account X", done.x],
-              ["Ví", done.wallet],
+              ["X account", done.x],
+              ["Wallet", done.wallet],
               ["Contract", done.contract],
               ...(done.l1 ? [["L1", done.l1]] : []),
-              ["NFT đã mint", String(done.minted)],
+              ["NFTs minted", String(done.minted)],
             ].map(([k, v]) => (
               <div
                 key={k}
@@ -165,7 +165,7 @@ export function RegisterPanel() {
           </dl>
 
           <Button className="mt-6" onClick={forgetKpi}>
-            Sửa lại / gửi lần nữa
+            Edit / send again
           </Button>
         </Card>
       </section>
@@ -176,75 +176,75 @@ export function RegisterPanel() {
     <section className="anim-rise">
       <Chapter
         n="03"
-        label="Đăng ký"
-        title="Đăng ký hoàn thành"
-        desc="Điền để ban tổ chức ghi nhận bạn đã hoàn thành bài. Contract và ví lấy tự động từ bước 1–2."
+        label="Register"
+        title="Complete your registration"
+        desc="Fill this in so the organizers can record that you finished. Contract and wallet are taken from steps 1–2."
       />
 
       <Card className="p-5 md:p-6">
         <div className="grid gap-5 sm:grid-cols-2">
-          <Field label="Gmail" hint="Gmail ĐÃ đăng ký Builder Hub">
+          <Field label="Gmail" hint="The Gmail you registered on Builder Hub">
             <Input
               type="email"
               value={contact}
               onChange={(e) => setContact(e.target.value)}
-              placeholder="ban@gmail.com"
+              placeholder="you@gmail.com"
             />
           </Field>
 
-          <Field label="Tên">
+          <Field label="Name">
             <Input
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Nguyễn Văn A"
+              placeholder="Jane Doe"
             />
           </Field>
 
-          <Field label="Telegram" hint="@handle, t.me/handle hay handle trơn đều được">
+          <Field label="Telegram" hint="@handle, t.me/handle or a bare handle all work">
             <Input
               value={telegram}
               onChange={(e) => setTelegram(e.target.value)}
-              placeholder="@tenban"
+              placeholder="@yourhandle"
             />
           </Field>
 
-          <Field label="Account X (Twitter)" hint="@handle hay link x.com đều được">
+          <Field label="X (Twitter) account" hint="@handle or an x.com link">
             <Input
               value={x}
               onChange={(e) => setX(e.target.value)}
-              placeholder="@tenban"
+              placeholder="@yourhandle"
             />
           </Field>
 
-          <Field label="Contract đã deploy" hint="Tự điền từ bước 1">
+          <Field label="Deployed contract" hint="Filled in from step 1">
             <Input value={contract} readOnly />
           </Field>
 
-          <Field label="Ví của bạn" hint="Tự điền từ ví đang kết nối">
-            <Input value={wallet ?? "chưa kết nối ví"} readOnly />
+          <Field label="Your wallet" hint="Filled in from the connected wallet">
+            <Input value={wallet ?? "wallet not connected"} readOnly />
           </Field>
         </div>
 
         <div className="mt-6 flex flex-wrap items-center gap-3">
           <Button variant="primary" size="lg" disabled={!canSend} onClick={send}>
-            {sending ? "Đang gửi" : "Gửi đăng ký"}
+            {sending ? "Sending…" : "Submit registration"}
           </Button>
-          {failed && <Button onClick={send}>Thử lại</Button>}
+          {failed && <Button onClick={send}>Retry</Button>}
         </div>
 
         <div className="mt-4 space-y-1.5">
           {result && <Status tone={failed ? "err" : "ok"}>{result}</Status>}
-          {!isConnected && <Status tone="warn">Kết nối ví trước đã.</Status>}
+          {!isConnected && <Status tone="warn">Connect a wallet first.</Status>}
           {!hasKpiEndpoint && (
             <Status tone="warn">
-              Chưa cấu hình{" "}
-              <code className="font-mono text-[12.5px]">NEXT_PUBLIC_KPI_ENDPOINT</code>{" "}
-              — form sẽ không gửi đi đâu được. Xem README mục &quot;Thu thập KPI&quot;.
+              <code className="font-mono text-[12.5px]">NEXT_PUBLIC_KPI_ENDPOINT</code> is
+              not configured — the form has nowhere to send to. See README, section
+              &quot;Collecting KPIs&quot;.
             </Status>
           )}
           <p className="text-xs leading-5 text-muted">
-            Gửi đi: tên · Gmail (Builder Hub) · Telegram · Account X · địa chỉ ví ·
-            địa chỉ contract · mạng · số NFT đã mint ({minted}).
+            Sends: name · Gmail (Builder Hub) · Telegram · X account · wallet address ·
+            contract address · network · NFTs minted ({minted}).
           </p>
           {isConfigured && explorerAddress(contract) && (
             <a
@@ -253,7 +253,7 @@ export function RegisterPanel() {
               target="_blank"
               rel="noreferrer"
             >
-              Xem contract trên Snowtrace
+              View contract on Snowtrace
               <Icon name="external" className="size-3" />
             </a>
           )}

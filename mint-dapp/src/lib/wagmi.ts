@@ -20,7 +20,7 @@ const connectors = [
           showQrModal: true,
           metadata: {
             name: "AvaxCats Mint — Team1 VN",
-            description: "Mint AvaxCat NFT trên Avalanche Fuji — Team Avalanche · Team1 VN",
+            description: "Mint an AvaxCat NFT on Avalanche Fuji — Team Avalanche · Team1 VN",
             url: SITE_URL,
             icons: [`${SITE_URL}/favicon.ico`],
           },
@@ -39,7 +39,7 @@ export const config = createConfig({
     [anvil.id]: http(LOCAL_RPC_URL),
     [avalancheFuji.id]: http(),
   },
-  ssr: true, // Next.js render trên server trước → tránh lỗi hydration
+  ssr: true, // Next.js renders on the server first → avoids hydration mismatches
 });
 
 export { activeChain, anvil, avalancheFuji, isLocal } from "./chains";

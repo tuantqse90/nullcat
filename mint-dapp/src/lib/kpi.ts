@@ -8,7 +8,7 @@ export const hasKpiEndpoint = /^https?:\/\//.test(KPI_ENDPOINT);
 
 export type KpiPayload = {
   name: string;
-  contact: string; // Gmail (đã đăng ký Builder Hub)
+  contact: string; // Gmail (registered on Builder Hub)
   telegram: string;
   x: string; // Account X (Twitter)
   wallet: string;
@@ -80,7 +80,7 @@ export type SubmitResult = { ok: true; confirmed: boolean } | { ok: false; reaso
 
 export async function submitKpi(payload: KpiPayload): Promise<SubmitResult> {
   if (!hasKpiEndpoint) {
-    return { ok: false, reason: "Chưa cấu hình NEXT_PUBLIC_KPI_ENDPOINT trong .env.local" };
+    return { ok: false, reason: "NEXT_PUBLIC_KPI_ENDPOINT is not set in .env.local" };
   }
 
   const body = JSON.stringify(payload);
@@ -96,7 +96,7 @@ export async function submitKpi(payload: KpiPayload): Promise<SubmitResult> {
       remember(payload, true);
       return { ok: true, confirmed: true };
     }
-    return { ok: false, reason: `Server trả về HTTP ${res.status}` };
+    return { ok: false, reason: `Server returned HTTP ${res.status}` };
   } catch {
     try {
       await fetch(KPI_ENDPOINT, {
@@ -108,7 +108,7 @@ export async function submitKpi(payload: KpiPayload): Promise<SubmitResult> {
       remember(payload, false);
       return { ok: true, confirmed: false };
     } catch (e) {
-      return { ok: false, reason: (e as Error).message || "không gửi được" };
+      return { ok: false, reason: (e as Error).message || "could not send" };
     }
   }
 }

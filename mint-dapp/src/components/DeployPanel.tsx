@@ -64,14 +64,14 @@ export function DeployPanel({ current, onGoMint }: Props) {
       <Chapter
         n="01"
         label="Contract"
-        title="Contract của bạn"
-        desc={`Toàn bộ contract ERC-721 của AvaxCats. Bấm Deploy là nó lên ${CHAIN_LABEL} bằng ví của bạn — không cần Remix, không cần cài gì.`}
+        title="Your contract"
+        desc={`The full AvaxCats ERC-721 contract. Hit Deploy and it goes live on ${CHAIN_LABEL} from your wallet — no Remix, nothing to install.`}
       />
 
       {current && !deployed && (
         <Card className="mb-4 flex flex-wrap items-center gap-x-5 gap-y-3 px-5 py-4">
           <Eyebrow dot={<PulseDot color="bg-emerald-500" />} className="text-fg">
-            Đang dùng
+            In use
           </Eyebrow>
           <Mono className="text-fg select-all">{current}</Mono>
           {explorerAddress(current) && (
@@ -87,10 +87,10 @@ export function DeployPanel({ current, onGoMint }: Props) {
           )}
           <div className="grow" />
           <Button variant="primary" onClick={onGoMint} arrow>
-            Sang bước mint
+            Go to mint
           </Button>
           <Button variant="ghost" onClick={clearDeployedAddress}>
-            Quên contract này
+            Forget this contract
           </Button>
         </Card>
       )}
@@ -100,10 +100,10 @@ export function DeployPanel({ current, onGoMint }: Props) {
           <span className="font-mono text-[12px] text-fg">{CONTRACT_FILE}</span>
           <Eyebrow>solc {SOLC_VERSION}</Eyebrow>
           <Eyebrow>{BYTECODE_SIZE.toLocaleString()} bytes</Eyebrow>
-          <Eyebrow>{FUNCTION_COUNT} hàm public</Eyebrow>
+          <Eyebrow>{FUNCTION_COUNT} public functions</Eyebrow>
           <div className="grow" />
           <Eyebrow dot={<PulseDot color="bg-emerald-500" ping={false} />} className="text-emerald-600 dark:text-emerald-400">
-            Đã compile
+            Compiled
           </Eyebrow>
         </div>
 
@@ -120,7 +120,7 @@ export function DeployPanel({ current, onGoMint }: Props) {
                 disabled={switching}
                 onClick={() => switchChain({ chainId: activeChain.id })}
               >
-                {switching ? "Đang chuyển" : "Chuyển mạng"}
+                {switching ? "Switching…" : "Switch network"}
               </Button>
             ) : (
               <Button
@@ -136,7 +136,7 @@ export function DeployPanel({ current, onGoMint }: Props) {
                   })
                 }
               >
-                {busy ? "Đang deploy" : current ? "Deploy contract mới" : "Deploy contract"}
+                {busy ? "Deploying…" : current ? "Deploy a new contract" : "Deploy contract"}
               </Button>
             )}
 
@@ -149,20 +149,20 @@ export function DeployPanel({ current, onGoMint }: Props) {
                   onGoMint();
                 }}
               >
-                Sang bước mint
+                Go to mint
               </Button>
             )}
-            {error && <Button onClick={() => reset()}>Thử lại</Button>}
+            {error && <Button onClick={() => reset()}>Retry</Button>}
           </div>
 
           <div className="mt-4 space-y-1.5">
-            {isPending && <Status tone="busy">Xác nhận giao dịch trong ví</Status>}
+            {isPending && <Status tone="busy">Confirm the transaction in your wallet</Status>}
             {hash && confirming && (
               <Status tone="busy">
-                Chờ block xác nhận{" "}
+                Waiting for confirmation{" "}
                 {txLink ? (
                   <a className="underline hover:text-fg" href={txLink} target="_blank" rel="noreferrer">
-                    xem tx
+                    view tx
                   </a>
                 ) : (
                   <Mono className="text-muted">
@@ -173,35 +173,35 @@ export function DeployPanel({ current, onGoMint }: Props) {
             )}
             {deployed && (
               <Status tone="ok">
-                <span className="block">Contract đã lên {CHAIN_LABEL}. Lưu địa chỉ này lại:</span>
+                <span className="block">Contract is live on {CHAIN_LABEL}. Save this address:</span>
                 <Mono className="mt-0.5 block text-fg select-all">{deployed}</Mono>
               </Status>
             )}
             {error && (
               <Status tone="err">
-                Deploy thất bại:{" "}
+                Deploy failed:{" "}
                 {/insufficient funds/i.test(error.message)
                   ? isLocal
-                    ? "ví không có AVAX trên anvil — dùng ví dev, hoặc `npm run fund <địa chỉ ví>`."
-                    : "ví không đủ AVAX test để trả gas."
+                    ? "wallet has no AVAX on anvil — use the dev wallet, or `npm run fund <wallet address>`."
+                    : "wallet doesn't have enough test AVAX for gas."
                   : /user rejected|denied/i.test(error.message)
-                    ? "bạn đã từ chối giao dịch trong ví."
+                    ? "you rejected the transaction in your wallet."
                     : ((error as { shortMessage?: string }).shortMessage ?? error.message).slice(0, 180)}
               </Status>
             )}
             {!isConnected && (
               <Status tone="warn">
-                Kết nối ví để deploy. Trên điện thoại: dùng WalletConnect hoặc mở trang
-                trong trình duyệt của app Core (hướng dẫn ở thanh trạng thái phía trên).
+                Connect a wallet to deploy. On a phone: use WalletConnect or open this page in
+                the Core app&apos;s browser (see the status bar above).
               </Status>
             )}
           </div>
 
           {!isLocal && (
             <p className="mt-4 text-xs leading-5 text-muted">
-              Deploy tốn khoảng 1,25 triệu gas.{" "}
+              Deploying costs about 1.25M gas.{" "}
               <a className="underline hover:text-fg" href={FAUCET} target="_blank" rel="noreferrer">
-                Xin AVAX test ở faucet
+                Get test AVAX from the faucet
               </a>
             </p>
           )}

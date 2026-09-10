@@ -19,17 +19,16 @@ function explainError(error: Error): string {
 
   if (/insufficient funds/i.test(raw)) {
     return isLocal
-      ? "ví không có AVAX trên anvil. Dùng ví dev, hoặc chạy `npm run fund <địa chỉ ví>`."
-      : "ví không đủ AVAX test để trả gas — xin thêm ở faucet rồi thử lại.";
+      ? "wallet has no AVAX on anvil. Use the dev wallet, or run `npm run fund <wallet address>`."
+      : "wallet doesn't have enough test AVAX for gas — top up at the faucet and try again.";
   }
   if (/CatAlreadyMinted/i.test(raw))
-    return "con này vừa có người khác mint mất rồi — chọn con khác.";
-  if (/CatDoesNotExist/i.test(raw)) return "catId không hợp lệ.";
+    return "someone just minted this one — pick another cat.";
+  if (/CatDoesNotExist/i.test(raw)) return "invalid catId.";
   if (/User rejected|denied transaction/i.test(raw))
-    return "bạn đã từ chối giao dịch trong ví.";
+    return "you rejected the transaction in your wallet.";
 
-  const short =
-    (error as { shortMessage?: string }).shortMessage ?? error.message;
+  const short = (error as { shortMessage?: string }).shortMessage ?? error.message;
   return short.length > 180 ? short.slice(0, 180) + "…" : short;
 }
 
@@ -67,19 +66,11 @@ export function MintPanel({
 }: Props) {
   const { isConnected, chainId } = useAccount();
   const { address: contract, isConfigured } = useContractAddress();
-  const {
-    writeContract,
-    data: hash,
-    isPending,
-    error,
-    reset,
-  } = useWriteContract();
-  const { data: receipt, isLoading: confirming } = useWaitForTransactionReceipt(
-    {
-      hash,
-      chainId: activeChain.id,
-    },
-  );
+  const { writeContract, data: hash, isPending, error, reset } = useWriteContract();
+  const { data: receipt, isLoading: confirming } = useWaitForTransactionReceipt({
+    hash,
+    chainId: activeChain.id,
+  });
 
   const [pendingName, setPendingName] = useState<string | null>(null);
 
@@ -104,8 +95,7 @@ export function MintPanel({
   const wrongChain = isConnected && chainId !== activeChain.id;
   const busy = isPending || confirming;
   const success = receipt?.status === "success";
-  const readyToMint =
-    isConfigured && isConnected && !wrongChain && !taken && !busy;
+  const readyToMint = isConfigured && isConnected && !wrongChain && !taken && !busy;
 
   function mint() {
     setPendingName(cat.name);
@@ -124,36 +114,18 @@ export function MintPanel({
   const shortHash = hash ? `${hash.slice(0, 10)}…${hash.slice(-8)}` : "";
 
   const barStatus = busy
-    ? {
-        text: isLocal ? "Đang gửi giao dịch…" : "Xác nhận trong ví…",
-        cls: "text-muted",
-      }
+    ? { text: isLocal ? "Sending transaction…" : "Confirm in your wallet…", cls: "text-muted" }
     : success && tokenId !== undefined
-      ? {
-          text: `Đã mint · token #${tokenId.toString()}`,
-          cls: "text-emerald-600 dark:text-emerald-400",
-        }
+      ? { text: `Minted · token #${tokenId.toString()}`, cls: "text-emerald-600 dark:text-emerald-400" }
       : error
-        ? { text: "Mint thất bại — xem chi tiết bên dưới", cls: "text-avax" }
+        ? { text: "Mint failed — see details below", cls: "text-avax" }
         : taken
-          ? {
-              text: "Đã có người mint — chọn con khác",
-              cls: "text-amber-600 dark:text-amber-400",
-            }
+          ? { text: "Already minted — pick another cat", cls: "text-amber-600 dark:text-amber-400" }
           : !isConnected
-            ? {
-                text: "Kết nối ví để mint",
-                cls: "text-amber-600 dark:text-amber-400",
-              }
+            ? { text: "Connect a wallet to mint", cls: "text-amber-600 dark:text-amber-400" }
             : wrongChain
-              ? {
-                  text: "Sai mạng — đổi mạng trước",
-                  cls: "text-amber-600 dark:text-amber-400",
-                }
-              : {
-                  text: `${cat.attributes.length} thuộc tính · sẵn sàng mint`,
-                  cls: "text-muted",
-                };
+              ? { text: "Wrong network — switch first", cls: "text-amber-600 dark:text-amber-400" }
+              : { text: `${cat.attributes.length} traits · ready to mint`, cls: "text-muted" };
 
   return (
     <>
@@ -166,12 +138,8 @@ export function MintPanel({
             alt=""
           />
           <div className="min-w-0 flex-1">
-            <div className="truncate text-[13px] font-medium text-fg">
-              {cat.name}
-            </div>
-            <div className={`truncate text-[11px] ${barStatus.cls}`}>
-              {barStatus.text}
-            </div>
+            <div className="truncate text-[13px] font-medium text-fg">{cat.name}</div>
+            <div className={`truncate text-[11px] ${barStatus.cls}`}>{barStatus.text}</div>
           </div>
           <Button
             variant="primary"
@@ -179,21 +147,18 @@ export function MintPanel({
             disabled={!readyToMint}
             className={busy ? "anim-sweep" : ""}
           >
-            {busy ? "Đang mint" : taken ? "Đã mint" : "Mint"}
+            {busy ? "Minting…" : taken ? "Minted" : "Mint"}
           </Button>
         </div>
       </div>
+
       <Pillar className="mt-6">
         <div className="flex flex-col gap-6 p-5 md:flex-row md:items-start md:gap-8 md:p-7">
           <div className="flex items-center justify-between md:w-8 md:flex-col md:items-start md:justify-start md:gap-4">
-            <span className="font-mono text-[11px] tracking-[0.18em] text-steel">
-              02
-            </span>
-            <span className="eyebrow text-steel/80 md:hidden">
-              Mèo đang chọn
-            </span>
+            <span className="font-mono text-[11px] tracking-[0.18em] text-steel">02</span>
+            <span className="eyebrow text-steel/80 md:hidden">Selected cat</span>
             <span className="hidden rotate-180 font-mono text-[10px] tracking-[0.18em] text-steel/80 [writing-mode:vertical-rl] md:block">
-              MÈO ĐANG CHỌN
+              SELECTED CAT
             </span>
           </div>
 
@@ -206,20 +171,12 @@ export function MintPanel({
           />
 
           <div className="min-w-0 flex-1">
-            <h3 className="text-2xl font-light tracking-[-0.02em] md:text-3xl">
-              {cat.name}
-            </h3>
-            <Attrs
-              cat={cat}
-              className="mt-4 hidden grid-cols-2 sm:grid sm:grid-cols-3 sm:gap-x-6"
-            />
+            <h3 className="text-2xl font-light tracking-[-0.02em] md:text-3xl">{cat.name}</h3>
+            <Attrs cat={cat} className="mt-4 hidden grid-cols-2 sm:grid sm:grid-cols-3 sm:gap-x-6" />
             <details className="group mt-4 sm:hidden">
               <summary className="eyebrow flex cursor-pointer list-none items-center gap-2 py-1 text-steel">
-                {cat.attributes.length} thuộc tính
-                <Icon
-                  name="arrow"
-                  className="size-3 transition-transform group-open:rotate-90"
-                />
+                {cat.attributes.length} traits
+                <Icon name="arrow" className="size-3 transition-transform group-open:rotate-90" />
               </summary>
               <Attrs cat={cat} className="mt-3 grid-cols-2" />
             </details>
@@ -227,22 +184,15 @@ export function MintPanel({
             <div className="mt-5 space-y-1.5">
               {isPending && (
                 <Status tone="busy" dark>
-                  {isLocal
-                    ? "Đang gửi giao dịch"
-                    : "Xác nhận giao dịch trong ví"}
+                  {isLocal ? "Sending transaction" : "Confirm the transaction in your wallet"}
                 </Status>
               )}
               {hash && confirming && (
                 <Status tone="busy" dark>
-                  Chờ block xác nhận{" "}
+                  Waiting for confirmation{" "}
                   {txLink ? (
-                    <a
-                      className="underline hover:text-white"
-                      href={txLink}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      xem tx
+                    <a className="underline hover:text-white" href={txLink} target="_blank" rel="noreferrer">
+                      view tx
                     </a>
                   ) : (
                     <Mono className="text-steel">{shortHash}</Mono>
@@ -251,25 +201,15 @@ export function MintPanel({
               )}
               {success && tokenId !== undefined && (
                 <Status tone="ok" dark>
-                  {pendingName ?? cat.name} là token #{tokenId.toString()}
+                  {pendingName ?? cat.name} is token #{tokenId.toString()}
                   {txLink && nftLink ? (
                     <>
                       {" · "}
-                      <a
-                        className="underline hover:text-white"
-                        href={txLink}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
+                      <a className="underline hover:text-white" href={txLink} target="_blank" rel="noreferrer">
                         tx
                       </a>
                       {" · "}
-                      <a
-                        className="underline hover:text-white"
-                        href={nftLink}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
+                      <a className="underline hover:text-white" href={nftLink} target="_blank" rel="noreferrer">
                         NFT
                       </a>
                     </>
@@ -283,25 +223,24 @@ export function MintPanel({
               )}
               {error && (
                 <Status tone="err" dark>
-                  Mint thất bại: {explainError(error)}
+                  Mint failed: {explainError(error)}
                 </Status>
               )}
               {taken && !hash && (
                 <Status tone="warn" dark>
-                  {cat.name} đã có người mint — mỗi con chỉ một lần. Chọn con
-                  khác.
+                  {cat.name} is already minted — one mint per cat. Pick another.
                 </Status>
               )}
               {!isConnected && (
                 <Status tone="warn" dark>
                   {isLocal
-                    ? "Bấm Ví dev (anvil) ở trên để mint."
-                    : "Kết nối ví để mint."}
+                    ? "Use the Dev wallet (anvil) button above to mint."
+                    : "Connect a wallet to mint."}
                 </Status>
               )}
               {wrongChain && (
                 <Status tone="warn" dark>
-                  Đổi sang đúng mạng trước.
+                  Switch to the right network first.
                 </Status>
               )}
             </div>
@@ -315,7 +254,7 @@ export function MintPanel({
               disabled={!readyToMint}
               className={`sm:min-w-0 ${busy ? "anim-sweep" : ""}`}
             >
-              {busy ? "Đang mint" : taken ? "Đã có người mint" : "Mint NFT"}
+              {busy ? "Minting…" : taken ? "Already minted" : "Mint NFT"}
             </Button>
             <Button
               variant="inverse"
@@ -324,16 +263,11 @@ export function MintPanel({
               className="justify-center sm:min-w-0"
               onClick={onRandom}
             >
-              Ngẫu nhiên
+              Random
             </Button>
             {success && (
-              <Button
-                variant="frost"
-                size="lg"
-                className="sm:min-w-0"
-                onClick={onRegister}
-              >
-                Đăng ký
+              <Button variant="frost" size="lg" className="sm:min-w-0" onClick={onRegister}>
+                Register
               </Button>
             )}
           </div>

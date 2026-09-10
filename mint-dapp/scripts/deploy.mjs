@@ -20,14 +20,14 @@ const pk =
 
 if (!pk) {
   console.error(`
-❌ Thiếu hoặc sai DEPLOYER_PRIVATE_KEY trong .env.local (bắt buộc khi deploy Fuji)
+❌ Missing or invalid DEPLOYER_PRIVATE_KEY in .env.local (required when deploying to Fuji)
 
-   1. Tạo 1 ví TESTNET RIÊNG trong Core/MetaMask (đừng dùng ví thật!)
-   2. Xin AVAX test: https://build.avax.network/console/primary-network/faucet
-   3. Export private key của ví đó (Core: Settings → Show private key)
-   4. Thêm vào .env.local:  DEPLOYER_PRIVATE_KEY=0x...
+   1. Create a SEPARATE TESTNET wallet in Core/MetaMask (don't use your real wallet!)
+   2. Get test AVAX: https://build.avax.network/console/primary-network/faucet
+   3. Export that wallet's private key (Core: Settings → Show private key)
+   4. Add to .env.local:  DEPLOYER_PRIVATE_KEY=0x...
 
-   💡 Muốn thử nhanh mà không cần ví? Chạy local: npm run anvil + npm run deploy:anvil
+   💡 Want a quick try without a wallet? Run locally: npm run anvil + npm run deploy:anvil
 `);
   process.exit(1);
 }
@@ -43,7 +43,7 @@ const walletClient = createWalletClient({
   transport: http(net.rpcUrl),
 });
 
-console.log(`🌐 Mạng: ${net.label}`);
+console.log(`🌐 Network: ${net.label}`);
 
 let chainId;
 try {
@@ -51,22 +51,22 @@ try {
 } catch {
   if (net.key === "anvil") {
     console.error(`
-❌ Không kết nối được anvil ở ${net.rpcUrl}
+❌ Could not connect to anvil at ${net.rpcUrl}
 
-   Mở một tab terminal khác và chạy:   npm run anvil
-   (cổng 8545 đang bị chiếm? dùng:     ANVIL_PORT=8546 npm run anvil
-    rồi thêm NEXT_PUBLIC_RPC_URL=http://127.0.0.1:8546 vào .env.local)
+   Open another terminal tab and run:   npm run anvil
+   (port 8545 already in use? use:      ANVIL_PORT=8546 npm run anvil
+    then add NEXT_PUBLIC_RPC_URL=http://127.0.0.1:8546 to .env.local)
 `);
   } else {
-    console.error(`❌ Không kết nối được RPC ${net.rpcUrl} — kiểm tra mạng internet.`);
+    console.error(`❌ Could not connect to RPC ${net.rpcUrl} — check your internet connection.`);
   }
   process.exit(1);
 }
 
 if (chainId !== net.chain.id) {
   console.error(
-    `❌ RPC ${net.rpcUrl} đang là chainId ${chainId}, không phải ${net.chain.id}.\n` +
-      "   Có thể bạn đang chạy một anvil khác (fork chain khác) trên cùng cổng.",
+    `❌ RPC ${net.rpcUrl} reports chainId ${chainId}, not ${net.chain.id}.\n` +
+      "   You may be running a different anvil (forking another chain) on the same port.",
   );
   process.exit(1);
 }
@@ -76,24 +76,24 @@ console.log(`👛 Deployer: ${account.address} — ${formatEther(balance)} AVAX`
 if (balance === 0n) {
   console.error(
     net.key === "anvil"
-      ? "❌ Tài khoản anvil không có tiền?! Thử restart anvil."
-      : "❌ Ví chưa có AVAX test. Xin tại: https://build.avax.network/console/primary-network/faucet",
+      ? "❌ The anvil account has no funds?! Try restarting anvil."
+      : "❌ Wallet has no test AVAX. Get some at: https://build.avax.network/console/primary-network/faucet",
   );
   process.exit(1);
 }
 
-console.log(`🚀 Đang deploy lên ${net.chain.name} (${net.chain.id})…`);
+console.log(`🚀 Deploying to ${net.chain.name} (${net.chain.id})…`);
 const hash = await walletClient.deployContract({ abi, bytecode });
 console.log("   tx:", hash);
 
 const receipt = await publicClient.waitForTransactionReceipt({ hash });
 if (receipt.status !== "success") {
-  console.error("❌ Deploy thất bại — receipt status:", receipt.status);
+  console.error("❌ Deploy failed — receipt status:", receipt.status);
   process.exit(1);
 }
 const address = receipt.contractAddress;
 console.log(`
-✅ DEPLOY THÀNH CÔNG
+✅ DEPLOY SUCCESSFUL
    contract : ${address}
    gas used : ${receipt.gasUsed}${
      net.explorer ? `\n   explorer : ${net.explorer}/address/${address}` : ""
@@ -111,5 +111,5 @@ const upsert = (key, value) => {
 upsert("NEXT_PUBLIC_CHAIN", net.key);
 upsert("NEXT_PUBLIC_CONTRACT_ADDRESS", address);
 writeFileSync(ENV_FILE, env);
-console.log("📝 Đã ghi NEXT_PUBLIC_CHAIN + NEXT_PUBLIC_CONTRACT_ADDRESS vào .env.local");
-console.log("   → restart `npm run dev` là mint được ngay!");
+console.log("📝 Wrote NEXT_PUBLIC_CHAIN + NEXT_PUBLIC_CONTRACT_ADDRESS to .env.local");
+console.log("   → restart `npm run dev` and you can mint right away!");

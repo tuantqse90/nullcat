@@ -35,7 +35,7 @@ export function ConnectButtons({ size = "md" }: { size?: Size }) {
           disabled={isPending}
           onClick={() => connect({ connector: devWallet })}
         >
-          Ví dev (anvil)
+          Dev wallet (anvil)
         </Button>
       )}
       {primaryIsInjected && (
@@ -45,7 +45,7 @@ export function ConnectButtons({ size = "md" }: { size?: Size }) {
           disabled={isPending}
           onClick={() => connect({ connector: injected! })}
         >
-          {isPending ? "Đang kết nối" : "Kết nối ví"}
+          {isPending ? "Connecting…" : "Connect wallet"}
         </Button>
       )}
       {wc && (
@@ -55,7 +55,7 @@ export function ConnectButtons({ size = "md" }: { size?: Size }) {
           disabled={isPending}
           onClick={() => connect({ connector: wc })}
         >
-          {mobile ? "Core / MetaMask" : "Quét QR bằng Core mobile"}
+          {mobile ? "Core / MetaMask" : "Scan QR with Core mobile"}
         </Button>
       )}
       {!primaryIsInjected && !wc && !devWallet && !mobile && (
@@ -65,7 +65,7 @@ export function ConnectButtons({ size = "md" }: { size?: Size }) {
           target="_blank"
           rel="noreferrer"
         >
-          Cài Core Wallet
+          Install Core Wallet
           <Icon name="external" />
         </a>
       )}
@@ -90,14 +90,14 @@ export function MobileConnectHelp() {
   return (
     <div className="border-t border-line bg-surface-solid">
       <div className="mx-auto w-full max-w-7xl px-5 py-4 md:px-6">
-        <p className="eyebrow mb-3 text-muted">Mint trên điện thoại</p>
+        <p className="eyebrow mb-3 text-muted">Mint on your phone</p>
         <ol className="space-y-3 text-[13px] leading-relaxed text-fg">
           {wc && (
             <li className="flex gap-3">
               <span className="font-mono text-[11px] tracking-[0.18em] text-avax">01</span>
               <span>
-                Bấm <b>Core / MetaMask</b> ở trên, chọn ví trong danh sách — app ví sẽ tự
-                mở để bạn duyệt kết nối (WalletConnect).
+                Tap <b>Core / MetaMask</b> above and pick your wallet — the wallet app opens
+                so you can approve the connection (WalletConnect).
               </span>
             </li>
           )}
@@ -106,14 +106,14 @@ export function MobileConnectHelp() {
               {wc ? "02" : "01"}
             </span>
             <span className="min-w-0">
-              {wc ? "Hoặc mở" : "Mở"} trang này <b>bên trong app Core</b>: Core → tab{" "}
-              <b>Browser</b> → dán link vào ô địa chỉ.{" "}
+              {wc ? "Or open" : "Open"} this page <b>inside the Core app</b>: Core →{" "}
+              <b>Browser</b> tab → paste the link into the address bar.{" "}
               <button
                 type="button"
                 onClick={copy}
                 className="inline-flex cursor-pointer items-center gap-1 border border-line-strong px-2 py-0.5 font-mono text-[11px] tracking-wide text-fg transition-colors hover:bg-hover"
               >
-                {copied ? "Đã sao chép" : "Sao chép link"}
+                {copied ? "Copied" : "Copy link"}
               </button>
             </span>
           </li>
@@ -122,13 +122,13 @@ export function MobileConnectHelp() {
               {wc ? "03" : "02"}
             </span>
             <span>
-              Dùng MetaMask?{" "}
+              Using MetaMask?{" "}
               <a
                 className="inline-flex items-center gap-1 underline hover:text-avax"
                 href={metamaskDeepLink()}
                 rel="noreferrer"
               >
-                Mở trong MetaMask <Icon name="external" className="size-3" />
+                Open in MetaMask <Icon name="external" className="size-3" />
               </a>
             </span>
           </li>

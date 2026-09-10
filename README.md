@@ -10,102 +10,105 @@ at all** (PNGs are encoded by hand with zlib).
 | File | Role |
 |---|---|
 | `engine.py` | Pixel engine: 32x32 grids, drawing ops, layer compositing, PNG writer, contact sheets |
-| `traits.py` | Trait library: 139 traits across 18 layers — 6 layer *dáng* (body, head, ears, mane, whiskers, belly) + màu lông, hoa văn, mắt, mồm, mũ, kính, áo, đồ cầm tay, khuyên, đuôi, hiệu ứng |
+| `traits.py` | Trait library: 139 traits across 18 layers — 6 *body-shape* layers (body, head, ears, mane, whiskers, belly) + fur colour, pattern, eyes, mouth, headwear, eyewear, outfit, paw item, earring, tail, effect |
 | `generate.py` | CLI: weighted rarity rolls, rendering, image + metadata output |
 | `build_preview.py` | Builds the preview page (`output/preview.html`) + renders the 4 curated LEGENDS |
 | `build_mint_site.py` | Embeds the generated batch into both mint frontends (`mint-site/cats.js` + `mint-dapp/src/lib/cats.ts`) |
-| `mint-site/config.js` | "env" của bài 1 — dán địa chỉ contract vào đây (`npm run set-contract` ghi hộ) |
+| `mint-site/config.js` | Lesson 1's "env" — paste the contract address here (`npm run set-contract` writes it for you) |
 | `mint-site/` | Lesson 1 — minimal mint page: single HTML file + ethers.js CDN (`mint-site/README.md`) |
-| `mint-dapp/contracts/AvaxCats.sol` | **Contract duy nhất** của cả project — cả 2 bài cùng deploy/dùng file này |
+| `mint-dapp/contracts/AvaxCats.sol` | **The only contract** in the whole project — both lessons deploy/use this file |
 | `mint-dapp/` | Lesson 2 — production-style dApp: Next.js 16 + TypeScript + Tailwind v4 + wagmi v3 + viem (`mint-dapp/README.md`) |
 
-Cả hai frontend chạy được **2 mạng bằng cùng một code**:
+Both frontends run on **2 networks with the same code**:
 
-| Mạng | Khi nào dùng | Cần gì |
+| Network | When to use | Requirements |
 |---|---|---|
-| **Anvil** (31337) — blockchain local | Học, test, sửa contract liên tục | Foundry. Không ví, không faucet, không internet |
-| **Avalanche Fuji** (43113) — testnet thật | Demo cho lớp / cho Avalanche | Ví Core/MetaMask + AVAX từ faucet |
+| **Anvil** (31337) — local blockchain | Learning, testing, iterating on the contract | Foundry. No wallet, no faucet, no internet |
+| **Avalanche Fuji** (43113) — real testnet | Demo for the class / for Avalanche | Core/MetaMask wallet + AVAX from the faucet |
 
-Mặc định là **anvil** — chạy thử local trước, lên Fuji sau.
+The default is **anvil** — try it locally first, then move to Fuji.
 
-**Sinh viên không phải cài gì ngoài ví:** mở web lên là thấy nguyên contract
-`.sol`, bấm DEPLOY là contract lên chain bằng ví của chính mình, xong mới vào
-được màn hình mint. Không Remix, không private key, không sửa file.
+**Students install nothing but a wallet:** open the web page and the full
+`.sol` contract is right there; click DEPLOY and the contract goes on-chain
+through their own wallet, and only then does the mint screen open. No Remix,
+no private keys, no file editing.
 
-## Cài đặt — cần gì để chạy project này
+## Setup — what you need to run this project
 
-Project chia 3 phần, mỗi phần yêu cầu khác nhau. Kiểm tra nhanh máy đã có gì:
+The project has 3 parts, each with different requirements. Quick check of
+what your machine already has:
 
 ```bash
-python3 --version   # cần 3.10+  (generator + serve trang tĩnh)
-node --version      # cần 20+    (chỉ cho mint-dapp)
-anvil --version     # foundry    (chỉ khi muốn chạy blockchain local)
+python3 --version   # needs 3.10+  (generator + static page server)
+node --version      # needs 20+    (mint-dapp only)
+anvil --version     # foundry    (only if you want a local blockchain)
 ```
 
 ### 1. Generator + preview (`generate.py`, `build_preview.py`)
 
-Chỉ cần **Python 3.10+** — dùng thuần stdlib, **không phải `pip install` bất kỳ
-thư viện nào** (PNG được encode tay bằng zlib có sẵn).
+Only needs **Python 3.10+** — pure stdlib, **no `pip install` of any
+library** (PNGs are hand-encoded with the built-in zlib).
 
-- macOS / Linux: có sẵn `python3`
-- Windows: tải tại <https://python.org> (nhớ tick "Add to PATH")
+- macOS / Linux: `python3` is preinstalled
+- Windows: download from <https://python.org> (remember to tick "Add to PATH")
 
-### 2. Mint site bản HTML thuần (`mint-site/`) — bài 1
+### 2. Plain-HTML mint site (`mint-site/`) — lesson 1
 
-Không cần cài gì thêm: ethers.js tải qua CDN, serve trang bằng chính
-Python (`python3 -m http.server 8000 -d mint-site`).
+Nothing extra to install: ethers.js loads from a CDN, and the page is served
+by Python itself (`python3 -m http.server 8000 -d mint-site`).
 
-- Chạy trên **anvil**: cần Foundry, KHÔNG cần ví — trang có nút
-  "DÙNG VÍ DEV (ANVIL)", anvil ký hộ giao dịch.
-- Chạy trên **Fuji**: cần ví **Core Wallet** (<https://core.app>) hoặc
-  MetaMask + AVAX test.
+- On **anvil**: needs Foundry, NO wallet needed — the page has a
+  "Dev wallet (anvil)" button and anvil signs transactions for you.
+- On **Fuji**: needs **Core Wallet** (<https://core.app>) or
+  MetaMask + test AVAX.
 
-### 3. Mint dApp Next.js (`mint-dapp/`) — bài 2
+### 3. Next.js mint dApp (`mint-dapp/`) — lesson 2
 
-Cần **Node.js 20+** (khuyến nghị bản LTS):
+Needs **Node.js 20+** (LTS recommended):
 
-- macOS: `brew install node` hoặc dùng nvm: <https://github.com/nvm-sh/nvm>
-- Windows: tải tại <https://nodejs.org>
+- macOS: `brew install node` or use nvm: <https://github.com/nvm-sh/nvm>
+- Windows: download from <https://nodejs.org>
 
-Sau đó mọi thư viện (Next.js 16, wagmi v3, viem 2, TanStack Query,
-Tailwind v4, solc, OpenZeppelin) đã khai báo sẵn trong `package.json` —
-một lệnh là xong:
+After that, every library (Next.js 16, wagmi v3, viem 2, TanStack Query,
+Tailwind v4, solc, OpenZeppelin) is already declared in `package.json` —
+one command does it:
 
 ```bash
 cd mint-dapp
 npm install
 ```
 
-Chạy local đủ 3 lệnh, không cần ví lẫn faucet:
+Running locally takes 3 commands, no wallet or faucet needed:
 
 ```bash
-npm run anvil          # tab 1: blockchain local
-npm run deploy:anvil   # tab 2: compile + deploy + ghi .env.local
-npm run dev            #        mở http://localhost:3000
-npm run test:contract  # (tuỳ chọn) test end-to-end trên anvil
-npm run fund 0x...     # (tuỳ chọn) nạp AVAX giả nếu dùng ví thật trên anvil
+npm run anvil          # tab 1: local blockchain
+npm run deploy:anvil   # tab 2: compile + deploy + write .env.local
+npm run dev            #        open http://localhost:3000
+npm run test:contract  # (optional) end-to-end test on anvil
+npm run fund 0x...     # (optional) top up fake AVAX if using a real wallet on anvil
 ```
 
-Khi demo trên Fuji thì thêm ví Core/MetaMask (ví testnet riêng!) + AVAX
-test từ faucet <https://build.avax.network/console/primary-network/faucet>, rồi
-`npm run deploy:fuji`. Chi tiết xem `mint-dapp/README.md`.
+For a Fuji demo, add a Core/MetaMask wallet (a separate testnet wallet!) + test
+AVAX from the faucet <https://build.avax.network/console/primary-network/faucet>, then
+`npm run deploy:fuji`. See `mint-dapp/README.md` for details.
 
-### 4. Foundry (`anvil`) — blockchain local cho cả 2 bài
+### 4. Foundry (`anvil`) — local blockchain for both lessons
 
 ```bash
 curl -L https://foundry.paradigm.xyz | bash
 foundryup
 ```
 
-Anvil dựng một EVM ngay trên máy: 10 tài khoản có sẵn 10000 AVAX giả,
-block đào tức thì khi có giao dịch, và **tự ký hộ** giao dịch của các
-tài khoản đó — nên mint được mà không cần cài ví. Tắt anvil là mất sạch
-state, bật lại phải deploy contract lại.
+Anvil spins up an EVM right on your machine: 10 accounts preloaded with 10000
+fake AVAX, blocks mined instantly on each transaction, and it **auto-signs**
+transactions from those accounts — so you can mint without installing a
+wallet. Stopping anvil wipes all state; restart it and you must redeploy the
+contract.
 
-### Tuỳ chọn
+### Optional
 
-- **ffmpeg** — chỉ cần nếu muốn render clip từ batch ảnh
-  (`brew install ffmpeg`), ví dụ: mỗi ảnh 0.3s →
+- **ffmpeg** — only needed to render a clip from the image batch
+  (`brew install ffmpeg`), e.g. 0.3s per image →
   `ffmpeg -framerate 10/3 -i output/images/%04d.png -c:v libx264 -pix_fmt yuv420p -r 30 output/drop.mp4`
 
 ## Run
@@ -132,31 +135,31 @@ Per-token output:
 
 ## Trait system (18 layers — 139 traits)
 
-**Dáng** (đây là thứ làm mỗi con khác nhau từ xa, không chỉ khác màu):
+**Body shape** (this is what makes each cat look different from afar, not just the colour):
 Body (6: Sitting · Chonk · Slim · Loaf · Standing · Wisp) · Head (5) ·
-Ears (6: Pointy · Round · Folded · Big · Tufted · Notched) · Mane (5, có
+Ears (6: Pointy · Round · Folded · Big · Tufted · Notched) · Mane (5, including
 Lion Mane) · Whiskers (5) · Belly (5)
 
-**Màu & phụ kiện:** Background (13) · Fur (11) · Pattern (6) · Eyes (10) ·
+**Colours & accessories:** Background (13) · Fur (11) · Pattern (6) · Eyes (10) ·
 Mouth (8) · Headwear (14) · Eyewear (7) · Outfit (9) · Paw Item (13) ·
 Earring (4) · Tail (5) · Effect (7)
 
-Hình học phần ĐẦU (mắt y9..11, mõm x12..19 y12..15) cố định tuyệt đối, nên
-mọi trait mắt/mồm/kính/mũ/khuyên luôn khớp dù thân và tai đổi kiểu gì.
-Ngược lại bụng + hoa văn + áo được **clip theo silhouette của thân**
-(`generate.py`), nên thêm một dáng thân mới không phải sửa lại 9 cái áo.
+The HEAD geometry (eyes y9..11, muzzle x12..19 y12..15) is absolutely fixed, so
+every eyes/mouth/eyewear/headwear/earring trait always fits no matter how the body and ears change.
+Conversely, belly + pattern + outfit are **clipped to the body silhouette**
+(`generate.py`), so adding a new body shape doesn't mean redrawing all 9 outfits.
 
 Avalanche house specials: **The Avalanche Hood** (summit parka hood in
 full AVAX red), **AVAX Red Card**, **Ice Axe**, **Snowflake**,
 **Avalanche Red** fur (#E84142), **Snowfall Red** background, the
 **Subnet Matrix** background, and the **Snowstorm** effect. Plus 4
 curated **1/1 LEGENDS** defined in `build_preview.py` (The Snowfather,
-Sir Stonks, Moon Mission, Blizzard Bandit) — mỗi con có dáng riêng.
+Sir Stonks, Moon Mission, Blizzard Bandit) — each with its own body shape.
 
 Five rarity tiers: common / uncommon / rare / epic / legendary
 (weights 100/55/28/12/5). Fit-coherence rules: special eyes refuse glasses
-on top; a VR headset resets eyes to Normal; mũ trùm đầu (The Avalanche Hood)
-bỏ bờm vì hai thứ vẽ đè lên nhau. Every trait combo is unique —
+on top; a VR headset resets eyes to Normal; hooded headwear (The Avalanche Hood)
+drops the mane since the two would draw over each other. Every trait combo is unique —
 the generator rerolls on collision.
 
 ## Adding a trait

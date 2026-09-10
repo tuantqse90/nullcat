@@ -26,7 +26,7 @@ export function SupplyBadge({ className = "" }: { className?: string }) {
   return (
     <Stat
       className={className}
-      label="Đã mint"
+      label="Minted"
       dot={
         <PulseDot
           color={!isConfigured ? "bg-zinc-400" : error ? "bg-amber-500" : "bg-emerald-500"}
@@ -38,7 +38,7 @@ export function SupplyBadge({ className = "" }: { className?: string }) {
         !isConfigured ? (
           <span className="text-muted">—</span>
         ) : error ? (
-          "Không đọc được contract"
+          "Can't read contract"
         ) : minted === undefined || max === undefined ? (
           <span className="text-muted">…</span>
         ) : (

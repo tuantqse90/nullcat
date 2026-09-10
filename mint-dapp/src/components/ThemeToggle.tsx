@@ -14,7 +14,7 @@ export function ThemeToggle() {
     <button
       type="button"
       onClick={toggle}
-      aria-label="Đổi giao diện sáng / tối"
+      aria-label="Toggle light / dark theme"
       className="grid size-9 cursor-pointer place-items-center rounded-md text-muted transition-colors hover:bg-hover hover:text-fg"
     >
       <Icon name="sun" className="size-4 dark:hidden" />

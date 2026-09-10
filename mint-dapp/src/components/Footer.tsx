@@ -60,7 +60,7 @@ export function Footer({ contract, isConfigured, onViewContract, padBottom = fal
                 color={isConfigured ? "bg-emerald-500" : "bg-zinc-400"}
                 ping={isConfigured}
               />
-              {isConfigured ? "Contract live" : "Chưa có contract"}
+              {isConfigured ? "Contract live" : "No contract yet"}
             </span>
             {!isLocal && (
               <a
@@ -102,8 +102,8 @@ export function Footer({ contract, isConfigured, onViewContract, padBottom = fal
                       <span className="font-mono text-xs break-all text-muted">{contract}</span>
                     )}
                   </li>
-                  <li><FooterLink onClick={onViewContract}>Xem contract</FooterLink></li>
-                  <li><FooterLink onClick={clearDeployedAddress}>Deploy contract khác</FooterLink></li>
+                  <li><FooterLink onClick={onViewContract}>View contract</FooterLink></li>
+                  <li><FooterLink onClick={clearDeployedAddress}>Deploy another contract</FooterLink></li>
                 </>
               ) : (
                 <li><FooterLink onClick={onViewContract}>Deploy contract</FooterLink></li>
@@ -112,11 +112,11 @@ export function Footer({ contract, isConfigured, onViewContract, padBottom = fal
           </div>
 
           <div className="flex flex-col bg-surface-solid py-8 sm:pr-5 lg:px-5">
-            <h3 className="eyebrow mb-5 text-muted">Mạng</h3>
+            <h3 className="eyebrow mb-5 text-muted">Network</h3>
             <ul className="flex flex-col gap-2.5 text-sm text-muted">
               <li>{CHAIN_LABEL}</li>
-              <li>Testnet, không có giá trị thật</li>
-              {isLocal && <li>Tắt anvil là mất sạch state</li>}
+              <li>Testnet only — nothing here has real value</li>
+              {isLocal && <li>Stopping anvil wipes all state</li>}
             </ul>
           </div>
 

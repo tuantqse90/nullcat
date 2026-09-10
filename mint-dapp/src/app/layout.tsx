@@ -8,7 +8,7 @@ import { Providers } from "./providers";
 
 export const metadata: Metadata = {
   title: `AvaxCats Mint — Team1 VN · ${CHAIN_LABEL}`,
-  description: `Demo mint NFT trên ${CHAIN_LABEL} — Team Avalanche (Team1 VN) academy.`,
+  description: `NFT mint demo on ${CHAIN_LABEL} — Team Avalanche (Team1 VN) academy.`,
 };
 
 export const viewport: Viewport = {
@@ -28,7 +28,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
-      lang="vi"
+      lang="en"
       suppressHydrationWarning
       className={`${GeistSans.variable} ${GeistMono.variable}`}
     >

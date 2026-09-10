@@ -23,4 +23,4 @@ export const AVAXCATS_BYTECODE = ${JSON.stringify(bytecode)} as \`0x\${string}\`
 );
 
 const kb = (readFileSync(out, "utf8").length / 1024).toFixed(1);
-console.log(`📦 src/lib/artifact.ts — bytecode ${(bytecode.length - 2) / 2} bytes, ${fns} hàm (file ${kb} KB)`);
+console.log(`📦 src/lib/artifact.ts — bytecode ${(bytecode.length - 2) / 2} bytes, ${fns} functions (file ${kb} KB)`);

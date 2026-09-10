@@ -108,21 +108,21 @@ export default function Home() {
               Team Avalanche · Team1 VN · {CHAIN_LABEL}
             </Eyebrow>
             <h1 className="display anim-rise-2 mt-6 text-[2.25rem] text-fg sm:text-[3.25rem] md:text-[4.5rem] xl:text-[5.5rem]">
-              Mint mèo
+              Mint a cat
               <br />
-              lên Avalanche
+              on Avalanche
               <span className="text-avax motion-safe:animate-[pulse_3s_ease-in-out_infinite]">.</span>
             </h1>
             <p className="anim-rise-3 mt-8 max-w-xl text-sm leading-relaxed text-muted md:text-base">
-              48 con mèo pixel sinh từ generator{" "}
-              <code className="font-mono text-[13px] text-fg">nullcat</code>. Deploy
-              contract ERC-721 bằng ví của bạn, chọn một con, mint, rồi đăng ký với ban
-              tổ chức.
+              48 pixel cats from the{" "}
+              <code className="font-mono text-[13px] text-fg">nullcat</code> generator.
+              Deploy the ERC-721 contract from your wallet, pick a cat, mint it, then
+              register with the organizers.
             </p>
             <div className="anim-rise-3 mt-10 flex w-full flex-col items-center gap-4 sm:w-auto sm:flex-row sm:gap-6">
               {isConfigured ? (
                 <Button variant="primary" size="lg" onClick={() => go(2)}>
-                  Vào màn hình mint
+                  Go to mint
                 </Button>
               ) : (
                 <Button variant="primary" size="lg" onClick={() => go(1)}>
@@ -130,7 +130,7 @@ export default function Home() {
                 </Button>
               )}
               <Button variant="secondary" size="lg" onClick={() => go(1)}>
-                Xem contract
+                View contract
               </Button>
             </div>
             <a
@@ -139,7 +139,7 @@ export default function Home() {
               target="_blank"
               rel="noreferrer"
             >
-              XEM AVALANCHE BUILDER HUB →
+              EXPLORE AVALANCHE BUILDER HUB →
             </a>
           </div>
           <CatMarquee />
@@ -172,12 +172,12 @@ export default function Home() {
             <div className="anim-rise pb-20 sm:pb-0">
               <Chapter
                 n="02"
-                label="Chọn & mint"
-                title="Chọn mèo của bạn"
+                label="Pick & mint"
+                title="Pick your cat"
                 desc={
                   <>
-                    Ảnh và thuộc tính nhúng thẳng vào tokenURI, không dùng IPFS. Mỗi con
-                    chỉ mint được một lần — luật nằm trong contract, không phải giao diện.
+                    Image and traits are embedded straight into the tokenURI — no IPFS. Each
+                    cat can be minted once; the rule lives in the contract, not the UI.
                   </>
                 }
                 aside={
@@ -185,7 +185,7 @@ export default function Home() {
                     <span className="font-mono text-2xl tabular-nums tracking-tight">
                       {mintedCount}
                     </span>
-                    <span className="text-muted">/ {CATS.length} đã có chủ</span>
+                    <span className="text-muted">/ {CATS.length} claimed</span>
                   </Eyebrow>
                 }
               />

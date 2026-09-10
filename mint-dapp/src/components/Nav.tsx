@@ -51,7 +51,7 @@ export function Nav() {
         <details className="group sm:hidden">
           <summary
             className="grid size-9 cursor-pointer list-none place-items-center rounded-md text-muted transition-colors hover:bg-hover hover:text-fg"
-            aria-label="Mở menu"
+            aria-label="Open menu"
           >
             <Icon name="menu" className="size-4 group-open:hidden" />
             <Icon name="x" className="hidden size-4 group-open:block" />

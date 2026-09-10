@@ -6,7 +6,7 @@ const port = process.env.ANVIL_PORT || url.port || "8545";
 const host = url.hostname || "127.0.0.1";
 
 console.log(`⛓  anvil → http://${host}:${port} (chainId 31337)`);
-console.log("   Để nguyên tab này chạy. Tab khác: npm run deploy:anvil && npm run dev\n");
+console.log("   Keep this tab running. In another tab: npm run deploy:anvil && npm run dev\n");
 
 const child = spawn(
   "anvil",
@@ -17,13 +17,13 @@ const child = spawn(
 child.on("error", (err) => {
   if (err.code === "ENOENT") {
     console.error(`
-❌ Chưa cài anvil (thuộc bộ Foundry).
+❌ anvil is not installed (it's part of the Foundry toolkit).
 
    macOS / Linux:
      curl -L https://foundry.paradigm.xyz | bash
      foundryup
 
-   Windows: cài qua WSL, hoặc xem https://getfoundry.sh
+   Windows: install via WSL, or see https://getfoundry.sh
 `);
   } else {
     console.error(err);

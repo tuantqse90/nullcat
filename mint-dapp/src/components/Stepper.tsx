@@ -4,8 +4,8 @@ import { Icon } from "./ui";
 
 const STEPS = [
   { label: "Contract", short: "Contract" },
-  { label: "Chọn & mint", short: "Mint" },
-  { label: "Đăng ký", short: "Đăng ký" },
+  { label: "Pick & mint", short: "Mint" },
+  { label: "Register", short: "Register" },
 ] as const;
 
 export function Stepper({
@@ -20,7 +20,7 @@ export function Stepper({
   return (
     <nav
       className="grid grid-cols-3 gap-px border border-line bg-line"
-      aria-label="Các bước"
+      aria-label="Steps"
     >
       {STEPS.map(({ label, short }, i) => {
         const n = (i + 1) as 1 | 2 | 3;
