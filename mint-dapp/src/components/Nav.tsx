@@ -1,11 +1,12 @@
 import { CHAIN_LABEL, EXPLORER, FAUCET } from "@/lib/chains";
-import { BUILDER_HUB, CONSOLE, DOCS } from "@/lib/links";
+import { ACADEMY, BUILDER_HUB, CONSOLE, DOCS } from "@/lib/links";
 import { Logo } from "./Logo";
 import { ThemeToggle } from "./ThemeToggle";
 import { Icon } from "./ui";
 
 const LINKS = [
   { label: "Builder Hub", href: BUILDER_HUB },
+  { label: "Academy", href: ACADEMY },
   { label: "Docs", href: DOCS },
   { label: "Console", href: CONSOLE },
   { label: "Faucet", href: FAUCET },

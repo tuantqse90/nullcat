@@ -4,6 +4,7 @@ import { CHAIN_LABEL, EXPLORER, FAUCET, isLocal } from "@/lib/chains";
 import { explorerAddress } from "@/lib/contract";
 import { clearDeployedAddress } from "@/lib/deployed";
 import {
+  ACADEMY,
   BUILDER_HUB,
   CONSOLE,
   DOCS,
@@ -89,6 +90,7 @@ export function Footer({ contract, isConfigured, onViewContract, padBottom = fal
             <h3 className="eyebrow mb-5 text-muted">Avalanche</h3>
             <ul className="flex flex-col gap-2.5">
               <li><FooterLink href={BUILDER_HUB}>Builder Hub</FooterLink></li>
+              <li><FooterLink href={ACADEMY}>Academy</FooterLink></li>
               <li><FooterLink href={DOCS}>Documentation</FooterLink></li>
               <li><FooterLink href={CONSOLE}>Console</FooterLink></li>
               <li><FooterLink href={FAUCET}>Testnet faucet</FooterLink></li>
