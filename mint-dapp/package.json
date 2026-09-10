@@ -1,0 +1,45 @@
+{
+  "name": "mint-dapp",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "predev": "node scripts/build-artifact.mjs",
+    "prebuild": "node scripts/build-artifact.mjs",
+    "artifact": "node scripts/build-artifact.mjs",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "anvil": "node --env-file-if-exists=.env.local scripts/anvil.mjs",
+    "compile": "node scripts/compile.mjs",
+    "deploy": "node --env-file-if-exists=.env.local scripts/deploy.mjs",
+    "deploy:anvil": "node --env-file-if-exists=.env.local scripts/deploy.mjs --network anvil",
+    "deploy:fuji": "node --env-file-if-exists=.env.local scripts/deploy.mjs --network fuji",
+    "set-contract": "node --env-file-if-exists=.env.local scripts/set-contract.mjs",
+    "fund": "node --env-file-if-exists=.env.local scripts/fund.mjs",
+    "test:contract": "node --env-file-if-exists=.env.local scripts/test-contract.mjs",
+    "local": "npm run deploy:anvil && npm run dev"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.102.8",
+    "@walletconnect/ethereum-provider": "^2.24.0",
+    "geist": "^1.7.2",
+    "next": "16.3.3",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "viem": "^2.56.1",
+    "wagmi": "^3.7.7"
+  },
+  "devDependencies": {
+    "@openzeppelin/contracts": "^5.6.1",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.3.3",
+    "solc": "^0.8.36",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}

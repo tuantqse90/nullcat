@@ -1,0 +1,176 @@
+{
+  "name": "AvaxCats \u2014 Team Avalanche (Team1 VN)",
+  "count": 100,
+  "seed": 1337,
+  "trait_counts": {
+    "Background": {
+      "Frost": 15,
+      "Moon Night": 10,
+      "Sunset": 11,
+      "Avalanche Red": 9,
+      "Subnet Matrix": 3,
+      "Night Purple": 18,
+      "Solid Gold": 4,
+      "Sky": 13,
+      "Green Candles": 6,
+      "Money Rain": 5,
+      "Snowfall Red": 1,
+      "Red Candles": 5
+    },
+    "Fur": {
+      "Money Green": 3,
+      "Pink": 9,
+      "Gray": 18,
+      "White": 6,
+      "Orange Tabby": 17,
+      "Cream": 24,
+      "Golden": 5,
+      "Zombie": 2,
+      "Black": 16
+    },
+    "Body": {
+      "Chonk": 30,
+      "Loaf": 13,
+      "Slim": 23,
+      "Sitting": 22,
+      "Standing": 10,
+      "Wisp": 2
+    },
+    "Head": {
+      "Round": 49,
+      "Narrow": 9,
+      "Normal": 23,
+      "Fluffy": 12,
+      "Square": 7
+    },
+    "Ears": {
+      "Round": 42,
+      "Folded": 11,
+      "Big": 17,
+      "Notched": 7,
+      "Pointy": 17,
+      "Tufted": 6
+    },
+    "Mane": {
+      "Beard": 20,
+      "None": 41,
+      "Lion Mane": 4,
+      "Neck Ruff": 21,
+      "Sideburns": 14
+    },
+    "Whiskers": {
+      "Droopy": 17,
+      "None": 30,
+      "Short": 27,
+      "Perky": 13,
+      "Long": 13
+    },
+    "Belly": {
+      "Solid": 15,
+      "Socks": 17,
+      "Chest Star": 12,
+      "Bib": 30,
+      "Classic": 26
+    },
+    "Pattern": {
+      "Plain": 27,
+      "Tabby Stripes": 24,
+      "Spots": 13,
+      "Tuxedo": 19,
+      "Pirate Patch": 8,
+      "Siamese Points": 9
+    },
+    "Eyes": {
+      "Candle Eyes": 4,
+      "Normal": 24,
+      "Wink": 10,
+      "Sleepy": 33,
+      "Hypno": 6,
+      "Diamond Eyes": 11,
+      "Cyborg": 7,
+      "Dollar Signs": 4,
+      "Heart Eyes": 1
+    },
+    "Mouth": {
+      "Smile": 25,
+      "Smirk": 20,
+      "Fresh Fish": 9,
+      "Dollar Bill": 8,
+      "Cigar": 7,
+      "Meh": 14,
+      "Blep": 8,
+      "Gold Tooth Grin": 9
+    },
+    "Headwear": {
+      "None": 38,
+      "Top Hat": 7,
+      "Mohawk": 8,
+      "Summit Cap": 2,
+      "Halo": 3,
+      "Party Hat": 6,
+      "Wizard Hat": 6,
+      "Crown": 2,
+      "Cowboy Hat": 6,
+      "Ninja Headband": 11,
+      "Beanie": 9,
+      "Arrow Through Head": 1,
+      "The Avalanche Hood": 1
+    },
+    "Eyewear": {
+      "None": 63,
+      "VR Headset": 3,
+      "Round Glasses": 12,
+      "Star Shades": 1,
+      "3D Glasses": 11,
+      "Monocle": 8,
+      "Deal With It": 2
+    },
+    "Outfit": {
+      "Gold Chain": 5,
+      "Bandana": 7,
+      "Cape": 2,
+      "None": 45,
+      "Scarf": 6,
+      "Hoodie": 11,
+      "Bowtie": 10,
+      "Suit & Tie": 9,
+      "AVAX Hoodie": 5
+    },
+    "Paw Item": {
+      "Stonks Phone": 5,
+      "Coin Stack": 3,
+      "None": 44,
+      "Green Candle": 10,
+      "Money Bag": 9,
+      "Snowflake": 2,
+      "AVAX Red Card": 1,
+      "Briefcase": 8,
+      "Red Candle": 12,
+      "Rocket": 4,
+      "Diamond (HODL)": 1,
+      "Ice Axe": 1
+    },
+    "Earring": {
+      "None": 80,
+      "Gold Hoop": 13,
+      "Diamond Stud": 3,
+      "Gold Cross": 4
+    },
+    "Tail": {
+      "Normal": 59,
+      "Lightning Tail": 5,
+      "Star Tail": 15,
+      "Coin Tail": 18,
+      "Flame Tail": 3
+    },
+    "Effect": {
+      "Avalanche Aura": 5,
+      "None": 56,
+      "Sparkles": 13,
+      "Stonks Arrow": 5,
+      "Snowstorm": 14,
+      "Coin Rain": 6,
+      "To The Moon": 1
+    }
+  }
+}

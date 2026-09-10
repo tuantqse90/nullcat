@@ -1,0 +1,733 @@
+{
+  "Background": [
+    {
+      "name": "Frost",
+      "tier": "common",
+      "file": "Background_Frost.png"
+    },
+    {
+      "name": "Avalanche Red",
+      "tier": "uncommon",
+      "file": "Background_Avalanche_Red.png"
+    },
+    {
+      "name": "Night Purple",
+      "tier": "common",
+      "file": "Background_Night_Purple.png"
+    },
+    {
+      "name": "Sky",
+      "tier": "common",
+      "file": "Background_Sky.png"
+    },
+    {
+      "name": "Sunset",
+      "tier": "uncommon",
+      "file": "Background_Sunset.png"
+    },
+    {
+      "name": "Solid Gold",
+      "tier": "epic",
+      "file": "Background_Solid_Gold.png"
+    },
+    {
+      "name": "Green Candles",
+      "tier": "rare",
+      "file": "Background_Green_Candles.png"
+    },
+    {
+      "name": "Red Candles",
+      "tier": "rare",
+      "file": "Background_Red_Candles.png"
+    },
+    {
+      "name": "Subnet Matrix",
+      "tier": "epic",
+      "file": "Background_Subnet_Matrix.png"
+    },
+    {
+      "name": "Moon Night",
+      "tier": "uncommon",
+      "file": "Background_Moon_Night.png"
+    },
+    {
+      "name": "Money Rain",
+      "tier": "rare",
+      "file": "Background_Money_Rain.png"
+    },
+    {
+      "name": "Vaporwave",
+      "tier": "epic",
+      "file": "Background_Vaporwave.png"
+    },
+    {
+      "name": "Snowfall Red",
+      "tier": "epic",
+      "file": "Background_Snowfall_Red.png"
+    }
+  ],
+  "Fur": [
+    {
+      "name": "Orange Tabby",
+      "tier": "common",
+      "file": "Fur_Orange_Tabby.png"
+    },
+    {
+      "name": "Gray",
+      "tier": "common",
+      "file": "Fur_Gray.png"
+    },
+    {
+      "name": "Black",
+      "tier": "uncommon",
+      "file": "Fur_Black.png"
+    },
+    {
+      "name": "White",
+      "tier": "uncommon",
+      "file": "Fur_White.png"
+    },
+    {
+      "name": "Cream",
+      "tier": "common",
+      "file": "Fur_Cream.png"
+    },
+    {
+      "name": "Money Green",
+      "tier": "rare",
+      "file": "Fur_Money_Green.png"
+    },
+    {
+      "name": "Golden",
+      "tier": "epic",
+      "file": "Fur_Golden.png"
+    },
+    {
+      "name": "Pink",
+      "tier": "rare",
+      "file": "Fur_Pink.png"
+    },
+    {
+      "name": "Zombie",
+      "tier": "epic",
+      "file": "Fur_Zombie.png"
+    },
+    {
+      "name": "Alien",
+      "tier": "legendary",
+      "file": "Fur_Alien.png"
+    },
+    {
+      "name": "Avalanche Red",
+      "tier": "legendary",
+      "file": "Fur_Avalanche_Red.png"
+    }
+  ],
+  "Body": [
+    {
+      "name": "Sitting",
+      "tier": "common",
+      "file": "Body_Sitting.png"
+    },
+    {
+      "name": "Chonk",
+      "tier": "common",
+      "file": "Body_Chonk.png"
+    },
+    {
+      "name": "Slim",
+      "tier": "uncommon",
+      "file": "Body_Slim.png"
+    },
+    {
+      "name": "Loaf",
+      "tier": "uncommon",
+      "file": "Body_Loaf.png"
+    },
+    {
+      "name": "Standing",
+      "tier": "rare",
+      "file": "Body_Standing.png"
+    },
+    {
+      "name": "Wisp",
+      "tier": "epic",
+      "file": "Body_Wisp.png"
+    }
+  ],
+  "Head": [
+    {
+      "name": "Normal",
+      "tier": "common",
+      "file": "Head_Normal.png"
+    },
+    {
+      "name": "Round",
+      "tier": "common",
+      "file": "Head_Round.png"
+    },
+    {
+      "name": "Narrow",
+      "tier": "uncommon",
+      "file": "Head_Narrow.png"
+    },
+    {
+      "name": "Fluffy",
+      "tier": "uncommon",
+      "file": "Head_Fluffy.png"
+    },
+    {
+      "name": "Square",
+      "tier": "rare",
+      "file": "Head_Square.png"
+    }
+  ],
+  "Ears": [
+    {
+      "name": "Pointy",
+      "tier": "common",
+      "file": "Ears_Pointy.png"
+    },
+    {
+      "name": "Round",
+      "tier": "common",
+      "file": "Ears_Round.png"
+    },
+    {
+      "name": "Folded",
+      "tier": "uncommon",
+      "file": "Ears_Folded.png"
+    },
+    {
+      "name": "Big",
+      "tier": "uncommon",
+      "file": "Ears_Big.png"
+    },
+    {
+      "name": "Tufted",
+      "tier": "rare",
+      "file": "Ears_Tufted.png"
+    },
+    {
+      "name": "Notched",
+      "tier": "rare",
+      "file": "Ears_Notched.png"
+    }
+  ],
+  "Mane": [
+    {
+      "name": "None",
+      "tier": "common",
+      "file": "Mane_None.png"
+    },
+    {
+      "name": "Neck Ruff",
+      "tier": "uncommon",
+      "file": "Mane_Neck_Ruff.png"
+    },
+    {
+      "name": "Beard",
+      "tier": "uncommon",
+      "file": "Mane_Beard.png"
+    },
+    {
+      "name": "Sideburns",
+      "tier": "rare",
+      "file": "Mane_Sideburns.png"
+    },
+    {
+      "name": "Lion Mane",
+      "tier": "epic",
+      "file": "Mane_Lion_Mane.png"
+    }
+  ],
+  "Whiskers": [
+    {
+      "name": "None",
+      "tier": "common",
+      "file": "Whiskers_None.png"
+    },
+    {
+      "name": "Short",
+      "tier": "common",
+      "file": "Whiskers_Short.png"
+    },
+    {
+      "name": "Long",
+      "tier": "uncommon",
+      "file": "Whiskers_Long.png"
+    },
+    {
+      "name": "Droopy",
+      "tier": "uncommon",
+      "file": "Whiskers_Droopy.png"
+    },
+    {
+      "name": "Perky",
+      "tier": "rare",
+      "file": "Whiskers_Perky.png"
+    }
+  ],
+  "Belly": [
+    {
+      "name": "Classic",
+      "tier": "common",
+      "file": "Belly_Classic.png"
+    },
+    {
+      "name": "Bib",
+      "tier": "common",
+      "file": "Belly_Bib.png"
+    },
+    {
+      "name": "Solid",
+      "tier": "uncommon",
+      "file": "Belly_Solid.png"
+    },
+    {
+      "name": "Socks",
+      "tier": "uncommon",
+      "file": "Belly_Socks.png"
+    },
+    {
+      "name": "Chest Star",
+      "tier": "rare",
+      "file": "Belly_Chest_Star.png"
+    }
+  ],
+  "Pattern": [
+    {
+      "name": "Plain",
+      "tier": "common",
+      "file": "Pattern_Plain.png"
+    },
+    {
+      "name": "Tabby Stripes",
+      "tier": "common",
+      "file": "Pattern_Tabby_Stripes.png"
+    },
+    {
+      "name": "Spots",
+      "tier": "uncommon",
+      "file": "Pattern_Spots.png"
+    },
+    {
+      "name": "Tuxedo",
+      "tier": "uncommon",
+      "file": "Pattern_Tuxedo.png"
+    },
+    {
+      "name": "Pirate Patch",
+      "tier": "rare",
+      "file": "Pattern_Pirate_Patch.png"
+    },
+    {
+      "name": "Siamese Points",
+      "tier": "rare",
+      "file": "Pattern_Siamese_Points.png"
+    }
+  ],
+  "Eyes": [
+    {
+      "name": "Normal",
+      "tier": "common",
+      "file": "Eyes_Normal.png"
+    },
+    {
+      "name": "Sleepy",
+      "tier": "common",
+      "file": "Eyes_Sleepy.png"
+    },
+    {
+      "name": "Wink",
+      "tier": "uncommon",
+      "file": "Eyes_Wink.png"
+    },
+    {
+      "name": "Dollar Signs",
+      "tier": "rare",
+      "file": "Eyes_Dollar_Signs.png"
+    },
+    {
+      "name": "Diamond Eyes",
+      "tier": "rare",
+      "file": "Eyes_Diamond_Eyes.png"
+    },
+    {
+      "name": "Hypno",
+      "tier": "rare",
+      "file": "Eyes_Hypno.png"
+    },
+    {
+      "name": "Heart Eyes",
+      "tier": "epic",
+      "file": "Eyes_Heart_Eyes.png"
+    },
+    {
+      "name": "Candle Eyes",
+      "tier": "epic",
+      "file": "Eyes_Candle_Eyes.png"
+    },
+    {
+      "name": "Cyborg",
+      "tier": "epic",
+      "file": "Eyes_Cyborg.png"
+    },
+    {
+      "name": "Laser Eyes",
+      "tier": "legendary",
+      "file": "Eyes_Laser_Eyes.png"
+    }
+  ],
+  "Mouth": [
+    {
+      "name": "Smile",
+      "tier": "common",
+      "file": "Mouth_Smile.png"
+    },
+    {
+      "name": "Smirk",
+      "tier": "common",
+      "file": "Mouth_Smirk.png"
+    },
+    {
+      "name": "Meh",
+      "tier": "uncommon",
+      "file": "Mouth_Meh.png"
+    },
+    {
+      "name": "Gold Tooth Grin",
+      "tier": "rare",
+      "file": "Mouth_Gold_Tooth_Grin.png"
+    },
+    {
+      "name": "Cigar",
+      "tier": "rare",
+      "file": "Mouth_Cigar.png"
+    },
+    {
+      "name": "Dollar Bill",
+      "tier": "rare",
+      "file": "Mouth_Dollar_Bill.png"
+    },
+    {
+      "name": "Fresh Fish",
+      "tier": "uncommon",
+      "file": "Mouth_Fresh_Fish.png"
+    },
+    {
+      "name": "Blep",
+      "tier": "uncommon",
+      "file": "Mouth_Blep.png"
+    }
+  ],
+  "Headwear": [
+    {
+      "name": "None",
+      "tier": "common",
+      "file": "Headwear_None.png"
+    },
+    {
+      "name": "Summit Cap",
+      "tier": "rare",
+      "file": "Headwear_Summit_Cap.png"
+    },
+    {
+      "name": "Crown",
+      "tier": "epic",
+      "file": "Headwear_Crown.png"
+    },
+    {
+      "name": "Top Hat",
+      "tier": "rare",
+      "file": "Headwear_Top_Hat.png"
+    },
+    {
+      "name": "Beanie",
+      "tier": "uncommon",
+      "file": "Headwear_Beanie.png"
+    },
+    {
+      "name": "Cowboy Hat",
+      "tier": "uncommon",
+      "file": "Headwear_Cowboy_Hat.png"
+    },
+    {
+      "name": "Halo",
+      "tier": "epic",
+      "file": "Headwear_Halo.png"
+    },
+    {
+      "name": "Devil Horns",
+      "tier": "epic",
+      "file": "Headwear_Devil_Horns.png"
+    },
+    {
+      "name": "Wizard Hat",
+      "tier": "rare",
+      "file": "Headwear_Wizard_Hat.png"
+    },
+    {
+      "name": "Party Hat",
+      "tier": "uncommon",
+      "file": "Headwear_Party_Hat.png"
+    },
+    {
+      "name": "Ninja Headband",
+      "tier": "uncommon",
+      "file": "Headwear_Ninja_Headband.png"
+    },
+    {
+      "name": "Mohawk",
+      "tier": "rare",
+      "file": "Headwear_Mohawk.png"
+    },
+    {
+      "name": "Arrow Through Head",
+      "tier": "legendary",
+      "file": "Headwear_Arrow_Through_Head.png"
+    },
+    {
+      "name": "The Avalanche Hood",
+      "tier": "epic",
+      "file": "Headwear_The_Avalanche_Hood.png"
+    }
+  ],
+  "Eyewear": [
+    {
+      "name": "None",
+      "tier": "common",
+      "file": "Eyewear_None.png"
+    },
+    {
+      "name": "Deal With It",
+      "tier": "rare",
+      "file": "Eyewear_Deal_With_It.png"
+    },
+    {
+      "name": "Round Glasses",
+      "tier": "uncommon",
+      "file": "Eyewear_Round_Glasses.png"
+    },
+    {
+      "name": "Monocle",
+      "tier": "rare",
+      "file": "Eyewear_Monocle.png"
+    },
+    {
+      "name": "3D Glasses",
+      "tier": "uncommon",
+      "file": "Eyewear_3D_Glasses.png"
+    },
+    {
+      "name": "VR Headset",
+      "tier": "epic",
+      "file": "Eyewear_VR_Headset.png"
+    },
+    {
+      "name": "Star Shades",
+      "tier": "epic",
+      "file": "Eyewear_Star_Shades.png"
+    }
+  ],
+  "Outfit": [
+    {
+      "name": "None",
+      "tier": "common",
+      "file": "Outfit_None.png"
+    },
+    {
+      "name": "Gold Chain",
+      "tier": "rare",
+      "file": "Outfit_Gold_Chain.png"
+    },
+    {
+      "name": "Suit & Tie",
+      "tier": "rare",
+      "file": "Outfit_Suit_and_Tie.png"
+    },
+    {
+      "name": "Hoodie",
+      "tier": "uncommon",
+      "file": "Outfit_Hoodie.png"
+    },
+    {
+      "name": "Bowtie",
+      "tier": "uncommon",
+      "file": "Outfit_Bowtie.png"
+    },
+    {
+      "name": "Scarf",
+      "tier": "uncommon",
+      "file": "Outfit_Scarf.png"
+    },
+    {
+      "name": "Cape",
+      "tier": "epic",
+      "file": "Outfit_Cape.png"
+    },
+    {
+      "name": "Bandana",
+      "tier": "uncommon",
+      "file": "Outfit_Bandana.png"
+    },
+    {
+      "name": "AVAX Hoodie",
+      "tier": "rare",
+      "file": "Outfit_AVAX_Hoodie.png"
+    }
+  ],
+  "Paw Item": [
+    {
+      "name": "None",
+      "tier": "common",
+      "file": "Paw_Item_None.png"
+    },
+    {
+      "name": "Money Bag",
+      "tier": "rare",
+      "file": "Paw_Item_Money_Bag.png"
+    },
+    {
+      "name": "Stonks Phone",
+      "tier": "rare",
+      "file": "Paw_Item_Stonks_Phone.png"
+    },
+    {
+      "name": "Diamond (HODL)",
+      "tier": "epic",
+      "file": "Paw_Item_Diamond_HODL.png"
+    },
+    {
+      "name": "Rocket",
+      "tier": "epic",
+      "file": "Paw_Item_Rocket.png"
+    },
+    {
+      "name": "Green Candle",
+      "tier": "uncommon",
+      "file": "Paw_Item_Green_Candle.png"
+    },
+    {
+      "name": "Red Candle",
+      "tier": "uncommon",
+      "file": "Paw_Item_Red_Candle.png"
+    },
+    {
+      "name": "Coin Stack",
+      "tier": "rare",
+      "file": "Paw_Item_Coin_Stack.png"
+    },
+    {
+      "name": "Briefcase",
+      "tier": "uncommon",
+      "file": "Paw_Item_Briefcase.png"
+    },
+    {
+      "name": "Golden Trophy",
+      "tier": "legendary",
+      "file": "Paw_Item_Golden_Trophy.png"
+    },
+    {
+      "name": "AVAX Red Card",
+      "tier": "legendary",
+      "file": "Paw_Item_AVAX_Red_Card.png"
+    },
+    {
+      "name": "Ice Axe",
+      "tier": "epic",
+      "file": "Paw_Item_Ice_Axe.png"
+    },
+    {
+      "name": "Snowflake",
+      "tier": "rare",
+      "file": "Paw_Item_Snowflake.png"
+    }
+  ],
+  "Earring": [
+    {
+      "name": "None",
+      "tier": "common",
+      "file": "Earring_None.png"
+    },
+    {
+      "name": "Gold Hoop",
+      "tier": "uncommon",
+      "file": "Earring_Gold_Hoop.png"
+    },
+    {
+      "name": "Diamond Stud",
+      "tier": "rare",
+      "file": "Earring_Diamond_Stud.png"
+    },
+    {
+      "name": "Gold Cross",
+      "tier": "rare",
+      "file": "Earring_Gold_Cross.png"
+    }
+  ],
+  "Tail": [
+    {
+      "name": "Normal",
+      "tier": "common",
+      "file": "Tail_Normal.png"
+    },
+    {
+      "name": "Coin Tail",
+      "tier": "rare",
+      "file": "Tail_Coin_Tail.png"
+    },
+    {
+      "name": "Flame Tail",
+      "tier": "epic",
+      "file": "Tail_Flame_Tail.png"
+    },
+    {
+      "name": "Lightning Tail",
+      "tier": "epic",
+      "file": "Tail_Lightning_Tail.png"
+    },
+    {
+      "name": "Star Tail",
+      "tier": "rare",
+      "file": "Tail_Star_Tail.png"
+    }
+  ],
+  "Effect": [
+    {
+      "name": "None",
+      "tier": "common",
+      "file": "Effect_None.png"
+    },
+    {
+      "name": "Sparkles",
+      "tier": "uncommon",
+      "file": "Effect_Sparkles.png"
+    },
+    {
+      "name": "Coin Rain",
+      "tier": "rare",
+      "file": "Effect_Coin_Rain.png"
+    },
+    {
+      "name": "Stonks Arrow",
+      "tier": "rare",
+      "file": "Effect_Stonks_Arrow.png"
+    },
+    {
+      "name": "Avalanche Aura",
+      "tier": "epic",
+      "file": "Effect_Avalanche_Aura.png"
+    },
+    {
+      "name": "To The Moon",
+      "tier": "legendary",
+      "file": "Effect_To_The_Moon.png"
+    },
+    {
+      "name": "Snowstorm",
+      "tier": "uncommon",
+      "file": "Effect_Snowstorm.png"
+    }
+  ]
+}

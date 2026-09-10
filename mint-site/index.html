@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f5">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0a0a0a">
+<title>AvaxCats Mint — Team1 VN</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;900&family=Geist+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: light;
+    --avax: #e6212f; --ink: #1f1f1f; --frost: #ebf0fa; --steel: #a2afb2;
+    --bg: #f5f5f5; --fg: #18181b; --muted: #71717a;
+    --line: #e4e4e7; --line-strong: #d4d4d8; --surface: #ffffff; --hover: #f4f4f5;
+    --ok: #059669; --warn: #d97706;
+    --sans: "Geist", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: dark;
+      --bg: #0a0a0a; --fg: #fafafa; --muted: #a1a1aa;
+      --line: #27272a; --line-strong: #3f3f46; --surface: #09090b; --hover: #18181b;
+      --ok: #34d399; --warn: #fbbf24;
+    }
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html { -webkit-tap-highlight-color: transparent; }
+  button, a, summary { touch-action: manipulation; }
+  summary { list-style: none; cursor: pointer; }
+  summary::-webkit-details-marker { display: none; }
+  html { scroll-padding-top: 56px; }
+  body {
+    margin: 0; background: var(--bg); color: var(--fg);
+    font-family: var(--sans); font-size: 15px; line-height: 1.6;
+    -webkit-font-smoothing: antialiased; overflow-x: clip;
+  }
+  a { color: inherit; }
+  code { font-family: var(--mono); font-size: .9em; color: var(--fg); }
+  img.px { image-rendering: pixelated; display: block; }
+  .wrap { width: 100%; max-width: 80rem; margin: 0 auto; padding: 0 20px; }
+  ::selection { background: rgb(230 33 47 / .25); }
+  :focus-visible { outline: 2px solid var(--avax); outline-offset: 2px; }
+
+  .eyebrow {
+    font-family: var(--mono); font-size: 10px; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .display {
+    text-transform: uppercase; letter-spacing: -.01em; font-weight: 900;
+    line-height: .95; margin: 0; color: var(--fg);
+  }
+  .red { color: var(--avax); }
+  .dot { position: relative; display: inline-flex; width: 6px; height: 6px; flex: none; }
+  .dot::before {
+    content: ""; position: absolute; inset: 0; border-radius: 999px;
+    background: var(--avax); opacity: .6; animation: ping 1s cubic-bezier(0,0,.2,1) infinite;
+  }
+  .dot::after { content: ""; position: absolute; inset: 0; border-radius: 999px; background: var(--avax); }
+  .dot.ok::before, .dot.ok::after { background: var(--ok); }
+  .dot.off::before { display: none; } .dot.off::after { background: #a1a1aa; }
+
+  /* ── nav ─────────────────────────────────────────────── */
+  .nav {
+    position: sticky; top: 0; z-index: 40; height: 56px;
+    border-bottom: 1px solid var(--line);
+    background: color-mix(in srgb, var(--surface) 80%, transparent);
+    backdrop-filter: blur(6px);
+  }
+  .nav-in { display: flex; align-items: center; gap: 8px; height: 56px; }
+  .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; padding-right: 16px; }
+  .brand svg { width: 28px; height: 28px; color: var(--avax); }
+  .brand b { font: 700 11px var(--mono); letter-spacing: .22em; color: var(--fg); }
+  .brand span { font: 400 11px var(--mono); letter-spacing: .22em; color: var(--muted); }
+  .links { display: flex; gap: 4px; }
+  .links a { padding: 8px; font-size: 14px; color: var(--muted); text-decoration: none; transition: color .15s; }
+  .links a:hover { color: var(--fg); }
+  .grow { flex: 1; }
+  .chip { border: 1px solid var(--line); padding: 6px 10px; white-space: nowrap; }
+  .menu { display: none; }
+  .menu > summary { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 6px; color: var(--muted); }
+  .menu > summary:hover { background: var(--hover); color: var(--fg); }
+  .menu > summary svg { width: 16px; height: 16px; }
+  .menu > summary .ic-x, .menu[open] > summary .ic-menu { display: none; }
+  .menu[open] > summary .ic-x { display: block; }
+  .menu .panel {
+    position: absolute; left: 0; right: 0; top: 56px; padding: 12px 20px;
+    border-bottom: 1px solid var(--line); background: var(--surface);
+    box-shadow: 0 16px 32px rgb(0 0 0 / .12);
+  }
+  .menu .panel .chip { display: inline-flex; align-items: center; gap: 8px; border: 0; padding: 8px; margin-bottom: 4px; }
+  .menu .panel a {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 8px; font-size: 15px; color: var(--fg); text-decoration: none;
+  }
+  .menu .panel a:hover { background: var(--hover); }
+  .menu .panel a::after { content: "↗"; color: var(--muted); font-family: var(--mono); font-size: 12px; }
+  @media (max-width: 720px) { .links, .brand span { display: none; } .menu { display: block; } .chip.net { display: none; } }
+
+  /* ── hero ────────────────────────────────────────────── */
+  .hero { position: relative; overflow: hidden; text-align: center; }
+  .hero::before {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background-image: radial-gradient(var(--line-strong) 1px, transparent 1px);
+    background-size: 22px 22px;
+    mask-image: radial-gradient(ellipse at 50% 40%, black 20%, transparent 72%);
+  }
+  .hero .wrap { position: relative; display: flex; flex-direction: column; align-items: center; padding: 72px 20px 56px; }
+  .hero .eyebrow { display: inline-flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px; }
+  .hero h1 { margin-top: 24px; font-size: 2.25rem; }
+  .hero .sub { max-width: 36rem; margin: 28px 0 0; color: var(--muted); font-size: 14px; line-height: 1.7; }
+  .hero .cta-row { display: flex; flex-direction: column; gap: 16px; width: 100%; margin-top: 36px; }
+  .readmore {
+    margin-top: 32px; font: 400 11px var(--mono); letter-spacing: .18em;
+    color: var(--muted); text-decoration: none; transition: color .15s;
+  }
+  .readmore:hover { color: var(--fg); }
+  @media (min-width: 640px) {
+    .hero .wrap { padding: 96px 20px 80px; }
+    .hero h1 { font-size: 3.25rem; }
+    .hero .sub { font-size: 16px; }
+    .hero .cta-row { flex-direction: row; width: auto; gap: 24px; }
+  }
+  @media (min-width: 900px) { .hero h1 { font-size: 4.5rem; } }
+  @media (min-width: 1280px) { .hero h1 { font-size: 5.5rem; } }
+
+  .marquee { position: relative; overflow: hidden; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--surface); }
+  .marquee::before, .marquee::after {
+    content: ""; position: absolute; top: 0; bottom: 0; width: 96px; z-index: 2; pointer-events: none;
+  }
+  .marquee::before { left: 0; background: linear-gradient(to right, var(--surface), transparent); }
+  .marquee::after { right: 0; background: linear-gradient(to left, var(--surface), transparent); }
+  .marquee .track { display: flex; gap: 1px; width: max-content; padding: 12px 0; animation: marquee 70s linear infinite; }
+  .marquee img { width: 48px; height: 48px; flex: none; }
+  @media (min-width: 900px) { .marquee img { width: 56px; height: 56px; } }
+
+  /* ── buttons ─────────────────────────────────────────── */
+  button { all: unset; box-sizing: border-box; cursor: pointer; font-family: var(--sans); }
+  button:disabled { pointer-events: none; opacity: .4; }
+  .cta {
+    position: relative; isolation: isolate; overflow: hidden;
+    display: inline-flex; align-items: center; justify-content: space-between; gap: 32px;
+    min-height: 52px; padding: 16px 24px; width: 100%;
+    font-size: 14px; font-weight: 600; color: #fff; background: var(--avax);
+    transition: color .3s; white-space: nowrap; text-decoration: none;
+  }
+  .cta::before {
+    content: ""; position: absolute; inset: 0; z-index: -1; background: var(--frost);
+    transform: scaleX(0); transform-origin: left; transition: transform .3s cubic-bezier(.22,1,.36,1);
+  }
+  .cta::after { content: "→"; font-family: var(--mono); font-weight: 400; }
+  .cta:hover { color: var(--ink); }
+  .cta:hover::before { transform: scaleX(1); }
+  .cta.dark { background: var(--ink); box-shadow: inset 4px 0 0 var(--avax); }
+  .cta.inverse { background: transparent; color: #fff; border: 1px solid rgb(255 255 255 / .2); justify-content: center; }
+  .cta.inverse::before { background: rgb(255 255 255 / .1); } .cta.inverse::after { content: none; } .cta.inverse:hover { color: #fff; }
+  .cta.sm { min-height: 40px; padding: 0 16px; font-size: 13px; width: auto; gap: 8px; }
+  .cta.sm::after { content: none; }
+  .cta.outline { background: transparent; color: var(--fg); border: 1px solid var(--line-strong); }
+  .cta.outline::before { background: var(--hover); } .cta.outline:hover { color: var(--fg); }
+  @media (min-width: 640px) { .cta { width: auto; min-width: 220px; } }
+
+  /* ── stats strip ─────────────────────────────────────── */
+  .bar { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .bar .cells {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line);
+    width: 100%; max-width: 80rem; margin: 0 auto;
+  }
+  .stat { display: flex; flex-direction: column; gap: 6px; min-width: 0; padding: 16px 20px; background: var(--surface); }
+  .stat .lbl { display: flex; align-items: center; gap: 8px; font-weight: 700; }
+  .stat .val {
+    font-family: var(--mono); font-size: 16px; letter-spacing: -.02em; color: var(--fg);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-variant-numeric: tabular-nums;
+  }
+  .stat .val:empty::before { content: "—"; color: var(--muted); }
+  .stat .val .ok { color: var(--fg); }
+  .stat .val .st { color: var(--muted); }
+  .actions { grid-column: span 2; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 16px 20px; background: var(--surface); }
+  @media (min-width: 900px) {
+    .bar .cells { grid-template-columns: 1.2fr 1fr 1fr 1fr auto; }
+    .stat { padding: 16px 24px; } .stat .val { font-size: 18px; }
+    .actions { grid-column: auto; justify-content: flex-end; padding: 16px 24px; }
+  }
+
+  /* ── content ─────────────────────────────────────────── */
+  .content { padding: 48px 20px; }
+  @media (min-width: 900px) { .content { padding: 64px 24px; } }
+  .chapter { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px 32px; margin-bottom: 32px; }
+  .chapter h2 { margin-top: 12px; font-size: 1.75rem; }
+  .chapter .hint { max-width: 42rem; margin: 16px 0 0; color: var(--muted); font-size: 14px; line-height: 1.7; }
+  @media (min-width: 640px) { .chapter h2 { font-size: 3rem; } .chapter .hint { font-size: 16px; } }
+
+  .grid {
+    display: grid; gap: 1px; background: var(--surface); border: 1px solid var(--line);
+    grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+  }
+  .grid button { position: relative; padding: 6px; background: var(--surface); outline: 1px solid var(--line); transition: background .15s; }
+  .grid button:hover { background: var(--hover); }
+  .grid button img.px { width: 100%; height: auto; }
+  .grid button.sel { z-index: 1; outline: 2px solid var(--avax); outline-offset: 0; }
+  .grid button.gone img.px { opacity: .25; filter: grayscale(1); }
+  .grid button.gone::after {
+    content: ""; position: absolute; inset: 0; margin: auto; width: 14px; height: 14px;
+    background: var(--muted);
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3.5' y='7' width='9' height='6.5' rx='1.2'/%3E%3Cpath d='M5.75 7V5.25a2.25 2.25 0 0 1 4.5 0V7'/%3E%3C/svg%3E") center / contain no-repeat;
+  }
+
+  /* ── mint pillar ─────────────────────────────────────── */
+  .mintbox {
+    display: flex; flex-direction: column; gap: 24px; margin-top: 24px; padding: 20px;
+    border-radius: 16px; background: var(--ink); color: #fff;
+  }
+  .mintbox .num { display: flex; align-items: center; justify-content: space-between; font: 400 11px var(--mono); letter-spacing: .18em; color: var(--steel); }
+  .mintbox img.px {
+    width: 144px; height: 144px; flex: none; border-radius: 8px;
+    border: 1px solid rgb(255 255 255 / .1); background: rgb(0 0 0 / .3);
+    animation: settle .28s cubic-bezier(.22,1,.36,1) both;
+  }
+  .mintbox .info { flex: 1; min-width: 0; }
+  .mintbox .nm { font-size: 24px; font-weight: 300; letter-spacing: -.02em; line-height: 1.15; }
+  .mintbox .attrs summary {
+    margin-top: 14px; font: 400 10px var(--mono); letter-spacing: .18em; text-transform: uppercase;
+    color: var(--steel); display: flex; align-items: center; gap: 8px;
+  }
+  .mintbox .attrs summary::after { content: "→"; transition: transform .2s; }
+  .mintbox .attrs[open] summary::after { transform: rotate(90deg); }
+  .mintbox .stats {
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 16px; margin: 12px 0 0;
+  }
+  .mintbox .stats div { min-width: 0; }
+  .mintbox .stats dt { font: 400 10px var(--mono); letter-spacing: .18em; text-transform: uppercase; color: rgb(162 175 178 / .7); }
+  .mintbox .stats dd { margin: 0; font-size: 13px; color: rgb(255 255 255 / .9); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .mintbox .btns { display: flex; flex-direction: column; gap: 12px; }
+  .mintbox .btns .cta { width: 100%; min-width: 0; }
+  #log {
+    font-family: var(--mono); font-size: 12.5px; margin-top: 16px; color: var(--steel);
+    white-space: pre-wrap; word-break: break-all; line-height: 1.8;
+  }
+  #log:empty { display: none; }
+  #log a { color: #fff; }
+  #log .ok { color: #34d399; }
+  #log .err { color: #f87171; }
+  #log .warn { color: #fbbf24; }
+  #log code { color: #fff; }
+  .mbar { display: none; }
+  @media (max-width: 899px) {
+    .mbar {
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; display: flex; align-items: center; gap: 12px;
+      padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+      border-top: 1px solid var(--line); background: color-mix(in srgb, var(--surface) 88%, transparent);
+      backdrop-filter: blur(6px);
+    }
+    .mbar img.px { width: 44px; height: 44px; flex: none; border: 1px solid var(--line); background: var(--surface); }
+    .mbar .mi { flex: 1; min-width: 0; }
+    .mbar .mn { font-size: 13px; font-weight: 500; color: var(--fg); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .mbar .ms { font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .mbar .ms.ok { color: var(--ok); } .mbar .ms.warn { color: var(--warn); } .mbar .ms.err { color: var(--avax); }
+    .mbar .cta.sm { min-height: 40px; }
+    footer { padding-bottom: 72px; }
+  }
+  @media (min-width: 900px) {
+    .mintbox .attrs summary { display: none; }
+    .mintbox .stats { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px 24px; margin-top: 16px; }
+    .mintbox { flex-direction: row; align-items: flex-start; gap: 32px; padding: 28px; }
+    .mintbox .num { flex-direction: column; align-items: flex-start; width: 32px; gap: 16px; }
+    .mintbox .num .vert { writing-mode: vertical-rl; transform: rotate(180deg); font-size: 10px; opacity: .8; }
+    .mintbox img.px { width: 176px; height: 176px; }
+    .mintbox .nm { font-size: 30px; }
+    .mintbox .btns { width: 220px; flex: none; }
+  }
+  .mintbox .num .horiz { font-size: 10px; opacity: .8; }
+  @media (min-width: 900px) { .mintbox .num .horiz { display: none; } }
+  @media (max-width: 899px) { .mintbox .num .vert { display: none; } }
+
+  /* ── footer ──────────────────────────────────────────── */
+  footer { margin-top: 96px; border-top: 1px solid var(--line); background: var(--surface); }
+  .ft-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding: 20px 0; border-bottom: 1px solid var(--line); }
+  .ft-top .brand { padding: 0; } .ft-top .brand svg { color: var(--fg); width: 24px; height: 24px; }
+  .ft-top .status { display: flex; flex-wrap: wrap; gap: 8px 24px; }
+  .ft-top .status a, .ft-top .status span { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; }
+  .ft-top .status a:hover { color: var(--fg); }
+  .ft-grid { display: grid; grid-template-columns: 1fr; gap: 1px; background: var(--line); }
+  .ft-col { display: flex; flex-direction: column; padding: 32px 0; background: var(--surface); }
+  .ft-col h3 { margin: 0 0 20px; }
+  .ft-col ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; font-size: 14px; color: var(--muted); }
+  .ft-col a { text-decoration: none; transition: color .15s; }
+  .ft-col a:hover { color: var(--fg); }
+  .ft-col .mono { font-family: var(--mono); font-size: 12px; word-break: break-all; }
+  .ft-bottom { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; padding: 24px 0; border-top: 1px solid var(--line); }
+  @media (min-width: 640px) { .ft-grid { grid-template-columns: 1fr 1fr; } .ft-col { padding: 32px 20px; } .ft-col:first-child { padding-left: 0; } }
+  @media (min-width: 900px) { .ft-grid { grid-template-columns: repeat(3, 1fr); } }
+
+  @keyframes ping { 75%, 100% { transform: scale(2); opacity: 0; } }
+  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  @keyframes settle { from { opacity: 0; transform: scale(.97); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .dot::before, .marquee .track, .mintbox img.px { animation: none !important; } }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="#">
+      <svg viewBox="0 0 220 190" fill="currentColor" aria-hidden="true">
+        <path d="M109.139252,23.041748 C111.741776,24.518684 114.786873,25.521351 116.039948,27.602837 C123.769547,40.442513 131.114777,53.514198 138.545532,66.532860 C141.523560,71.750351 141.392197,76.930382 138.378067,82.178566 C122.784348,109.330147 107.212326,136.494400 91.727638,163.708237 C88.432472,169.499405 83.770172,172.296158 77.077980,172.237946 C62.580860,172.111847 48.081749,172.237732 33.583733,172.183975 C25.895014,172.155457 23.042721,167.395203 26.880989,160.673264 C49.344860,121.332367 71.899803,82.043488 94.420807,42.735210 C97.235901,37.821735 99.810646,32.750118 102.939713,28.046438 C104.299789,26.001934 106.781303,24.703455 109.139252,23.041748 z"/>
+        <path d="M190.145935,151.838699 C192.156281,155.320618 194.133530,158.409164 195.809311,161.653442 C198.644424,167.142075 196.006195,172.076218 189.921402,172.129471 C171.131317,172.293900 152.337845,172.294647 133.547867,172.121841 C127.530586,172.066513 124.725456,166.870987 127.775551,161.592056 C136.920776,145.764069 146.170135,129.994598 155.552734,114.306282 C159.019684,108.509308 164.857819,108.843597 168.514145,114.968781 C175.755188,127.099236 182.832336,139.327515 190.145935,151.838699 z"/>
+      </svg>
+      <b>AVAXCATS</b><span>· BUILDER HUB</span>
+    </a>
+    <div class="links">
+      <a href="https://build.avax.network/?ref=HVHXK&utm_source=team1" target="_blank" rel="noreferrer">Builder Hub</a>
+      <a href="https://build.avax.network/docs" target="_blank" rel="noreferrer">Docs</a>
+      <a href="https://build.avax.network/console/primary-network/faucet" target="_blank" rel="noreferrer">Faucet</a>
+      <a href="https://testnet.snowtrace.io" target="_blank" rel="noreferrer">Snowtrace</a>
+    </div>
+    <span class="grow"></span>
+    <span class="eyebrow chip net" id="ft-net">—</span>
+    <details class="menu">
+      <summary aria-label="Mở menu">
+        <svg class="ic-menu" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M2.5 4.5h11M2.5 8h11M2.5 11.5h11"/></svg>
+        <svg class="ic-x" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg>
+      </summary>
+      <div class="panel">
+        <span class="eyebrow chip"><span class="dot"></span><span id="m-net">—</span></span>
+        <a href="https://build.avax.network/?ref=HVHXK&utm_source=team1" target="_blank" rel="noreferrer">Builder Hub</a>
+        <a href="https://build.avax.network/docs" target="_blank" rel="noreferrer">Docs</a>
+        <a href="https://build.avax.network/console/primary-network/faucet" target="_blank" rel="noreferrer">Faucet</a>
+        <a href="https://testnet.snowtrace.io" target="_blank" rel="noreferrer">Snowtrace</a>
+      </div>
+    </details>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow"><span class="dot"></span>Team Avalanche · Team1 VN · Bài 1</span>
+    <h1 class="display">Mint mèo<br>lên Avalanche<span class="red">.</span></h1>
+    <p class="sub">48 con mèo pixel sinh từ generator <code>nullcat</code>. Chọn một con, bấm mint,
+      NFT về ví của bạn. Ảnh và thuộc tính nhúng thẳng vào tokenURI — không cần IPFS.</p>
+    <div class="cta-row">
+      <a class="cta" href="#chon">Chọn mèo</a>
+      <a class="cta dark" href="https://build.avax.network/?ref=HVHXK&utm_source=team1" target="_blank" rel="noreferrer">Builder Hub</a>
+    </div>
+    <a class="readmore" href="https://build.avax.network/docs" target="_blank" rel="noreferrer">ĐỌC DOCS AVALANCHE →</a>
+  </div>
+  <div class="marquee"><div class="track" id="marquee"></div></div>
+</header>
+
+<section class="bar" aria-label="Trạng thái ví">
+  <div class="cells">
+    <div class="stat"><span class="eyebrow lbl"><span class="dot off" id="net-dot"></span>Mạng</span><span class="val st" id="net">Chưa kết nối</span></div>
+    <div class="stat"><span class="eyebrow lbl">Ví</span><span class="val" id="addr"></span></div>
+    <div class="stat"><span class="eyebrow lbl">Số dư</span><span class="val" id="bal"></span></div>
+    <div class="stat"><span class="eyebrow lbl">Đã mint</span><span class="val" id="supply"></span></div>
+    <div class="actions">
+      <button id="btn-dev" class="cta outline sm" hidden>Ví dev (anvil)</button>
+      <button id="btn-connect" class="cta sm">Kết nối ví</button>
+    </div>
+  </div>
+</section>
+
+<main class="wrap content" id="chon">
+  <div class="chapter">
+    <div>
+      <span class="eyebrow"><span class="red">01</span> · Chọn &amp; mint</span>
+      <h2 class="display">Chọn mèo của bạn<span class="red">.</span></h2>
+      <p class="hint">Mỗi con chỉ mint được một lần — luật nằm trong contract, không phải giao diện.
+        Con nào đã có chủ sẽ mờ đi và khoá lại.</p>
+    </div>
+  </div>
+  <div class="grid" id="grid"></div>
+
+  <div class="mintbox">
+    <div class="num"><span>02</span><span class="horiz">MÈO ĐANG CHỌN</span><span class="vert">MÈO ĐANG CHỌN</span></div>
+    <img class="px" id="sel-img" alt="Mèo đang chọn">
+    <div class="info">
+      <div class="nm" id="sel-name">—</div>
+      <details class="attrs" id="attrs" open>
+        <summary><span id="attrs-n">Thuộc tính</span></summary>
+        <dl class="stats" id="sel-attrs"></dl>
+      </details>
+      <div id="log"></div>
+    </div>
+    <div class="btns">
+      <button id="btn-mint" class="cta" disabled>Mint NFT</button>
+      <button id="btn-random" class="cta inverse">Ngẫu nhiên</button>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="ft-top">
+      <a class="brand" href="#">
+        <svg viewBox="0 0 220 190" fill="currentColor" aria-hidden="true">
+          <path d="M109.139252,23.041748 C111.741776,24.518684 114.786873,25.521351 116.039948,27.602837 C123.769547,40.442513 131.114777,53.514198 138.545532,66.532860 C141.523560,71.750351 141.392197,76.930382 138.378067,82.178566 C122.784348,109.330147 107.212326,136.494400 91.727638,163.708237 C88.432472,169.499405 83.770172,172.296158 77.077980,172.237946 C62.580860,172.111847 48.081749,172.237732 33.583733,172.183975 C25.895014,172.155457 23.042721,167.395203 26.880989,160.673264 C49.344860,121.332367 71.899803,82.043488 94.420807,42.735210 C97.235901,37.821735 99.810646,32.750118 102.939713,28.046438 C104.299789,26.001934 106.781303,24.703455 109.139252,23.041748 z"/>
+          <path d="M190.145935,151.838699 C192.156281,155.320618 194.133530,158.409164 195.809311,161.653442 C198.644424,167.142075 196.006195,172.076218 189.921402,172.129471 C171.131317,172.293900 152.337845,172.294647 133.547867,172.121841 C127.530586,172.066513 124.725456,166.870987 127.775551,161.592056 C136.920776,145.764069 146.170135,129.994598 155.552734,114.306282 C159.019684,108.509308 164.857819,108.843597 168.514145,114.968781 C175.755188,127.099236 182.832336,139.327515 190.145935,151.838699 z"/>
+        </svg>
+        <b>AVAXCATS · BUILDER HUB</b>
+      </a>
+      <div class="status eyebrow">
+        <span><span class="dot off" id="ft-dot"></span><span id="ft-status">Chưa có contract</span></span>
+        <a href="https://status.avax.network/" target="_blank" rel="noreferrer"><span class="dot ok"></span>Network status</a>
+      </div>
+    </div>
+    <div class="ft-grid">
+      <div class="ft-col">
+        <h3 class="eyebrow">Avalanche</h3>
+        <ul>
+          <li><a href="https://build.avax.network/?ref=HVHXK&utm_source=team1" target="_blank" rel="noreferrer">Builder Hub ↗</a></li>
+          <li><a href="https://build.avax.network/docs" target="_blank" rel="noreferrer">Documentation ↗</a></li>
+          <li><a href="https://build.avax.network/console/primary-network/faucet" target="_blank" rel="noreferrer">Testnet faucet ↗</a></li>
+          <li><a href="https://testnet.snowtrace.io" target="_blank" rel="noreferrer">Snowtrace ↗</a></li>
+        </ul>
+      </div>
+      <div class="ft-col">
+        <h3 class="eyebrow">Contract</h3>
+        <ul><li class="mono" id="ft-contract">chưa cấu hình</li></ul>
+      </div>
+      <div class="ft-col">
+        <h3 class="eyebrow">Team</h3>
+        <ul>
+          <li>Team Avalanche · Team1 VN</li>
+          <li>Testnet, không có giá trị thật</li>
+          <li>Bài 1 — mint page thuần HTML + ethers.js</li>
+        </ul>
+      </div>
+    </div>
+    <div class="ft-bottom eyebrow"><span>© 2026 Team1 VN</span><span>Built on Avalanche</span></div>
+  </div>
+</footer>
+
+<div class="mbar" id="mbar">
+  <img class="px" id="sel-img-m" alt="">
+  <div class="mi"><div class="mn" id="sel-name-m">—</div><div class="ms" id="sel-status-m"></div></div>
+  <button id="btn-mint-m" class="cta sm" disabled>Mint</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.2/ethers.umd.min.js"></script>
+<script src="config.js"></script>
+<script src="cats.js"></script>
+<script>
+const CFG = window.AVAXCATS_CONFIG ?? {};
+const NETWORK = CFG.NETWORK === "anvil" ? "anvil" : "fuji";
+const CONTRACT_ADDRESS = CFG.CONTRACT_ADDRESS ?? "";
+
+const NETWORKS = {
+  anvil: {
+    chainId: "0x7a69",                                 // 31337
+    chainName: "Anvil local (AvaxCats)",
+    nativeCurrency: { name: "Avalanche", symbol: "AVAX", decimals: 18 },
+    rpcUrls: ["http://127.0.0.1:8545"],
+    label: "ANVIL LOCAL (31337)",
+    explorer: "",                                      // local không có explorer
+  },
+  fuji: {
+    chainId: "0xa869",                                 // 43113
+    chainName: "Avalanche Fuji C-Chain",
+    nativeCurrency: { name: "Avalanche", symbol: "AVAX", decimals: 18 },
+    rpcUrls: ["https://api.avax-test.network/ext/bc/C/rpc"],
+    blockExplorerUrls: ["https://testnet.snowtrace.io/"],
+    label: "FUJI TESTNET (43113)",
+    explorer: "https://testnet.snowtrace.io/",
+  },
+};
+
+const NET = NETWORKS[NETWORK];
+const isLocal = NETWORK === "anvil";
+
+const addChainParams = {
+  chainId: NET.chainId,
+  chainName: NET.chainName,
+  nativeCurrency: NET.nativeCurrency,
+  rpcUrls: NET.rpcUrls,
+  ...(NET.blockExplorerUrls ? { blockExplorerUrls: NET.blockExplorerUrls } : {}),
+};
+
+const ABI = [
+  "function mint(uint256 catId, string uri) returns (uint256)",
+  "function totalMinted() view returns (uint256)",
+  "function MAX_SUPPLY() view returns (uint256)",
+  "function mintedBitmap() view returns (uint256)",
+  "event Minted(address indexed to, uint256 indexed tokenId, uint256 indexed catId)",
+  "error CatAlreadyMinted(uint256 catId)",
+  "error CatDoesNotExist(uint256 catId)",
+];
+
+let provider, signer, contract, selected = null;
+
+let taken = [];
+
+const $ = (id) => document.getElementById(id);
+const log = (html) => { $("log").innerHTML = html; };
+
+function drawGrid() {
+  const grid = $("grid");
+  CATS.forEach((c, i) => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.title = c.name;
+    b.innerHTML = `<img class="px" src="${c.image}" alt="${c.name}">`;
+    b.addEventListener("click", () => select(i));
+    grid.appendChild(b);
+  });
+}
+
+function select(i) {
+  selected = i;
+  const c = CATS[i];
+  document.querySelectorAll(".grid button")
+    .forEach((b, j) => b.classList.toggle("sel", j === i));
+  log(taken[i]
+    ? '<span class="warn">🔒 Con này đã có người mint rồi</span> — mỗi con chỉ 1-of-1, chọn con khác nhé.'
+    : "");
+  $("sel-img").src = c.image;
+  $("sel-name").textContent = c.name;
+  $("sel-img-m").src = c.image;
+  $("sel-name-m").textContent = c.name;
+  const esc = (v) => String(v).replace(/&/g, "&amp;").replace(/</g, "&lt;");
+  $("sel-attrs").innerHTML = c.attributes
+    .map((a) => `<div><dt>${esc(a.trait_type)}</dt><dd>${esc(a.value)}</dd></div>`).join("");
+  $("attrs-n").textContent = c.attributes.length + " thuộc tính";
+  setBarStatus("", "");
+  updateMintButton();
+}
+
+async function connect() {
+  if (!window.ethereum) {
+    log('<span class="err">Chưa cài ví!</span> Cài Core Wallet ' +
+        '(<a href="https://core.app" target="_blank">core.app</a>) hoặc MetaMask rồi tải lại trang.' +
+        (isLocal ? ' Hoặc bấm <b>DÙNG VÍ DEV (ANVIL)</b> — không cần ví.' : ''));
+    return;
+  }
+  try {
+    await window.ethereum.request({ method: "eth_requestAccounts" });
+
+    try {
+      await window.ethereum.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: NET.chainId }],
+      });
+    } catch (e) {
+      if (e.code === 4902) {
+        await window.ethereum.request({
+          method: "wallet_addEthereumChain", params: [addChainParams],
+        });
+      } else { throw e; }
+    }
+
+    provider = new ethers.BrowserProvider(window.ethereum);
+    signer = await provider.getSigner();
+    await afterConnect("ĐÃ KẾT NỐI ✓");
+  } catch (e) {
+    log('<span class="err">Lỗi kết nối:</span> ' + (e.shortMessage || e.message));
+  }
+}
+
+async function connectDev() {
+  try {
+    provider = new ethers.JsonRpcProvider(NET.rpcUrls[0], undefined, {
+      staticNetwork: true,
+    });
+    signer = await provider.getSigner(0);
+    await afterConnect("VÍ DEV ✓");
+  } catch (e) {
+    log('<span class="err">Không kết nối được anvil</span> ở ' + NET.rpcUrls[0] +
+        ' — đã chạy <code>npm run anvil</code> chưa? (' + (e.shortMessage || e.message) + ')');
+  }
+}
+
+async function afterConnect(btnLabel) {
+  contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
+
+  const addr = await signer.getAddress();
+  const bal = await provider.getBalance(addr);
+  $("net").innerHTML = '<span class="ok">' + NET.label + '</span>';
+  $("net-dot").className = "dot";
+  $("addr").textContent = addr.slice(0, 6) + "…" + addr.slice(-4);
+  $("bal").textContent = (+ethers.formatEther(bal)).toFixed(3) + " AVAX";
+  $("btn-connect").textContent = btnLabel;
+
+  await Promise.all([refreshSupply(), refreshTaken()]);
+  updateMintButton();
+  if (bal === 0n && !isLocal) {
+    log('<span class="warn">Ví chưa có AVAX test.</span> Xin tại faucet: ' +
+        '<a href="https://build.avax.network/console/primary-network/faucet" target="_blank">build.avax.network/console → faucet</a>');
+  }
+}
+
+async function refreshBalance() {
+  if (!signer || !provider) return;
+  try {
+    const bal = await provider.getBalance(await signer.getAddress());
+    $("bal").textContent = (+ethers.formatEther(bal)).toFixed(3) + " AVAX";
+  } catch (e) { /* mất kết nối RPC — bỏ qua */ }
+}
+
+async function refreshTaken() {
+  if (!contract) return;
+  try {
+    const bits = await contract.mintedBitmap();
+    taken = CATS.map((_, i) => ((bits >> BigInt(i)) & 1n) === 1n);
+    document.querySelectorAll(".grid button")
+      .forEach((b, i) => b.classList.toggle("gone", taken[i]));
+    updateMintButton();
+  } catch (e) { /* contract chưa deploy hoặc sai địa chỉ */ }
+}
+
+async function refreshSupply() {
+  if (!contract || !CONTRACT_ADDRESS.startsWith("0x") || CONTRACT_ADDRESS.length !== 42) return;
+  try {
+    const [minted, max] = await Promise.all([
+      contract.totalMinted(), contract.MAX_SUPPLY(),
+    ]);
+    $("supply").textContent = `${minted} / ${max}`;
+  } catch (e) { /* contract chưa deploy hoặc sai địa chỉ */ }
+}
+
+function setBarStatus(text, cls) {
+  const el = $("sel-status-m");
+  el.textContent = text;
+  el.className = "ms " + cls;
+}
+
+function updateMintButton() {
+  const okContract = CONTRACT_ADDRESS.startsWith("0x") && CONTRACT_ADDRESS.length === 42;
+  const gone = selected !== null && taken[selected];
+  const ready = !!(signer && selected !== null && okContract && !gone);
+  $("btn-mint").disabled = !ready;
+  $("btn-mint").textContent = gone ? "Đã có người mint" : "Mint NFT";
+  $("btn-mint-m").disabled = !ready;
+  $("btn-mint-m").textContent = gone ? "Đã mint" : "Mint";
+  if (!$("sel-status-m").textContent) {
+    setBarStatus(
+      gone ? "Đã có người mint — chọn con khác"
+        : !okContract ? "Chưa có địa chỉ contract"
+        : !signer ? "Kết nối ví để mint"
+        : "Sẵn sàng mint",
+      gone || !signer || !okContract ? "warn" : "");
+  }
+}
+
+function buildTokenURI(cat) {
+  const meta = {
+    name: cat.name + " - Team1 VN",
+    description: "AvaxCats - pixel summit cat of Team Avalanche (Team1 VN). " +
+                 "Minted on " + NET.chainName + " for the academy demo.",
+    image: cat.image,
+    attributes: cat.attributes,
+  };
+  return "data:application/json;base64," + btoa(JSON.stringify(meta));
+}
+
+function txLink(hash) {
+  return NET.explorer
+    ? `<a href="${NET.explorer}tx/${hash}" target="_blank">${hash}</a>`
+    : hash;
+}
+
+async function mint() {
+  const cat = CATS[selected];
+  try {
+    $("btn-mint").disabled = true;
+    $("btn-mint-m").disabled = true;
+    setBarStatus("Đang gửi giao dịch…", "");
+    log("⏳ Đang gửi giao dịch… xác nhận trong ví nhé.");
+
+    const tx = await contract.mint(selected, buildTokenURI(cat));
+    log("⏳ Đã gửi, chờ block xác nhận…\ntx: " + txLink(tx.hash));
+
+    const receipt = await tx.wait();
+
+    let tokenId = "?";
+    for (const lg of receipt.logs) {
+      try {
+        const ev = contract.interface.parseLog(lg);
+        if (ev && ev.name === "Minted") { tokenId = ev.args.tokenId.toString(); break; }
+      } catch (_) {}
+    }
+
+    setBarStatus(`Đã mint · token #${tokenId}`, "ok");
+    log(`<span class="ok">✅ Mint thành công — ${cat.name} là token #${tokenId}!</span>\n` +
+        "tx: " + txLink(tx.hash) + "\n" +
+        (NET.explorer
+          ? `NFT: <a href="${NET.explorer}nft/${CONTRACT_ADDRESS}/${tokenId}" target="_blank">xem token trên Snowtrace</a>`
+          : "NFT: đang nằm trong ví của bạn trên chain local — kiểm tra bằng\n" +
+            `     cast call ${CONTRACT_ADDRESS} "ownerOf(uint256)(address)" ${tokenId} --rpc-url ${NET.rpcUrls[0]}`));
+    await Promise.all([refreshSupply(), refreshBalance(), refreshTaken()]);
+  } catch (e) {
+    const raw = (e.shortMessage || "") + " " + (e.message || "");
+    const why =
+      /CatAlreadyMinted/.test(raw) ? "con này vừa có người khác mint mất rồi — chọn con khác nhé." :
+      /CatDoesNotExist/.test(raw) ? "catId không hợp lệ (bộ sưu tập chỉ có 48 con)." :
+      /insufficient funds/i.test(raw) ? "ví không đủ AVAX để trả gas — xin thêm ở faucet rồi thử lại." :
+      /user rejected|denied/i.test(raw) ? "bạn đã từ chối giao dịch trong ví." :
+      (e.shortMessage || e.message).slice(0, 180);
+    setBarStatus("Mint thất bại — xem chi tiết bên trên", "err");
+    log('<span class="err">❌ Mint thất bại:</span> ' + why);
+  } finally {
+    updateMintButton();
+  }
+}
+
+drawGrid();
+$("marquee").innerHTML = [...CATS, ...CATS]
+  .map((c) => `<img class="px" src="${c.image}" alt="" aria-hidden="true">`).join("");
+select(Math.floor(Math.random() * CATS.length));
+if (CONTRACT_ADDRESS.length !== 42) {
+  log('<span class="warn">⚠ Chưa có địa chỉ contract.</span> Deploy bằng Remix ' +
+      '(file <code>../mint-dapp/contracts/AvaxCats.sol</code>) rồi dán địa chỉ ' +
+      'vào <code>config.js</code> — hoặc chạy <code>npm run set-contract 0x…</code> ' +
+      'trong thư mục <code>mint-dapp</code>, nó ghi cho cả hai bài.');
+}
+$("ft-net").textContent = NET.label;
+$("m-net").textContent = NET.label;
+document.title = "AvaxCats Mint — Team1 VN · " + NET.label;
+$("btn-dev").hidden = !isLocal;
+$("btn-dev").addEventListener("click", connectDev);
+$("btn-connect").addEventListener("click", connect);
+$("btn-mint").addEventListener("click", mint);
+$("btn-mint-m").addEventListener("click", mint);
+if (matchMedia("(max-width: 899px)").matches) $("attrs").open = false;
+$("btn-random").addEventListener("click",
+  () => select(Math.floor(Math.random() * CATS.length)));
+$("ft-contract").textContent =
+  CONTRACT_ADDRESS.length === 42
+    ? CONTRACT_ADDRESS
+    : "chưa cấu hình — dán địa chỉ contract vào config.js";
+if (CONTRACT_ADDRESS.length === 42) {
+  $("ft-dot").className = "dot ok";
+  $("ft-status").textContent = "Contract live";
+}
+
+if (window.ethereum) {
+  window.ethereum.on?.("accountsChanged", () => location.reload());
+  window.ethereum.on?.("chainChanged", () => location.reload());
+}
+</script>
+</body>
+</html>
