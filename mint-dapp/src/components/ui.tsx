@@ -14,9 +14,9 @@ const VARIANTS: Record<Variant, string> = {
 };
 
 const SWEEP: Partial<Record<Variant, { bg: string; text: string }>> = {
-  primary: { bg: "bg-frost", text: "group-hover:text-ink" },
-  secondary: { bg: "bg-frost", text: "group-hover:text-ink" },
-  frost: { bg: "bg-ink", text: "group-hover:text-white" },
+  primary: { bg: "bg-frost", text: "hover:text-ink" },
+  secondary: { bg: "bg-frost", text: "hover:text-ink" },
+  frost: { bg: "bg-ink", text: "hover:text-white" },
 };
 
 const SIZES: Record<Size, string> = {

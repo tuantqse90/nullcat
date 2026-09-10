@@ -5,7 +5,7 @@ Deck: Canva "Avalanche Team1 Workshop Template", 18 slide. Giọng trình bày: 
 ## Việc cần chốt trước buổi
 
 - Kịch bản mint. Site đang để mỗi người tự deploy contract riêng. Nếu muốn cả lớp mint chung 48 con như slide 15 ghi, deploy một contract trước, chạy `npm run set-contract 0x…`, build và deploy lại site.
-- Slide 13 và 18 ghi repo `tuantqse90/avaxcats`. Repo thật là `tuantqse90/nullcat`, đang private. Đổi tên repo hoặc sửa slide.
+- Repo `github.com/tuantqse90/avaxcats` đã public, khớp với slide 13 và 18.
 - Slide 18 ghi faucet cũ `faucet.avax.network`. Faucet hiện tại: `build.avax.network/console/primary-network/faucet`.
 - Agenda ghi 60 phút, presenter notes ghi 90. Thống nhất một con số.
 - Ví Core của người trình bày có sẵn AVAX Fuji, cộng một ví dự phòng để chuyển cho người bị faucet từ chối.

@@ -589,7 +589,7 @@ def build():
              '<a href="https://x.com/Team1VN" target="_blank" rel="noreferrer">X @TEAM1VN</a> · '
              '<a href="https://build.avax.network/?ref=HVHXK&amp;utm_source=team1" target="_blank" rel="noreferrer">BUILDER HUB</a> · '
              '<a href="https://build.avax.network/academy?ref=HVHXK&amp;utm_source=team1" target="_blank" rel="noreferrer">ACADEMY</a> · '
-             '<a href="https://github.com/tuantqse90/nullcat" target="_blank" rel="noreferrer">GITHUB</a></footer>')
+             '<a href="https://github.com/tuantqse90/avaxcats" target="_blank" rel="noreferrer">GITHUB</a></footer>')
     h.append('</div>')
 
 
