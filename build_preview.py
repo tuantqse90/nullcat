@@ -584,7 +584,8 @@ def build():
     h.append('<footer>TEAM AVALANCHE · TEAM1 VN 🇻🇳 — PREVIEW BUILD FOR APPROVAL, '
              'NOT THE FINAL DROP. APPROVE → LOCK SUPPLY + SEED → RUN THE '
              'FINAL BATCH. NFA · DYOR 🏔️😼<br>'
-             '<a href="https://t.me/Team1VNbuilders" target="_blank" rel="noreferrer">TELEGRAM @TEAM1VNBUILDERS</a> · '
+             '<a href="https://t.me/avalanche_vn" target="_blank" rel="noreferrer">TELEGRAM · AVALANCHE VN COMMUNITY</a> · '
+             '<a href="https://t.me/Team1VNbuilders" target="_blank" rel="noreferrer">TELEGRAM · TEAM1 VN BUILDERS</a> · '
              '<a href="https://x.com/Team1VN" target="_blank" rel="noreferrer">X @TEAM1VN</a> · '
              '<a href="https://build.avax.network/?ref=HVHXK&amp;utm_source=team1" target="_blank" rel="noreferrer">BUILDER HUB</a></footer>')
     h.append('</div>')

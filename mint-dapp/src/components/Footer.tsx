@@ -3,7 +3,15 @@
 import { CHAIN_LABEL, EXPLORER, FAUCET, isLocal } from "@/lib/chains";
 import { explorerAddress } from "@/lib/contract";
 import { clearDeployedAddress } from "@/lib/deployed";
-import { BUILDER_HUB, CONSOLE, DOCS, NETWORK_STATUS, TELEGRAM, X_ACCOUNT } from "@/lib/links";
+import {
+  BUILDER_HUB,
+  CONSOLE,
+  DOCS,
+  NETWORK_STATUS,
+  TELEGRAM_BUILDERS,
+  TELEGRAM_COMMUNITY,
+  X_ACCOUNT,
+} from "@/lib/links";
 import { Logo } from "./Logo";
 import { Icon, PulseDot } from "./ui";
 
@@ -124,7 +132,8 @@ export function Footer({ contract, isConfigured, onViewContract, padBottom = fal
             <h3 className="eyebrow mb-5 text-muted">Team1 VN</h3>
             <ul className="flex flex-col gap-2.5 text-sm text-muted">
               <li>Team Avalanche · Team1 VN</li>
-              <li><FooterLink href={TELEGRAM}>Telegram @Team1VNbuilders</FooterLink></li>
+              <li><FooterLink href={TELEGRAM_COMMUNITY}>Telegram · Avalanche VN community</FooterLink></li>
+              <li><FooterLink href={TELEGRAM_BUILDERS}>Telegram · Team1 VN builders</FooterLink></li>
               <li><FooterLink href={X_ACCOUNT}>X @Team1VN</FooterLink></li>
               <li>
                 Generator <code className="font-mono text-xs text-fg">nullcat</code>
@@ -136,7 +145,8 @@ export function Footer({ contract, isConfigured, onViewContract, padBottom = fal
         <div className="eyebrow flex flex-wrap items-center justify-between gap-2 border-t border-line py-6 text-muted">
           <span>© 2026 Team1 VN</span>
           <span className="flex flex-wrap gap-x-5 gap-y-1">
-            <a className="transition-colors hover:text-fg" href={TELEGRAM} target="_blank" rel="noreferrer">Telegram</a>
+            <a className="transition-colors hover:text-fg" href={TELEGRAM_COMMUNITY} target="_blank" rel="noreferrer">Community</a>
+            <a className="transition-colors hover:text-fg" href={TELEGRAM_BUILDERS} target="_blank" rel="noreferrer">Builders</a>
             <a className="transition-colors hover:text-fg" href={X_ACCOUNT} target="_blank" rel="noreferrer">X</a>
             <span>Built on Avalanche</span>
           </span>
