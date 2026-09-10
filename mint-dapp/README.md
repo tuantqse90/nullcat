@@ -258,9 +258,10 @@ After minting, students click **03 Register** and fill in:
 
 | Field | Source |
 |---|---|
-| GitHub / Gmail (registered on Builder Hub) | typed manually |
-| Name | typed manually |
+| Gmail (registered on Builder Hub) | typed manually — **required** |
+| Name | typed manually — **required** |
 | Telegram | typed manually — `@handle`, `t.me/handle` or a bare handle all work; the app normalizes to `@handle` |
+| X (Twitter) | typed manually — `@handle` or an x.com link; **at least one of Telegram / X is required** |
 | Deployed contract | **auto-filled** from Step 1 |
 | Wallet | **auto-filled** from the connected wallet |
 | NFTs minted | **auto-read** from `balanceOf` on-chain |

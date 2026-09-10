@@ -87,13 +87,9 @@ export function RegisterPanel() {
   const [failed, setFailed] = useState(false);
 
   const minted = Number(balance ?? 0n);
-  const canSend =
-    isConnected &&
-    name.trim() !== "" &&
-    contact.trim() !== "" &&
-    normalizeTelegram(telegram) !== "" &&
-    normalizeX(x) !== "" &&
-    !sending;
+  const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact.trim());
+  const hasSocial = normalizeTelegram(telegram) !== "" || normalizeX(x) !== "";
+  const canSend = isConnected && name.trim() !== "" && validEmail && hasSocial && !sending;
 
   async function send() {
     setSending(true);
@@ -183,7 +179,7 @@ export function RegisterPanel() {
 
       <Card className="p-5 md:p-6">
         <div className="grid gap-5 sm:grid-cols-2">
-          <Field label="Gmail" hint="The Gmail you registered on Builder Hub">
+          <Field label="Gmail · required" hint="The Gmail you registered on Builder Hub">
             <Input
               type="email"
               value={contact}
@@ -192,7 +188,7 @@ export function RegisterPanel() {
             />
           </Field>
 
-          <Field label="Name">
+          <Field label="Name · required">
             <Input
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -200,7 +196,7 @@ export function RegisterPanel() {
             />
           </Field>
 
-          <Field label="Telegram" hint="@handle, t.me/handle or a bare handle all work">
+          <Field label="Telegram" hint="Telegram or X — at least one is required. @handle, t.me/handle or a bare handle all work">
             <Input
               value={telegram}
               onChange={(e) => setTelegram(e.target.value)}
@@ -208,7 +204,7 @@ export function RegisterPanel() {
             />
           </Field>
 
-          <Field label="X (Twitter) account" hint="@handle or an x.com link">
+          <Field label="X (Twitter) account" hint="Telegram or X — at least one is required. @handle or an x.com link">
             <Input
               value={x}
               onChange={(e) => setX(e.target.value)}
@@ -235,6 +231,17 @@ export function RegisterPanel() {
         <div className="mt-4 space-y-1.5">
           {result && <Status tone={failed ? "err" : "ok"}>{result}</Status>}
           {!isConnected && <Status tone="warn">Connect a wallet first.</Status>}
+          {isConnected && !canSend && !sending && (
+            <Status tone="warn">
+              {name.trim() === ""
+                ? "Name is required."
+                : !validEmail
+                  ? "Enter a valid Gmail address."
+                  : !hasSocial
+                    ? "Enter at least one of Telegram or X."
+                    : ""}
+            </Status>
+          )}
           {!hasKpiEndpoint && (
             <Status tone="warn">
               <code className="font-mono text-[12.5px]">NEXT_PUBLIC_KPI_ENDPOINT</code> is
