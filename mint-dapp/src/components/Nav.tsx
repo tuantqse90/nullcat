@@ -1,5 +1,5 @@
 import { CHAIN_LABEL, EXPLORER, FAUCET } from "@/lib/chains";
-import { ACADEMY, BUILDER_HUB, CONSOLE, DOCS, GITHUB } from "@/lib/links";
+import { ACADEMY, BUILDER_HUB, CONSOLE, CREATE_L1, DOCS, GITHUB } from "@/lib/links";
 import { Logo } from "./Logo";
 import { ThemeToggle } from "./ThemeToggle";
 import { Icon } from "./ui";
@@ -29,7 +29,7 @@ export function Nav() {
           </span>
         </a>
 
-        <ul className="flex items-center gap-1 max-sm:hidden">
+        <ul className="flex items-center gap-1 max-lg:hidden">
           {LINKS.map((l) => (
             <li key={l.label} className="list-none">
               <a
@@ -46,12 +46,21 @@ export function Nav() {
 
         <div className="grow" />
 
-        <span className="eyebrow hidden border border-line px-2.5 py-1.5 text-muted sm:inline-block">
+        <span className="eyebrow hidden border border-line px-2.5 py-1.5 text-muted lg:inline-block">
           {CHAIN_LABEL}
         </span>
+        <a
+          href={CREATE_L1}
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex h-8 items-center gap-1.5 bg-avax px-3 text-[12px] font-semibold text-white transition-colors hover:bg-avax-deep"
+        >
+          Create L1
+          <Icon name="arrowRight" className="size-3.5" />
+        </a>
         <ThemeToggle />
 
-        <details className="group sm:hidden">
+        <details className="group lg:hidden">
           <summary
             className="grid size-9 cursor-pointer list-none place-items-center rounded-md text-muted transition-colors hover:bg-hover hover:text-fg"
             aria-label="Open menu"
@@ -64,6 +73,15 @@ export function Nav() {
               <span className="size-1.5 rounded-full bg-avax" />
               {CHAIN_LABEL}
             </span>
+            <a
+              className="flex items-center justify-between px-2 py-3 text-[15px] font-semibold text-avax transition-colors hover:bg-hover"
+              href={CREATE_L1}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Create your own L1
+              <Icon name="external" className="size-3.5 text-muted" />
+            </a>
             {LINKS.map((l) => (
               <a
                 key={l.label}

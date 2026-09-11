@@ -7,6 +7,7 @@ import {
   ACADEMY,
   BUILDER_HUB,
   CONSOLE,
+  CREATE_L1,
   DOCS,
   GITHUB,
   NETWORK_STATUS,
@@ -94,6 +95,7 @@ export function Footer({ contract, isConfigured, onViewContract, padBottom = fal
               <li><FooterLink href={ACADEMY}>Academy</FooterLink></li>
               <li><FooterLink href={DOCS}>Documentation</FooterLink></li>
               <li><FooterLink href={CONSOLE}>Console</FooterLink></li>
+              <li><FooterLink href={CREATE_L1}>Create your own L1</FooterLink></li>
               <li><FooterLink href={FAUCET}>Testnet faucet</FooterLink></li>
               {EXPLORER && <li><FooterLink href={EXPLORER}>Snowtrace</FooterLink></li>}
             </ul>

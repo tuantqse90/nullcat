@@ -2,6 +2,7 @@ export const BUILDER_HUB = "https://build.avax.network/?ref=HVHXK&utm_source=tea
 export const ACADEMY = "https://build.avax.network/academy?ref=HVHXK&utm_source=team1";
 export const DOCS = "https://build.avax.network/docs";
 export const CONSOLE = "https://build.avax.network/console";
+export const CREATE_L1 = "https://build.avax.network/console/create-l1?ref=HVHXK&utm_source=team1";
 export const NETWORK_STATUS = "https://status.avax.network/";
 export const TELEGRAM_COMMUNITY = "https://t.me/avalanche_vn";
 export const TELEGRAM_BUILDERS = "https://t.me/Team1VNbuilders";
