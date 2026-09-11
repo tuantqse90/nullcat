@@ -26,7 +26,7 @@ import {
 
 // ❓ Vì sao phải "chuẩn hoá" handle Telegram?
 // → Sinh viên nhập đủ kiểu: @abc, t.me/abc, https://t.me/abc… Bóc hết prefix rồi luôn trả về dạng "@abc" để cột trong
-//   Google Sheet đồng nhất. Chuỗi rỗng → "" (không phải "@") để kiểm tra hasSocial bên dưới hoạt động đúng.
+//   Google Sheet đồng nhất. Chuỗi rỗng → "" (không phải "@") vì trường này giờ là tuỳ chọn.
 function normalizeTelegram(v: string) {
   const t = v
     .trim()
@@ -104,14 +104,10 @@ export function RegisterPanel() {
   // → Chỉ kiểm tra tối thiểu: có đúng 1 "@", có dấu "." sau đó, không khoảng trắng. Mục tiêu là bắt lỗi gõ nhầm;
   //   có phải Gmail trên Builder Hub hay không thì ban tổ chức đối chiếu sau.
   const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact.trim());
-  // ❓ Quy tắc "Telegram hoặc X — ít nhất một" được kiểm tra ở đâu?
-  // → Ngay đây: chuẩn hoá cả hai rồi xem có cái nào khác rỗng không. Dùng bản đã chuẩn hoá để gõ mỗi "@" hay
-  //   "https://" không bị tính là hợp lệ.
-  const hasSocial = normalizeTelegram(telegram) !== "" || normalizeX(x) !== "";
   // ❓ Điều kiện để bấm Submit?
-  // → Ví đã kết nối (để có wallet address), có tên, email hợp lệ, ít nhất 1 social, và không đang gửi (chặn double-submit).
-  //   Thông báo warn bên dưới hiện đúng điều kiện đầu tiên còn thiếu theo cùng thứ tự này.
-  const canSend = isConnected && name.trim() !== "" && validEmail && hasSocial && !sending;
+  // → Ví đã kết nối (để có wallet address), có tên, email hợp lệ, và không đang gửi (chặn double-submit).
+  //   Telegram/X là tuỳ chọn — không bắt buộc phải điền.
+  const canSend = isConnected && name.trim() !== "" && validEmail && !sending;
 
   async function send() {
     setSending(true);
@@ -224,7 +220,7 @@ export function RegisterPanel() {
             />
           </Field>
 
-          <Field label="Telegram" hint="Telegram or X — at least one is required. @handle, t.me/handle or a bare handle all work">
+          <Field label="Telegram" hint="Optional. @handle, t.me/handle or a bare handle all work">
             <Input
               value={telegram}
               onChange={(e) => setTelegram(e.target.value)}
@@ -232,7 +228,7 @@ export function RegisterPanel() {
             />
           </Field>
 
-          <Field label="X (Twitter) account" hint="Telegram or X — at least one is required. @handle or an x.com link">
+          <Field label="X (Twitter) account" hint="Optional. @handle or an x.com link">
             <Input
               value={x}
               onChange={(e) => setX(e.target.value)}
@@ -265,9 +261,7 @@ export function RegisterPanel() {
                 ? "Name is required."
                 : !validEmail
                   ? "Enter a valid Gmail address."
-                  : !hasSocial
-                    ? "Enter at least one of Telegram or X."
-                    : ""}
+                  : ""}
             </Status>
           )}
           {!hasKpiEndpoint && (
