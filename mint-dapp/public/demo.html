@@ -81,7 +81,8 @@
   .demo h2 { margin: 0; font-size: 24px; font-weight: 300; letter-spacing: -.02em; line-height: 1.15; }
   .demo p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.7; max-width: 42rem; }
   .phone { display: flex; justify-content: center; padding: 24px 0; border-radius: 16px; background: var(--ink); }
-  .phone video { width: min(100%, 320px); aspect-ratio: 9 / 20; height: auto; max-height: 72vh; border-radius: 12px; background: #000; display: block; object-fit: cover; }
+  .phone video { width: min(100%, 320px); height: auto; max-height: 72vh; border-radius: 12px; background: #000; display: block; object-fit: contain; }
+  .phone video:fullscreen, .phone video:-webkit-full-screen { width: 100%; height: 100%; max-height: none; border-radius: 0; object-fit: contain; }
   ol.steps { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; font-size: 14px; }
   ol.steps li { display: flex; gap: 12px; }
   ol.steps li b { font: 400 11px var(--mono); letter-spacing: .18em; color: var(--avax); padding-top: 4px; flex: none; width: 24px; }
