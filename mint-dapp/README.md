@@ -55,7 +55,7 @@ mint-dapp/
         └── cats.ts               # 48 cats (auto-generated, don't edit by hand)
 ```
 
-The code is left bare, with no comments. The explanations live in the **code reading path**
+Important lines carry a `// ❓ question` / `// → answer` comment in Vietnamese for students; the same goes for the contract, the scripts and the Python generator. The English overview lives in the **code reading path**
 section below and in this README.
 
 ---

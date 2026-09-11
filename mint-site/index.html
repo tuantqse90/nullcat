@@ -468,6 +468,10 @@ const CFG = window.AVAXCATS_CONFIG ?? {};
 const NETWORK = CFG.NETWORK === "anvil" ? "anvil" : "fuji";
 const CONTRACT_ADDRESS = CFG.CONTRACT_ADDRESS ?? "";
 
+// ❓ Tại sao phải khai báo cả anvil lẫn fuji, và chainId lại viết dạng hex "0x7a69"?
+// → Đây là bảng cấu hình mạng, mỗi entry đúng format mà wallet (Core/MetaMask) yêu cầu khi gọi wallet_addEthereumChain.
+// → Wallet API (EIP-3085/3326) bắt buộc chainId là chuỗi hex: 0x7a69 = 31337 (anvil), 0xa869 = 43113 (Fuji).
+// → Đưa số thập phân vào là wallet từ chối. rpcUrls là endpoint JSON-RPC mà wallet sẽ gửi tx tới.
 const NETWORKS = {
   anvil: {
     chainId: "0x7a69",                                 // 31337
@@ -499,6 +503,10 @@ const addChainParams = {
   ...(NET.blockExplorerUrls ? { blockExplorerUrls: NET.blockExplorerUrls } : {}),
 };
 
+// ❓ ABI là gì, sao ở đây chỉ là vài dòng chữ giống Solidity chứ không phải JSON dài?
+// → ABI (Application Binary Interface) cho ethers biết cách encode lời gọi hàm và decode dữ liệu trả về/event.
+// → ethers v6 chấp nhận "human-readable ABI": chỉ liệt kê đúng chữ ký các hàm/event/error mà UI dùng.
+// → Khai báo 2 dòng "error ..." là để khi tx revert, ethers dịch được ra tên CatAlreadyMinted thay vì mã hex.
 const ABI = [
   "function mint(uint256 catId, string uri) returns (uint256)",
   "function totalMinted() view returns (uint256)",
@@ -556,14 +564,24 @@ async function connect() {
     return;
   }
   try {
+    // ❓ window.ethereum là gì và eth_requestAccounts làm gì?
+    // → window.ethereum là object do extension wallet inject vào trang (EIP-1193), cổng duy nhất để trang nói chuyện với wallet.
+    // → eth_requestAccounts mở popup xin quyền xem địa chỉ ví; user bấm từ chối thì throw và rơi xuống catch bên dưới.
     await window.ethereum.request({ method: "eth_requestAccounts" });
 
     try {
+      // ❓ Tại sao phải yêu cầu wallet chuyển mạng trước khi kết nối?
+      // → Nếu wallet đang ở Ethereum mainnet mà ta gửi tx mint, tx sẽ đi sai chain (hoặc fail vì không có contract).
+      // → wallet_switchEthereumChain (EIP-3326) bảo wallet chuyển sang chainId của NET; user phải bấm đồng ý trong popup.
       await window.ethereum.request({
         method: "wallet_switchEthereumChain",
         params: [{ chainId: NET.chainId }],
       });
     } catch (e) {
+      // ❓ 4902 là mã lỗi gì, sao lại xử lý riêng?
+      // → 4902 = "Unrecognized chain": wallet chưa có mạng này trong danh sách (rất hay gặp với anvil hoặc Fuji lần đầu).
+      // → Khi đó gọi wallet_addEthereumChain (EIP-3085) với addChainParams để wallet tự thêm mạng rồi chuyển sang.
+      // → Lỗi khác (ví dụ 4001 = user từ chối) thì ném tiếp ra ngoài để hiện thông báo.
       if (e.code === 4902) {
         await window.ethereum.request({
           method: "wallet_addEthereumChain", params: [addChainParams],
@@ -571,6 +589,10 @@ async function connect() {
       } else { throw e; }
     }
 
+    // ❓ provider và signer khác nhau chỗ nào?
+    // → provider là "cổng đọc" blockchain (getBalance, gọi hàm view); BrowserProvider bọc window.ethereum nên mọi request đi qua wallet.
+    // → signer là tài khoản có quyền ký tx; getSigner() lấy account đang active trong wallet.
+    // → Private key không bao giờ rời wallet: trang chỉ xin ký, wallet hiện popup và tự ký.
     provider = new ethers.BrowserProvider(window.ethereum);
     signer = await provider.getSigner();
     await afterConnect("Connected ✓");
@@ -581,6 +603,10 @@ async function connect() {
 
 async function connectDev() {
   try {
+    // ❓ Sao "Dev wallet" không cần cài Core/MetaMask mà vẫn mint được?
+    // → JsonRpcProvider nói thẳng với RPC của anvil (127.0.0.1:8545), không qua extension. anvil giữ sẵn private key
+    // → của 10 account test nên getSigner(0) = account #0 và anvil tự ký tx (eth_sendTransaction). RPC thật không bao giờ giữ key.
+    // → staticNetwork: true để ethers không phải hỏi eth_chainId liên tục (anvil là chain cố định 31337).
     provider = new ethers.JsonRpcProvider(NET.rpcUrls[0], undefined, {
       staticNetwork: true,
     });
@@ -593,6 +619,9 @@ async function connectDev() {
 }
 
 async function afterConnect(btnLabel) {
+  // ❓ Object contract này là gì?
+  // → ethers tạo một JS object có sẵn các method theo ABI: contract.mint(), contract.totalMinted()… Gắn signer để hàm ghi
+  // → (mint) ký & gửi tx; hàm view thì ethers tự dùng eth_call qua provider. Sai CONTRACT_ADDRESS thì mọi call lỗi/rỗng.
   contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
 
   const addr = await signer.getAddress();
@@ -622,6 +651,10 @@ async function refreshBalance() {
 async function refreshTaken() {
   if (!contract) return;
   try {
+    // ❓ Sao chỉ 1 lần gọi RPC mà biết được cả 48 con mèo con nào đã mint?
+    // → Contract lưu trạng thái "đã mint" của mọi cat trong MỘT số uint256 (bitmap): bit thứ i = 1 nghĩa là cat i đã mint.
+    // → Đọc 1 lần thay vì gọi catMinted(i) 48 lần. uint256 về JS là BigInt (hậu tố n), nên dòng dưới dịch phải i bit
+    // → rồi AND với 1n để lấy đúng bit thứ i → taken[i] = true/false, dùng để khoá nút của cat đã mint.
     const bits = await contract.mintedBitmap();
     taken = CATS.map((_, i) => ((bits >> BigInt(i)) & 1n) === 1n);
     document.querySelectorAll(".grid button")
@@ -672,6 +705,10 @@ function buildTokenURI(cat) {
     image: cat.image,
     attributes: cat.attributes,
   };
+  // ❓ tokenURI sao không phải link IPFS như NFT thường thấy?
+  // → Metadata (name, image, attributes) được JSON.stringify rồi base64 thành data URI và lưu THẲNG on-chain trong tokenURI.
+  // → Không cần IPFS/server, ảnh không bao giờ "chết link"; đổi lại chuỗi dài hơn → tốn gas hơn (chấp nhận được cho pixel art nhỏ).
+  // → Wallet/explorer đọc data URI y như link bình thường.
   return "data:application/json;base64," + btoa(JSON.stringify(meta));
 }
 
@@ -689,12 +726,22 @@ async function mint() {
     setBarStatus("Sending transaction…", "");
     log("⏳ Sending transaction… confirm it in your wallet.");
 
+    // ❓ await ở đây xong có nghĩa là NFT đã mint chưa?
+    // → CHƯA. ethers encode (catId, uri) theo ABI thành calldata, wallet hiện popup, ký và gửi tx đến RPC.
+    // → Promise resolve ngay khi tx vào mempool: ta chỉ mới có tx.hash, chưa có block nào chứa nó.
     const tx = await contract.mint(selected, buildTokenURI(cat));
     log("⏳ Sent, waiting for confirmation…\ntx: " + txLink(tx.hash));
 
+    // ❓ Sao còn phải wait() thêm lần nữa?
+    // → tx.wait() chờ tx được đưa vào block (mined). receipt chứa status (1 = thành công), gasUsed và logs (event contract emit).
+    // → Trước khi có receipt không thể biết tokenId. Trên anvil gần như tức thì; trên Fuji khoảng 1–2 giây.
     const receipt = await tx.wait();
 
     let tokenId = "?";
+    // ❓ Làm sao biết tokenId vừa mint? mint() có return value mà?
+    // → Return value của hàm ghi KHÔNG đọc được từ tx (chỉ eth_call mới thấy). Cách chuẩn là contract emit event Minted(to, tokenId, catId).
+    // → Event nằm trong receipt.logs dạng raw (topics + data); contract.interface.parseLog(lg) dùng ABI để decode.
+    // → Log không thuộc ABI của ta (ví dụ Transfer của ERC721) sẽ throw → try/catch bỏ qua và xét log tiếp theo.
     for (const lg of receipt.logs) {
       try {
         const ev = contract.interface.parseLog(lg);
@@ -712,6 +759,10 @@ async function mint() {
     await Promise.all([refreshSupply(), refreshBalance(), refreshTaken()]);
   } catch (e) {
     const raw = (e.shortMessage || "") + " " + (e.message || "");
+    // ❓ Sao không in thẳng e.message cho user?
+    // → Lỗi từ ethers/wallet rất dài và khó hiểu. Ghép shortMessage + message rồi dò regex: custom error CatAlreadyMinted/CatDoesNotExist
+    // → (decode được nhờ khai báo "error ..." trong ABI), thiếu AVAX trả gas, hay user bấm Reject.
+    // → Mỗi trường hợp → 1 câu tiếng người; trường hợp lạ thì cắt 180 ký tự để không tràn log.
     const why =
       /CatAlreadyMinted/.test(raw) ? "someone just minted this one — pick another cat." :
       /CatDoesNotExist/.test(raw) ? "invalid catId (the collection has 48 cats)." :
@@ -756,6 +807,10 @@ if (CONTRACT_ADDRESS.length === 42) {
 }
 
 if (window.ethereum) {
+  // ❓ Tại sao đổi account/mạng trong wallet lại reload cả trang?
+  // → Wallet phát event accountsChanged/chainChanged (EIP-1193) khi user đổi ví hoặc chuyển mạng. provider/signer/contract
+  // → đã tạo vẫn trỏ vào account/chain cũ → reload để làm lại từ đầu là cách đơn giản và an toàn nhất (tránh gửi tx nhầm ví).
+  // → Dùng on?. vì một số wallet không có hàm .on.
   window.ethereum.on?.("accountsChanged", () => location.reload());
   window.ethereum.on?.("chainChanged", () => location.reload());
 }

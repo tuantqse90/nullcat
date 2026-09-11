@@ -15,6 +15,9 @@ from generate import render, rarity_score
 from traits import CATEGORIES
 
 OUT = "output"
+# ❓ dict(CATEGORIES) làm gì?
+# → CATEGORIES là list các cặp (tên, list trait); dict() biến nó thành map tên → list
+# → để tra cứu nhanh theo tên category (pickt dùng).
 CATS = dict(CATEGORIES)
 
 TIER_VI = {"common": "Common", "uncommon": "Uncommon", "rare": "Rare",
@@ -23,6 +26,9 @@ TIER_VI = {"common": "Common", "uncommon": "Uncommon", "rare": "Rare",
 
 def datauri(path):
     with open(path, "rb") as f:
+        # ❓ Tại sao preview.html nhúng ảnh dạng data URI?
+        # → Đọc PNG binary → base64 → gắn tiền tố data:image/png. Trang HTML thành một file duy nhất,
+        # → gửi qua Telegram/Zalo mở là xem được, không cần thư mục ảnh đi kèm.
         return "data:image/png;base64," + base64.b64encode(f.read()).decode()
 
 
@@ -30,6 +36,9 @@ def pickt(cat, name):
     return next(t for t in CATS[cat] if t["name"] == name)
 
 
+# ❓ BASE là gì?
+# → Bộ trait "trần" mặc định (mèo cam, ngồi, không phụ kiện). Legends chỉ cần khai báo phần
+# → khác biệt, phần còn lại lấy từ đây — giống cách catalog() trong generate.py làm.
 BASE = {"Background": "Frost", "Fur": "Orange Tabby",
 
 
@@ -42,10 +51,16 @@ BASE = {"Background": "Frost", "Fur": "Orange Tabby",
 
 
 def combo(**over):
+    # ❓ dict(BASE, **over) hoạt động thế nào?
+    # → Copy BASE rồi ghi đè bằng các keyword truyền vào (Fur="Golden"…). Kết quả là dict
+    # → tên category → trait dict, đúng định dạng mà generate.render mong đợi.
     names = dict(BASE, **over)
     return {c: pickt(c, n) for c, n in names.items()}
 
 
+# ❓ Legends khác mèo random ở chỗ nào?
+# → 4 con 1/1 được "tay chọn" từng trait, không qua weighted random và không nằm trong 48 con của batch.
+# → Dùng cho auction/giveaway; vì tự chọn nên không tính rarity score (score=None).
 LEGENDS = [
     ("The Snowfather",
      "Wears The Avalanche Hood, chews a cigar, laser eyes locked on the tape, Red Card in paw. Final boss of the summit.",
@@ -80,6 +95,9 @@ def build_legends():
     os.makedirs(ldir, exist_ok=True)
     out = []
     for i, (name, tag, chosen) in enumerate(LEGENDS):
+        # ❓ Tại sao vẫn cần Random dù trait đã chọn sẵn?
+        # → Vài background/effect (Moon Night, Money Rain) rải pixel bằng rng. Seed cố định 9000+i
+        # → để legend render giống hệt mỗi lần build — không đổi hình sau mỗi lần chạy.
         g = render(chosen, random.Random(9000 + i))
         path = os.path.join(ldir, f"legend_{i}.png")
         save_grid(path, g, scale=1)
@@ -104,6 +122,9 @@ def load_tokens():
         tokens.append({
             "name": m["name"],
             "img": datauri(os.path.join(OUT, "thumbs", idx + ".png")),
+            # ❓ Vì sao chuyển attributes từ dict sang list 3 phần tử?
+            # → Gộp trait_type, value và tier thành [cat, name, tier] cho JS hiển thị chip màu theo tier.
+            # → Dạng list ngắn hơn dict → preview.html nhẹ hơn khi nhúng cả 48 token.
             "attrs": [[a["trait_type"], a["value"],
                        m["rarity"]["tiers"][a["trait_type"]]]
                       for a in m["attributes"]],
@@ -114,6 +135,9 @@ def load_tokens():
 
 def load_catalog():
     cdir = os.path.join(OUT, "catalog")
+    # ❓ catalog.json từ đâu ra?
+    # → Do `python3 generate.py --catalog` sinh: mỗi trait một ảnh trên base cat + index tên/tier/file.
+    # → Preview chỉ đọc lại, không render — nên phải chạy --catalog trước khi build preview.
     with open(os.path.join(cdir, "catalog.json")) as f:
         index = json.load(f)
     out = {}
@@ -465,6 +489,9 @@ def build():
     with open(os.path.join(OUT, "collection.json")) as f:
         coll = json.load(f)
 
+    # ❓ hero được chọn thế nào?
+    # → Sắp xếp index token theo rarity score giảm dần và lấy con đầu tiên —
+    # → con hiếm nhất batch làm ảnh đại diện ở đầu trang.
     hero = sorted(range(len(tokens)), key=lambda i: -tokens[i]["score"])[:1][0]
     total_traits = sum(len(v) for v in catalog.values())
     ticker = TICKER.replace("__TRAITS__", str(total_traits))
@@ -601,6 +628,9 @@ def build():
 
     slim = [{"name": t["name"], "img": t["img"], "attrs": t["attrs"],
              "score": t["score"]} for t in tokens]
+    # ❓ Dữ liệu token vào JS bằng cách nào?
+    # → json.dumps ra chuỗi JSON rồi thay placeholder __TOKENS__ / __LEGENDS__ trong khối JS.
+    # → JSON hợp lệ cũng là JS hợp lệ nên trình duyệt đọc trực tiếp thành mảng object cho inspector.
     js = JS.replace("__TOKENS__", json.dumps(slim))
     js = js.replace("__LEGENDS__", json.dumps(legends))
     h.append("<script>" + js + "</script>")

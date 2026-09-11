@@ -14,6 +14,9 @@ import { useContractAddress } from "@/lib/deployed";
 import { buildTokenURI } from "@/lib/metadata";
 import { Button, Icon, Mono, Pillar, Status } from "./ui";
 
+// ❓ Vì sao phải "dịch" lỗi thay vì hiện error.message?
+// → error.message của viem rất dài (kèm request body, link docs). Ta gộp shortMessage (1 dòng tóm tắt) với message rồi
+//   dò vài mẫu quen thuộc để trả về câu ngắn, dễ hiểu; không khớp mẫu nào thì cắt còn 180 ký tự.
 function explainError(error: Error): string {
   const raw = `${(error as { shortMessage?: string }).shortMessage ?? ""} ${error.message}`;
 
@@ -22,9 +25,15 @@ function explainError(error: Error): string {
       ? "wallet has no AVAX on anvil. Use the dev wallet, or run `npm run fund <wallet address>`."
       : "wallet doesn't have enough test AVAX for gas — top up at the faucet and try again.";
   }
+  // ❓ "CatAlreadyMinted" từ đâu ra?
+  // → Là tên custom error trong contract (`revert CatAlreadyMinted(catId)`). Khi ước lượng gas hoặc gửi tx, node trả
+  //   revert data và tên lỗi xuất hiện trong message → match bằng regex. Xảy ra khi 2 người chọn cùng một con và người
+  //   kia mint trước; UI chỉ biết sau POLL_MS nên vẫn phải phòng ở đây.
   if (/CatAlreadyMinted/i.test(raw))
     return "someone just minted this one — pick another cat.";
   if (/CatDoesNotExist/i.test(raw)) return "invalid catId.";
+  // ❓ Từ chối trong ví có phải lỗi on-chain không?
+  // → Không — ví trả lỗi 4001 (User rejected) trước khi gửi gì lên mạng, không tốn gas. Bắt riêng để không dọa người dùng.
   if (/User rejected|denied transaction/i.test(raw))
     return "you rejected the transaction in your wallet.";
 
@@ -66,7 +75,14 @@ export function MintPanel({
 }: Props) {
   const { isConnected, chainId } = useAccount();
   const { address: contract, isConfigured } = useContractAddress();
+  // ❓ useWriteContract khác useReadContract chỗ nào?
+  // → Read = eth_call, miễn phí. Write = transaction thay đổi state → phải ký bằng ví và trả gas. writeContract() mở ví;
+  //   data (hash) có ngay sau khi ví gửi; isPending = đang chờ ký; error = ví từ chối hoặc revert khi ước lượng gas;
+  //   reset() xoá toàn bộ để mint con khác.
   const { writeContract, data: hash, isPending, error, reset } = useWriteContract();
+  // ❓ Tại sao còn phải đợi receipt sau khi có hash?
+  // → Hash chỉ nghĩa là tx đã được gửi. receipt về khi tx nằm trong block: có status "success"/"reverted" và logs
+  //   (chứa event Minted → tokenId). Không đợi receipt thì không biết mint thành công hay không.
   const { data: receipt, isLoading: confirming } = useWaitForTransactionReceipt({
     hash,
     chainId: activeChain.id,
@@ -74,10 +90,17 @@ export function MintPanel({
 
   const [pendingName, setPendingName] = useState<string | null>(null);
 
+  // ❓ Sao lại reset khi đổi cat?
+  // → hash/receipt/error là của lần mint TRƯỚC. Không xoá thì chọn cat mới vẫn thấy "Minted · token #N" hoặc lỗi cũ,
+  //   và nút Mint kẹt ở busy. reset() của wagmi có tham chiếu ổn định nên đưa vào deps không gây chạy lại vô ích.
   useEffect(() => {
     reset();
   }, [cat, reset]);
 
+  // ❓ Lấy tokenId của NFT vừa mint bằng cách nào?
+  // → Hàm mint() có `return tokenId` nhưng giá trị return của một transaction KHÔNG được lưu on-chain. Cách duy nhất là
+  //   đọc event Minted(to, tokenId, catId) trong receipt.logs: parseEventLogs dùng ABI để lọc đúng topic và giải mã args.
+  //   useMemo để không parse lại mỗi lần render; logs[0] vì mỗi tx mint chỉ phát đúng 1 event Minted.
   const tokenId = useMemo(() => {
     if (!receipt) return undefined;
     const logs = parseEventLogs({
@@ -88,18 +111,34 @@ export function MintPanel({
     return logs[0]?.args.tokenId;
   }, [receipt]);
 
+  // ❓ onMinted được gọi để làm gì?
+  // → Báo cho page refetch mintedBitmap ngay (thay vì đợi POLL_MS) để cat vừa mint bị khoá xám trong CatGrid lập tức.
+  //   Đặt trong useEffect vì gọi callback của cha (có setState) ngay trong lúc render là anti-pattern và React sẽ cảnh báo.
   useEffect(() => {
     if (receipt) onMinted();
   }, [receipt, onMinted]);
 
   const wrongChain = isConnected && chainId !== activeChain.id;
   const busy = isPending || confirming;
+  // ❓ Có receipt là thành công chưa?
+  // → Chưa chắc: tx được mine nhưng có thể revert (status "reverted") và vẫn tốn gas. Chỉ status === "success" mới
+  //   được coi là đã mint và hiện link NFT.
   const success = receipt?.status === "success";
+  // ❓ Khi nào được phép bấm Mint?
+  // → Đủ 5 điều kiện: đã có địa chỉ contract, ví đã kết nối, đúng mạng, cat này chưa ai mint (taken = false) và không
+  //   có tx đang chạy. Thiếu một là tx sẽ fail (revert hoặc ví từ chối) → chặn từ UI để khỏi tốn gas vô ích.
   const readyToMint = isConfigured && isConnected && !wrongChain && !taken && !busy;
 
   function mint() {
+    // ❓ Vì sao lưu tên cat vào state riêng?
+    // → Nếu người dùng bấm Random trong lúc chờ receipt, prop `cat` đổi nhưng thông báo thành công vẫn phải hiện đúng
+    //   con vừa mint.
     setPendingName(cat.name);
     onMintStart();
+    // ❓ args của mint là gì?
+    // → Khớp chữ ký Solidity `mint(uint256 catId, string uri)`: catId phải là BigInt (uint256), uri là tokenURI dạng
+    //   data:application/json;base64 chứa name/image/attributes — metadata nằm hoàn toàn on-chain, không cần IPFS.
+    //   chainId ép wagmi gửi trên đúng mạng; ví ở mạng khác sẽ bị từ chối thay vì mint nhầm chain.
     writeContract({
       abi: AVAXCATS_ABI,
       address: contract,

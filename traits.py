@@ -9,6 +9,9 @@ Backgrounds paint ctx["bg"], body parts paint ctx["cat"], overlays
 from engine import P, H, V, R, darken, lighten, mask_of, dilate, SIZE
 
 
+# ❓ Các con số 100/55/28/12/5 nghĩa là gì?
+# → Trọng số (weight) cho weighted random trong generate.pick. Common nặng gấp 20 lần legendary,
+# → nên trong ~200 lượt roll của một category chỉ ra ~5 legendary. Đổi số ở đây là đổi toàn bộ phân phối rarity.
 TIER_W = {"common": 100, "uncommon": 55, "rare": 28, "epic": 12, "legendary": 5}
 
 GOLD = (250, 200, 60)
@@ -27,6 +30,9 @@ SNOW = (247, 250, 252)
 ICE = (168, 216, 240)
 
 
+# ❓ _n là gì mà xuất hiện ở khắp file?
+# → Helper đăng ký một trait thành dict {name, tier, w, fn}: name vào metadata, tier/w cho rarity,
+# → fn là hàm vẽ (None = không vẽ gì, như "Plain"). Mọi list trait bên dưới đều là list các dict này.
 def _n(name, tier, fn):
     return {"name": name, "tier": tier, "w": TIER_W[tier], "fn": fn}
 
@@ -49,6 +55,9 @@ def _neck(g, fur, x0=7, x1=24):
 
 def _sym(g, y, x, c):
     """Draw one pixel and its mirror across the face's center axis (x=15.5)."""
+    # ❓ Vì sao 31 - x?
+    # → Mặt mèo đối xứng quanh trục x = 15.5 (giữa cột 15 và 16). Vẽ một bên rồi mirror sang bên kia
+    # → giúp code trait ngắn một nửa và hai mắt/tai không bao giờ lệch nhau.
     P(g, x, y, c); P(g, 31 - x, y, c)
 
 
@@ -173,6 +182,9 @@ def _tail_tuck(g, fur):
 
 
 def _body_sitting(ctx):
+    # ❓ Một hàm vẽ trait nhận gì và trả về gì?
+    # → Nhận ctx (các layer + palette fur + rng), vẽ bằng P/H/V/R lên ctx["cat"] với 3 màu
+    # → o (outline), f (fill), b (belly). Body trả về toạ độ neo đuôi để trait Tail biết vẽ ở đâu.
     g, fur = ctx["cat"], ctx["fur"]
     o, f, b = fur["o"], fur["f"], fur["b"]
     _neck(g, fur)
@@ -321,6 +333,9 @@ def _head_square(ctx):
     H(g, 16, 5, 6, o); H(g, 16, 25, 26, o)
 
 
+# ❓ Danh sách này là gì?
+# → Một "category": các lựa chọn cho lớp Head, mỗi phần tử do _n tạo. generate.pick chọn 1 phần tử
+# → theo trọng số. Thêm trait mới = viết hàm vẽ + thêm 1 dòng _n vào đây.
 HEADS = [
     _n("Normal", "common", _head_normal),
     _n("Round", "common", _head_round),
@@ -513,6 +528,9 @@ def draw_base_cat(ctx, body=None, ears=None, head=None):
     Returns the tail anchor coordinates so the Tail trait follows the right pose.
     """
     g, fur = ctx["cat"], ctx["fur"]
+    # ❓ Thứ tự vẽ mèo "trần" là gì và vì sao đầu vẽ sau thân?
+    # → Body (kèm đuôi) → đầu cố định → dáng đầu → tai. Đầu đè lên cổ để che mép nối.
+    # → generate.py lấy mask ngay sau bước này để có silhouette dùng cho clipping.
     tail_tip = (body or _body_sitting)(ctx)
     _draw_head(g, fur)
     (head or _head_normal)(ctx)
@@ -521,6 +539,9 @@ def draw_base_cat(ctx, body=None, ears=None, head=None):
     return tail_tip
 
 
+# ❓ Fur khác các trait khác thế nào?
+# → Fur không có hàm vẽ; nó là palette 4 màu o/f/b/e (outline, fill, belly, ear) mà mọi hàm vẽ
+# → đọc từ ctx["fur"]. Vì thế đổi Fur là đổi màu toàn thân mà không cần vẽ lại pixel nào.
 FURS = [
     {"name": "Orange Tabby", "tier": "common",
      "o": (66, 42, 30), "f": (240, 158, 66), "b": (255, 230, 196), "e": (232, 120, 116)},
@@ -619,6 +640,9 @@ def _eye_wink(ctx):
 
 
 def _eye_laser(ctx):
+    # ❓ Vì sao Laser Eyes vẽ lên cả fg chứ không chỉ cat?
+    # → Mắt nằm trên layer cat, nhưng tia laser phải bắn ra ngoài thân và đè lên cả mũ/kính,
+    # → nên vẽ vào layer fg (foreground) — layer được overlay cuối cùng trong generate.render.
     g, fg = ctx["cat"], ctx["fg"]
     core = (255, 236, 210)
     hot = (255, 84, 48)
@@ -859,6 +883,9 @@ def _h_hood(ctx):
     H(g, 3, 7, 24, gr)
     H(g, 4, 6, 25, gr)
     P(g, 23, 0, gr); P(g, 24, 1, dg)
+    # ❓ Vì sao hood vẽ hai cột dọc từ y=5 đến 15 ở hai bên mặt?
+    # → Đó là vành hood ôm hai má, phủ đúng vùng mà Mane (Lion Mane, Sideburns) vẽ.
+    # → Vì thế generate.roll ép Mane = None khi có hood — không thì bờm lòi ra ngoài vành.
     for x in (6, 7):
         V(g, x, 5, 15, gr)
     for x in (24, 25):
@@ -1467,6 +1494,9 @@ BACKGROUNDS = [
 
 FUR_TRAITS = [_n(f["name"], f["tier"], None) for f in FURS]
 
+# ❓ CATEGORIES là "nguồn sự thật" của cả hệ thống?
+# → Đúng: list (tên category, list trait) theo thứ tự này. generate.roll lặp qua nó để chọn 1 trait/category,
+# → metadata ghi attributes theo thứ tự này, và PART_ORDER trong generate.py dùng đúng các tên này.
 CATEGORIES = [
     ("Background", BACKGROUNDS),
     ("Fur", FUR_TRAITS),
@@ -1491,6 +1521,9 @@ CATEGORIES = [
 FUR_BY_NAME = {f["name"]: f for f in FURS}
 
 
+# ❓ Sao lại tăng trọng số "None" cho accessory sau khi đã đăng ký?
+# → Nếu None chỉ nặng 100 như common, gần như mèo nào cũng đủ mũ+kính+áo+khuyên → nhàm.
+# → Tăng None lên 200–320 để đa số mèo "trần", mèo full-swag mới nổi bật. Vòng lặp bên dưới sửa w trực tiếp trên dict.
 _NONE_W = {"Headwear": 200, "Eyewear": 260, "Outfit": 280,
            "Paw Item": 260, "Earring": 320, "Effect": 220}
 for _cat, _ts in CATEGORIES:
@@ -1500,5 +1533,8 @@ for _cat, _ts in CATEGORIES:
                 _t["w"] = _NONE_W[_cat]
 
 
+# ❓ SPECIAL_EYES dùng ở đâu?
+# → generate.roll: nếu Eyes thuộc tập này thì Eyewear bị ép về None (fit-coherence).
+# → Thêm mắt mới vẽ đè vùng mắt thì phải thêm tên vào đây, không thì kính sẽ che mất.
 SPECIAL_EYES = {"Laser Eyes", "Dollar Signs", "Diamond Eyes", "Hypno",
                 "Heart Eyes", "Candle Eyes", "Cyborg"}

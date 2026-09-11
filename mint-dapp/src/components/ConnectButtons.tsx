@@ -8,12 +8,25 @@ import { Button, Icon } from "./ui";
 type Size = "md" | "lg";
 
 export function useWalletOptions() {
+  // ❓ connectors là gì và từ đâu ra?
+  // → Danh sách các cách kết nối ví đã khai báo trong lib/wagmi.ts (injected, walletConnect, mock). connect({ connector })
+  //   mở ví tương ứng; isPending = true trong lúc chờ người dùng bấm "Connect" trong ví → disable mọi nút để khỏi mở 2 popup.
   const { connect, connectors, isPending } = useConnect();
+  // ❓ Connector "mock" là gì?
+  // → Ví giả do wagmi cung cấp, dùng sẵn tài khoản anvil #0 (có 10.000 AVAX) — không cần cài MetaMask khi dev local.
+  //   Chỉ được thêm khi isLocal (xem lib/wagmi.ts); trên Fuji find() trả undefined nên nút "Dev wallet" không hiện.
   const devWallet = connectors.find((c) => c.id === "mock");
   const wc = connectors.find((c) => c.id === "walletConnect");
+  // ❓ Tại sao tìm connector có type "injected" nhưng id KHÁC "injected" trước?
+  // → Ví cài trong browser (Core, MetaMask…) tự "announce" qua EIP-6963 và wagmi tạo cho mỗi ví một connector riêng
+  //   (id kiểu "app.core.extension"). Ưu tiên connector đó để mở đúng ví; fallback về connector "injected" chung
+  //   (đọc window.ethereum) cho ví cũ không hỗ trợ EIP-6963.
   const injected =
     connectors.find((c) => c.type === "injected" && c.id !== "injected") ??
     connectors.find((c) => c.id === "injected");
+  // ❓ Đã có connector injected, sao còn cần useHasInjected?
+  // → wagmi LUÔN tạo connector "injected" kể cả khi browser không cài ví nào. useHasInjected kiểm tra thực tế
+  //   (window.ethereum hoặc event EIP-6963) để quyết định có nên hiện nút "Connect wallet" hay không.
   const hasInjected = useHasInjected();
   const mobile = useIsMobile();
   return { connect, isPending, devWallet, wc, injected, hasInjected, mobile };
@@ -23,6 +36,9 @@ export function ConnectButtons({ size = "md" }: { size?: Size }) {
   const { connect, isPending, devWallet, wc, injected, hasInjected, mobile } =
     useWalletOptions();
 
+  // ❓ Nút nào là nút chính?
+  // → Có ví cài sẵn trong browser → "Connect wallet" (injected) là nút chính; nếu không, WalletConnect hoặc Dev wallet
+  //   lên thay. Cần cả hai: ví thật được phát hiện VÀ wagmi có connector tương ứng, thiếu một là bấm sẽ không mở gì.
   const primaryIsInjected = hasInjected && !!injected;
 
   return (
@@ -77,10 +93,16 @@ export function MobileConnectHelp() {
   const { hasInjected, mobile, wc } = useWalletOptions();
   const [copied, setCopied] = useState(false);
 
+  // ❓ Khi nào hiện hướng dẫn "Mint on your phone"?
+  // → Chỉ trên mobile và khi KHÔNG có ví injected — tức đang mở bằng Safari/Chrome thường. Nếu trang đang chạy trong
+  //   browser của app Core/MetaMask thì window.ethereum đã có → kết nối như desktop, không cần hướng dẫn.
   if (!mobile || hasInjected) return null;
 
   async function copy() {
     try {
+      // ❓ Vì sao phải copy link thay vì mở thẳng app Core?
+      // → Dán link vào tab Browser của app Core thì trang chạy ngay trong ví → window.ethereum có sẵn. clipboard.writeText
+      //   chỉ hoạt động trên HTTPS và sau thao tác người dùng, nên bọc try/catch để không crash nếu bị chặn.
       await navigator.clipboard.writeText(currentUrl());
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);

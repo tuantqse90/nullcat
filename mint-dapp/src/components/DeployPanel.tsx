@@ -46,16 +46,37 @@ type Props = {
 };
 
 export function DeployPanel({ current, onGoMint }: Props) {
+  // ❓ Cần gì từ ví để deploy?
+  // → isConnected để biết có ví ký transaction chưa; chainId để kiểm tra ví đang ở đúng mạng (anvil/Fuji) hay không.
   const { isConnected, chainId } = useAccount();
+  // ❓ Vì sao phải switch chain trước khi deploy?
+  // → Transaction deploy được ký và gửi trên mạng mà VÍ đang chọn. Ví ở mạng khác thì contract lên nhầm chain (hoặc
+  //   ví từ chối vì chainId không khớp). switchChain yêu cầu ví đổi sang activeChain; isPending = đang chờ đồng ý.
   const { switchChain, isPending: switching } = useSwitchChain();
+  // ❓ useDeployContract khác useWriteContract chỗ nào?
+  // → Cùng gửi một transaction, nhưng deploy không có địa chỉ đích (to = null) và data = bytecode của contract.
+  //   deployContract() mở ví để ký; data là tx hash có NGAY sau khi ví gửi (chưa được mine); error giữ lỗi (ví từ chối,
+  //   thiếu gas…); reset() xoá hash/error để bấm Retry.
   const { deployContract, data: hash, isPending, error, reset } = useDeployContract();
+  // ❓ Có hash rồi sao chưa xong? Receipt là gì?
+  // → Hash chỉ chứng minh tx đã vào mempool. Hook này poll RPC tới khi tx được đưa vào block rồi trả về receipt
+  //   (status, gasUsed, logs, contractAddress). Khi hash còn undefined hook tự tắt; isLoading = đang chờ xác nhận.
   const { data: receipt, isLoading: confirming } = useWaitForTransactionReceipt({
     hash,
     chainId: activeChain.id,
   });
 
+  // ❓ Tại sao phải có isConnected trong điều kiện?
+  // → Chưa kết nối thì chainId là undefined và luôn "khác" activeChain.id; thiếu isConnected sẽ hiện nhầm nút
+  //   "Switch network" thay vì nút Connect.
   const wrongChain = isConnected && chainId !== activeChain.id;
+  // ❓ Địa chỉ contract mới lấy từ đâu?
+  // → Chỉ receipt của tx deploy mới có trường contractAddress (node tính từ địa chỉ người gửi + nonce). Trước khi có
+  //   receipt, deployed = undefined → chưa hiện nút "Go to mint" và chưa lưu gì cả.
   const deployed = receipt?.contractAddress;
+  // ❓ Nút Deploy bị disable khi nào?
+  // → Hai giai đoạn: isPending (đang chờ ký trong ví) và confirming (đã gửi, chờ block). Gộp lại để chặn bấm 2 lần
+  //   → tránh deploy ra 2 contract và tốn gas 2 lần.
   const busy = isPending || confirming;
   const txLink = hash ? explorerTx(hash) : null;
 
@@ -145,6 +166,9 @@ export function DeployPanel({ current, onGoMint }: Props) {
                 variant="secondary"
                 size="lg"
                 onClick={() => {
+                  // ❓ Sao phải lưu địa chỉ, không truyền thẳng qua props?
+                  // → setDeployedAddress ghi vào localStorage và báo cho mọi component đang dùng useContractAddress (MintPanel,
+                  //   SupplyBadge, MyCats…). Nhờ đó F5 hay mở tab mới vẫn nhớ contract; không lưu thì reload xong là phải deploy lại.
                   setDeployedAddress(deployed);
                   onGoMint();
                 }}

@@ -1,5 +1,8 @@
 import { EXPLORER, isLocal } from "./chains";
 
+// ❓ ABI là gì và vì sao viết tay ở đây?
+// → ABI mô tả tên hàm, tham số, kiểu trả về để viem encode/decode call data. Chỉ khai báo những hàm
+//   frontend dùng (mint, mintedBitmap, ownerOf, tokenURI...) cho gọn; hàm khác của ERC-721 không cần liệt kê.
 export const AVAXCATS_ABI = [
   {
     type: "function",
@@ -77,6 +80,9 @@ export const AVAXCATS_ABI = [
       { name: "catId", type: "uint256", indexed: true },
     ],
   },
+// ❓ "as const" ở cuối mảng ABI có tác dụng gì?
+// → Giữ nguyên kiểu literal để TypeScript suy ra được: functionName chỉ được là "mint" | "ownerOf"...,
+//   args đúng kiểu (bigint, string), kết quả đúng kiểu. Bỏ "as const" là mất toàn bộ type-safety.
 ] as const;
 
 export const explorerTx = (hash: string) =>
@@ -84,6 +90,8 @@ export const explorerTx = (hash: string) =>
 export const explorerNft = (address: string, tokenId: bigint | string) =>
   EXPLORER ? `${EXPLORER}/nft/${address}/${tokenId}` : null;
 
+// ❓ Vì sao các hàm explorer trả về null trên anvil?
+// → Anvil là chain local, không có block explorer. Component nhận null thì hiện hash thô thay vì link.
 export const explorerAddress = (address: string) =>
   EXPLORER ? `${EXPLORER}/address/${address}` : null;
 

@@ -24,6 +24,9 @@ import {
   type KpiPayload,
 } from "@/lib/kpi";
 
+// ❓ Vì sao phải "chuẩn hoá" handle Telegram?
+// → Sinh viên nhập đủ kiểu: @abc, t.me/abc, https://t.me/abc… Bóc hết prefix rồi luôn trả về dạng "@abc" để cột trong
+//   Google Sheet đồng nhất. Chuỗi rỗng → "" (không phải "@") để kiểm tra hasSocial bên dưới hoạt động đúng.
 function normalizeTelegram(v: string) {
   const t = v
     .trim()
@@ -35,6 +38,8 @@ function normalizeTelegram(v: string) {
   return t ? "@" + t : "";
 }
 
+// ❓ Dòng replace(/[/?].*$/, "") để làm gì?
+// → Link X thường có đuôi: x.com/abc?s=20 hoặc x.com/abc/status/123. Cắt từ dấu "/" hoặc "?" đầu tiên để chỉ giữ handle.
 function normalizeX(v: string) {
   const t = v
     .trim()
@@ -67,8 +72,14 @@ function Field({
 export function RegisterPanel() {
   const { address: wallet, isConnected } = useAccount();
   const { address: contract, isConfigured } = useContractAddress();
+  // ❓ done là gì?
+  // → Bản ghi đã gửi trước đó, đọc từ localStorage qua useSyncExternalStore (xem lib/kpi.ts). Có done → hiện màn
+  //   "Registered" thay vì form, để F5 không làm người dùng gửi trùng.
   const done = useKpiSubmitted();
 
+  // ❓ balanceOf để làm gì ở form đăng ký?
+  // → Đọc số NFT ví này đang giữ trong contract (ERC-721 balanceOf) để gửi kèm KPI "minted" — bằng chứng đã xong bước 2.
+  //   args chỉ có khi wallet tồn tại; enabled chặn gọi khi chưa có contract hoặc chưa kết nối.
   const { data: balance } = useReadContract({
     abi: AVAXCATS_ABI,
     address: contract,
@@ -86,15 +97,29 @@ export function RegisterPanel() {
   const [result, setResult] = useState<string | null>(null);
   const [failed, setFailed] = useState(false);
 
+  // ❓ Sao lại Number(balance ?? 0n)?
+  // → balance là bigint (uint256); JSON.stringify không serialize được bigint nên phải đổi sang number trước khi gửi.
   const minted = Number(balance ?? 0n);
+  // ❓ Regex email này kiểm tra gì?
+  // → Chỉ kiểm tra tối thiểu: có đúng 1 "@", có dấu "." sau đó, không khoảng trắng. Mục tiêu là bắt lỗi gõ nhầm;
+  //   có phải Gmail trên Builder Hub hay không thì ban tổ chức đối chiếu sau.
   const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact.trim());
+  // ❓ Quy tắc "Telegram hoặc X — ít nhất một" được kiểm tra ở đâu?
+  // → Ngay đây: chuẩn hoá cả hai rồi xem có cái nào khác rỗng không. Dùng bản đã chuẩn hoá để gõ mỗi "@" hay
+  //   "https://" không bị tính là hợp lệ.
   const hasSocial = normalizeTelegram(telegram) !== "" || normalizeX(x) !== "";
+  // ❓ Điều kiện để bấm Submit?
+  // → Ví đã kết nối (để có wallet address), có tên, email hợp lệ, ít nhất 1 social, và không đang gửi (chặn double-submit).
+  //   Thông báo warn bên dưới hiện đúng điều kiện đầu tiên còn thiếu theo cùng thứ tự này.
   const canSend = isConnected && name.trim() !== "" && validEmail && hasSocial && !sending;
 
   async function send() {
     setSending(true);
     setResult(null);
     setFailed(false);
+    // ❓ Payload gửi lên gồm gì?
+    // → Phần người dùng nhập (đã trim/chuẩn hoá) + phần tự lấy từ bước 1–2: wallet, contract, chain/chainId, số NFT.
+    //   at = timestamp ISO để sheet ghi thời điểm; l1 để trống, dành cho bài sau (deploy L1 riêng).
     const payload: KpiPayload = {
       name: name.trim(),
       contact: contact.trim(),
@@ -108,6 +133,9 @@ export function RegisterPanel() {
       minted,
       at: new Date().toISOString(),
     };
+    // ❓ r.ok nhưng confirmed = false nghĩa là gì?
+    // → Đã gửi được nhưng browser không đọc được response (rơi vào nhánh no-cors trong lib/kpi.ts vì Apps Script chặn CORS).
+    //   Vì vậy thông báo khuyên người dùng kiểm tra Google Sheet thay vì khẳng định server đã nhận.
     const r = await submitKpi(payload);
     setSending(false);
     if (r.ok) {

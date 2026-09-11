@@ -27,6 +27,9 @@ DESCRIPTION = ("AvaxCats — 32x32 pixel summit cats of Team Avalanche "
 
 def pick(rng, traits):
     total = sum(t["w"] for t in traits)
+    # ❓ Weighted random là gì — tại sao không dùng rng.choice?
+    # → rng.choice chọn đều nhau; ở đây mỗi trait có trọng số w (common=100 … legendary=5).
+    # → Bốc số r trong [0, tổng w] rồi cộng dồn: trait có w lớn chiếm đoạn dài hơn nên dễ trúng hơn.
     r = rng.uniform(0, total)
     acc = 0.0
     for t in traits:
@@ -41,21 +44,36 @@ def roll(rng):
     cats = dict(CATEGORIES)
     for cat_name, traits in CATEGORIES:
         chosen[cat_name] = pick(rng, traits)
+    # ❓ Vì sao mắt đặc biệt thì bị bỏ kính?
+    # → Fit-coherence: Laser/Diamond/Hypno… vẽ đè lên vùng mắt; thêm kính lên nữa sẽ che mất trait hiếm.
+    # → Nên ép Eyewear về "None" — mắt hiếm luôn thắng, ảnh và metadata khớp nhau.
     if chosen["Eyes"]["name"] in SPECIAL_EYES and chosen["Eyewear"]["name"] != "None":
         chosen["Eyewear"] = next(t for t in cats["Eyewear"] if t["name"] == "None")
+    # ❓ Còn VR Headset thì ngược lại — ép mắt về Normal?
+    # → VR Headset che kín toàn bộ vùng mắt nên mọi mắt đặc biệt đều vô hình.
+    # → Reset về Normal để metadata không "khoe" một trait hiếm mà ảnh không hề hiển thị.
     if chosen["Eyewear"]["name"] == "VR Headset":
         chosen["Eyes"] = next(t for t in cats["Eyes"] if t["name"] == "Normal")
 
 
+    # ❓ Tại sao Hood lại xoá Mane?
+    # → Hood trùm kín từ đỉnh đầu xuống cổ, còn Mane (bờm, râu quai nón) vẽ đúng vùng đó.
+    # → Để cả hai thì bờm lòi ra ngoài vành hood trông lỗi; quy tắc này giữ ảnh và metadata nhất quán.
     if chosen["Headwear"]["name"] == "The Avalanche Hood":
         chosen["Mane"] = next(t for t in cats["Mane"] if t["name"] == "None")
     return chosen
 
 
+# ❓ Thứ tự trong PART_ORDER có quan trọng không?
+# → Rất quan trọng: layer vẽ sau đè lên layer vẽ trước. Belly/Pattern sát thân, Outfit đè lên,
+# → rồi mắt/miệng, kính đè lên mắt, mũ đè lên tất cả. Đổi thứ tự là kính sẽ bị mắt che.
 PART_ORDER = ["Belly", "Pattern", "Tail", "Mane", "Outfit", "Whiskers",
               "Eyes", "Mouth", "Earring", "Eyewear", "Headwear", "Paw Item"]
 
 
+# ❓ CLIP_EXACT và CLIP_LOOSE khác nhau chỗ nào?
+# → Belly/Pattern là lông nên phải cắt đúng theo silhouette thân (mask exact).
+# → Outfit (áo, khăn) được phép chờm ra ngoài thân vài pixel (loose) — dùng mask đã dilate 3 lần.
 CLIP_EXACT = {"Belly", "Pattern"}
 CLIP_LOOSE = {"Outfit"}
 
@@ -68,6 +86,9 @@ def clip_to(g, mask):
 
 
 def render(chosen, rng):
+    # ❓ Vì sao cần 3 grid bg / cat / fg thay vì vẽ thẳng lên một ảnh?
+    # → Ba layer: nền, thân mèo, hiệu ứng trước mặt (tia laser, mưa coin). Tách ra để lấy mask
+    # → của riêng thân mèo (clipping) và để hiệu ứng luôn đè lên mèo dù được vẽ từ trait Eyes.
     bg, cat, fg = new_grid(), new_grid(), new_grid()
     fur = FUR_BY_NAME[chosen["Fur"]["name"]]
     ctx = {"bg": bg, "cat": cat, "fg": fg, "fur": fur, "rng": rng}
@@ -77,6 +98,10 @@ def render(chosen, rng):
                   chosen["Head"]["fn"])
 
 
+    # ❓ Tại sao phải lấy body_mask ngay sau draw_base_cat?
+    # → Lúc này grid cat chỉ có thân + đầu + tai, nên mask chính là silhouette mèo "trần".
+    # → Lấy muộn hơn thì mũ/áo đã dính vào mask và clipping mất tác dụng.
+    # → Trait cần clip sẽ vẽ "thô" lên grid tạm tmp, clip_to cắt theo mask, rồi mới overlay vào cat.
     body_mask = mask_of(cat)
     loose_mask = dilate(dilate(dilate(body_mask)))
 
@@ -109,11 +134,17 @@ def rarity_score(chosen):
     cats = dict(CATEGORIES)
     for cat_name, t in chosen.items():
         total = sum(x["w"] for x in cats[cat_name])
+        # ❓ Điểm rarity tính thế nào?
+        # → Mỗi trait góp tổng_w / w — trait càng hiếm (w nhỏ) điểm càng cao. Cộng dồn 18 category
+        # → ra một số để xếp hạng mèo hiếm nhất trong batch (preview dùng làm hero).
         score += total / t["w"]
     return round(score, 2)
 
 
 def token_metadata(idx, chosen):
+    # ❓ Định dạng metadata này ai quy định?
+    # → Chuẩn OpenSea / ERC-721 metadata: name, description, image và attributes = list {trait_type, value}.
+    # → Marketplace đọc đúng các key này để hiển thị trait; khối "rarity" là phần mở rộng riêng của dự án.
     return {
         "name": f"AvaxCat #{idx:04d}",
         "description": DESCRIPTION,
@@ -133,6 +164,9 @@ def generate(count, seed, outdir, scale, sheet):
     for sub in ("images", "thumbs", "metadata"):
         os.makedirs(os.path.join(outdir, sub), exist_ok=True)
 
+    # ❓ Fixed seed để làm gì?
+    # → Cùng seed → cùng chuỗi số ngẫu nhiên → cùng 48 con mèo y hệt trên mọi máy (reproducibility).
+    # → master chỉ phát seed con; mỗi token có RNG riêng nên có thể tái tạo 1 con từ token_seed trong metadata.
     master = random.Random(seed)
     seen = set()
     tokens = []
@@ -144,6 +178,9 @@ def generate(count, seed, outdir, scale, sheet):
         token_seed = master.randrange(2 ** 31)
         rng = random.Random(token_seed)
         chosen = roll(rng)
+        # ❓ Làm sao đảm bảo không có 2 mèo giống hệt nhau?
+        # → key = tuple tên trait của 18 category. Nếu đã gặp thì bỏ qua và roll lại (continue, không tăng i).
+        # → attempts < count*60 chặn vòng lặp vô hạn khi số tổ hợp khả dĩ ít hơn count.
         key = tuple(t["name"] for t in chosen.values())
         if key in seen:
             continue
