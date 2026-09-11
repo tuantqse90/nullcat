@@ -74,7 +74,8 @@
 
   main { flex: 1; padding: 48px 20px 64px; }
   .demos { display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); }
-  @media (min-width: 900px) { .demos { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 760px) { .demos { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 1100px) { .demos { grid-template-columns: 1fr 1fr 1fr; } }
   .demo { background: var(--surface); padding: 24px 20px 28px; display: flex; flex-direction: column; gap: 20px; }
   @media (min-width: 640px) { .demo { padding: 28px 28px 32px; } }
   .demo .head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; }
@@ -140,7 +141,7 @@
   <div class="wrap">
     <span class="eyebrow"><span class="dot"></span>Team Avalanche · Team1 VN · Demo</span>
     <h1 class="display">Watch it<br>end to end<span class="red">.</span></h1>
-    <p class="sub">Two short recordings from a phone, inside the Core app's browser: create your Builder Hub account, then deploy the AvaxCats contract and mint your cat on Fuji.</p>
+    <p class="sub">Three short recordings from a phone, inside the Core app's browser: create your Builder Hub account, get test AVAX from the faucet, then deploy the AvaxCats contract and mint your cat on Fuji.</p>
   </div>
 </header>
 
@@ -171,7 +172,30 @@
 
     <section class="demo">
       <div class="head">
-        <span class="eyebrow"><span class="red">02</span> · Deploy &amp; mint</span>
+        <span class="eyebrow"><span class="red">02</span> · Testnet AVAX</span>
+        <span class="eyebrow">0:18</span>
+      </div>
+      <h2>Get test AVAX from the faucet</h2>
+      <p>The faucet lives in the Builder Console. Switch the Console to Testnet, then request 0.5 AVAX on Fuji C-Chain. Fuji AVAX has no value; it only pays for gas on the testnet.</p>
+      <div class="phone">
+        <video controls playsinline preload="metadata" poster="/videos/faucet-claim-poster.jpg">
+          <source src="/videos/faucet-claim.mp4" type="video/mp4">
+        </video>
+      </div>
+      <ol class="steps">
+        <li><b>01</b><span>Open the menu on build.avax.network → Console → Testnet Faucet.</span></li>
+        <li><b>02</b><span>Switch Mainnet to Testnet at the top, make sure Core is connected on C-Chain.</span></li>
+        <li><b>03</b><span>Request 0.5 AVAX on C-Chain and wait for the balance to update in Core.</span></li>
+      </ol>
+      <div class="cta-row">
+        <a class="cta" href="https://build.avax.network/console/primary-network/faucet" target="_blank" rel="noreferrer">Open the faucet</a>
+        <a class="cta dark" href="https://build.avax.network/console?ref=HVHXK&utm_source=team1" target="_blank" rel="noreferrer">Builder Console</a>
+      </div>
+    </section>
+
+    <section class="demo">
+      <div class="head">
+        <span class="eyebrow"><span class="red">03</span> · Deploy &amp; mint</span>
         <span class="eyebrow">1:03</span>
       </div>
       <h2>Deploy the contract, mint your cat</h2>
