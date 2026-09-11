@@ -5,25 +5,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f5f5">
 <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0a0a0a">
-<title>Register — AvaxCats Workshop · Team1 VN</title>
+<title>Demo — AvaxCats Workshop · Team1 VN</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;900&family=Geist+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;900&family=Geist+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root {
     color-scheme: light;
-    --avax: #e6212f; --ink: #1f1f1f; --frost: #ebf0fa;
+    --avax: #e6212f; --ink: #1f1f1f; --frost: #ebf0fa; --steel: #a2afb2;
     --bg: #f5f5f5; --fg: #18181b; --muted: #71717a;
     --line: #e4e4e7; --line-strong: #d4d4d8; --surface: #ffffff; --hover: #f4f4f5; --ok: #059669;
     --sans: "Geist", ui-sans-serif, system-ui, -apple-system, sans-serif;
     --mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   }
   @media (prefers-color-scheme: dark) {
-    :root {
-      color-scheme: dark;
-      --bg: #0a0a0a; --fg: #fafafa; --muted: #a1a1aa;
-      --line: #27272a; --line-strong: #3f3f46; --surface: #09090b; --hover: #18181b; --ok: #34d399;
-    }
+    :root { color-scheme: dark; --bg: #0a0a0a; --fg: #fafafa; --muted: #a1a1aa; --line: #27272a; --line-strong: #3f3f46; --surface: #09090b; --hover: #18181b; --ok: #34d399; }
   }
   * { box-sizing: border-box; }
   [hidden] { display: none !important; }
@@ -31,11 +27,7 @@
   button, a, summary { touch-action: manipulation; }
   summary { list-style: none; cursor: pointer; }
   summary::-webkit-details-marker { display: none; }
-  body {
-    margin: 0; background: var(--bg); color: var(--fg); font-family: var(--sans);
-    font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: clip;
-    display: flex; flex-direction: column; min-height: 100vh;
-  }
+  body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: clip; display: flex; flex-direction: column; min-height: 100vh; }
   a { color: inherit; }
   .wrap { width: 100%; max-width: 80rem; margin: 0 auto; padding: 0 20px; }
   ::selection { background: rgb(230 33 47 / .25); }
@@ -56,7 +48,7 @@
   .brand span { font: 400 11px var(--mono); letter-spacing: .22em; color: var(--muted); }
   .links { display: flex; gap: 4px; }
   .links a { padding: 8px; font-size: 14px; color: var(--muted); text-decoration: none; transition: color .15s; }
-  .links a:hover { color: var(--fg); }
+  .links a:hover, .links a.on { color: var(--fg); }
   .grow { flex: 1; }
   .chip { border: 1px solid var(--line); padding: 6px 10px; white-space: nowrap; }
   .menu { display: none; }
@@ -73,29 +65,32 @@
 
   .hero { position: relative; overflow: hidden; text-align: center; border-bottom: 1px solid var(--line); }
   .hero::before { content: ""; position: absolute; inset: 0; pointer-events: none; background-image: radial-gradient(var(--line-strong) 1px, transparent 1px); background-size: 22px 22px; mask-image: radial-gradient(ellipse at 50% 40%, black 20%, transparent 72%); }
-  .hero .wrap { position: relative; display: flex; flex-direction: column; align-items: center; padding: 64px 20px 56px; }
+  .hero .wrap { position: relative; display: flex; flex-direction: column; align-items: center; padding: 56px 20px 48px; }
   .hero .eyebrow { display: inline-flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px; }
   .hero h1 { margin-top: 24px; font-size: 2.25rem; }
-  .hero .sub { max-width: 36rem; margin: 24px 0 0; color: var(--muted); font-size: 14px; line-height: 1.7; }
-  .hero .sub b { color: var(--fg); font-weight: 500; }
-  .cta-row { display: flex; flex-direction: column; gap: 16px; width: 100%; margin-top: 32px; }
-  .cta { position: relative; isolation: isolate; overflow: hidden; display: inline-flex; align-items: center; justify-content: space-between; gap: 32px; min-height: 52px; padding: 16px 24px; width: 100%; font-size: 14px; font-weight: 600; color: #fff; background: var(--avax); transition: color .3s; white-space: nowrap; text-decoration: none; }
+  .hero .sub { max-width: 38rem; margin: 20px 0 0; color: var(--muted); font-size: 14px; line-height: 1.7; }
+  @media (min-width: 640px) { .hero .wrap { padding: 80px 20px 64px; } .hero h1 { font-size: 3.25rem; } .hero .sub { font-size: 16px; } }
+  @media (min-width: 900px) { .hero h1 { font-size: 4.5rem; } }
+
+  main { flex: 1; padding: 48px 20px 64px; }
+  .demos { display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); }
+  @media (min-width: 900px) { .demos { grid-template-columns: 1fr 1fr; } }
+  .demo { background: var(--surface); padding: 24px 20px 28px; display: flex; flex-direction: column; gap: 20px; }
+  @media (min-width: 640px) { .demo { padding: 28px 28px 32px; } }
+  .demo .head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; }
+  .demo h2 { margin: 0; font-size: 24px; font-weight: 300; letter-spacing: -.02em; line-height: 1.15; }
+  .demo p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.7; max-width: 42rem; }
+  .phone { display: flex; justify-content: center; padding: 24px 0; border-radius: 16px; background: var(--ink); }
+  .phone video { width: min(100%, 320px); aspect-ratio: 9 / 20; height: auto; max-height: 72vh; border-radius: 12px; background: #000; display: block; object-fit: cover; }
+  ol.steps { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; font-size: 14px; }
+  ol.steps li { display: flex; gap: 12px; }
+  ol.steps li b { font: 400 11px var(--mono); letter-spacing: .18em; color: var(--avax); padding-top: 4px; flex: none; width: 24px; }
+  .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 4px; }
+  .cta { position: relative; isolation: isolate; overflow: hidden; display: inline-flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 44px; padding: 10px 18px; font-size: 13px; font-weight: 600; color: #fff; background: var(--avax); transition: color .3s; white-space: nowrap; text-decoration: none; }
   .cta::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--frost); transform: scaleX(0); transform-origin: left; transition: transform .3s cubic-bezier(.22,1,.36,1); }
   .cta::after { content: "→"; font-family: var(--mono); font-weight: 400; }
   .cta:hover { color: var(--ink); } .cta:hover::before { transform: scaleX(1); }
   .cta.dark { background: var(--ink); box-shadow: inset 4px 0 0 var(--avax); }
-  @media (min-width: 640px) {
-    .hero .wrap { padding: 88px 20px 72px; } .hero h1 { font-size: 3.25rem; } .hero .sub { font-size: 16px; }
-    .cta-row { flex-direction: row; width: auto; gap: 24px; } .cta { width: auto; min-width: 220px; }
-  }
-  @media (min-width: 900px) { .hero h1 { font-size: 4.5rem; } }
-
-  main { flex: 1; padding: 48px 20px; }
-  .formbox { border: 1px solid var(--line); background: var(--surface); }
-  .formbox .head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; padding: 12px 20px; border-bottom: 1px solid var(--line); }
-  .formbox iframe { display: block; width: 100%; height: 78vh; min-height: 640px; border: 0; background: #fff; }
-  .fallback { margin-top: 16px; font-family: var(--mono); font-size: 12px; letter-spacing: .04em; color: var(--muted); text-align: center; }
-  .fallback a { color: var(--fg); }
 
   footer { border-top: 1px solid var(--line); background: var(--surface); }
   .ft-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding: 20px 0; border-bottom: 1px solid var(--line); }
@@ -115,7 +110,7 @@
     <a class="brand" href="/"><svg viewBox="0 0 220 190" fill="currentColor" aria-hidden="true"><path d="M109.139252,23.041748 C111.741776,24.518684 114.786873,25.521351 116.039948,27.602837 C123.769547,40.442513 131.114777,53.514198 138.545532,66.532860 C141.523560,71.750351 141.392197,76.930382 138.378067,82.178566 C122.784348,109.330147 107.212326,136.494400 91.727638,163.708237 C88.432472,169.499405 83.770172,172.296158 77.077980,172.237946 C62.580860,172.111847 48.081749,172.237732 33.583733,172.183975 C25.895014,172.155457 23.042721,167.395203 26.880989,160.673264 C49.344860,121.332367 71.899803,82.043488 94.420807,42.735210 C97.235901,37.821735 99.810646,32.750118 102.939713,28.046438 C104.299789,26.001934 106.781303,24.703455 109.139252,23.041748 z"/><path d="M190.145935,151.838699 C192.156281,155.320618 194.133530,158.409164 195.809311,161.653442 C198.644424,167.142075 196.006195,172.076218 189.921402,172.129471 C171.131317,172.293900 152.337845,172.294647 133.547867,172.121841 C127.530586,172.066513 124.725456,166.870987 127.775551,161.592056 C136.920776,145.764069 146.170135,129.994598 155.552734,114.306282 C159.019684,108.509308 164.857819,108.843597 168.514145,114.968781 C175.755188,127.099236 182.832336,139.327515 190.145935,151.838699 z"/></svg><b>AVAXCATS</b><span>· BUILDER HUB</span></a>
     <div class="links">
       <a href="/">Mint dApp</a>
-      <a href="/demo.html">Demo</a>
+      <a href="/demo.html" class="on">Demo</a>
       <a href="/preview.html">Collection</a>
       <a href="https://build.avax.network/?ref=HVHXK&utm_source=team1" target="_blank" rel="noreferrer">Builder Hub</a>
       <a href="https://build.avax.network/academy?ref=HVHXK&utm_source=team1" target="_blank" rel="noreferrer">Academy</a>
@@ -142,32 +137,60 @@
 
 <header class="hero">
   <div class="wrap">
-    <span class="eyebrow"><span class="dot"></span>Team Avalanche · Team1 VN · Workshop</span>
-    <h1 class="display">Register for<br>the workshop<span class="red">.</span></h1>
-    <p class="sub"><b>Building on Avalanche</b> — mint your first AvaxCat on the Fuji testnet.
-      Fill in the form below to save your seat.</p>
-    <div class="cta-row">
-      <a class="cta" href="#form">Fill in the form</a>
-      <a class="cta dark" href="/">Open the mint dApp</a>
-    </div>
+    <span class="eyebrow"><span class="dot"></span>Team Avalanche · Team1 VN · Demo</span>
+    <h1 class="display">Watch it<br>end to end<span class="red">.</span></h1>
+    <p class="sub">Two short recordings from a phone, inside the Core app's browser: create your Builder Hub account, then deploy the AvaxCats contract and mint your cat on Fuji.</p>
   </div>
 </header>
 
-<main class="wrap" id="form">
-  <div class="formbox">
-    <div class="head">
-      <span class="eyebrow"><span class="red">01</span> · Registration form</span>
-      <span class="eyebrow">Google Forms</span>
-    </div>
-    <iframe
-      src="https://docs.google.com/forms/d/13qQDgd8soI8o_Vh9ks1lQqdspUCwSjXaxF_KaWUwGGo/viewform?embedded=true"
-      title="Team1 VN workshop registration form"
-      loading="lazy">
-    </iframe>
+<main class="wrap">
+  <div class="demos">
+    <section class="demo">
+      <div class="head">
+        <span class="eyebrow"><span class="red">01</span> · Builder Hub account</span>
+        <span class="eyebrow">0:17</span>
+      </div>
+      <h2>Sign in to Builder Hub</h2>
+      <p>You need a Builder Hub account for the testnet faucet and for Academy badges. Sign in with your email and the one-time code, or with Google / GitHub.</p>
+      <div class="phone">
+        <video controls playsinline preload="metadata" poster="/videos/builder-hub-register-poster.jpg">
+          <source src="/videos/builder-hub-register.mp4" type="video/mp4">
+        </video>
+      </div>
+      <ol class="steps">
+        <li><b>01</b><span>Open build.avax.network in Core → Browser, tap the account icon.</span></li>
+        <li><b>02</b><span>Enter the Gmail you will use for the workshop and continue.</span></li>
+        <li><b>03</b><span>Paste the sign-in code from your inbox. You are in.</span></li>
+      </ol>
+      <div class="cta-row">
+        <a class="cta" href="https://build.avax.network/?ref=HVHXK&utm_source=team1" target="_blank" rel="noreferrer">Open Builder Hub</a>
+        <a class="cta dark" href="https://build.avax.network/console/primary-network/faucet" target="_blank" rel="noreferrer">Testnet faucet</a>
+      </div>
+    </section>
+
+    <section class="demo">
+      <div class="head">
+        <span class="eyebrow"><span class="red">02</span> · Deploy &amp; mint</span>
+        <span class="eyebrow">1:03</span>
+      </div>
+      <h2>Deploy the contract, mint your cat</h2>
+      <p>On team1vn.xyz: connect Core on Fuji, deploy the AvaxCats ERC-721 from your own wallet, pick a cat and mint it. The dApp reads the NFT back from the chain.</p>
+      <div class="phone">
+        <video controls playsinline preload="metadata" poster="/videos/mint-deploy-poster.jpg">
+          <source src="/videos/mint-deploy.mp4" type="video/mp4">
+        </video>
+      </div>
+      <ol class="steps">
+        <li><b>01</b><span>Open team1vn.xyz in Core → Browser, tap Connect wallet, switch to Fuji if asked.</span></li>
+        <li><b>02</b><span>Step 01: Deploy contract, confirm in Core, wait for "Contract is live".</span></li>
+        <li><b>03</b><span>Step 02: pick a cat, Mint NFT, confirm. Then Register in step 03.</span></li>
+      </ol>
+      <div class="cta-row">
+        <a class="cta" href="/">Open the mint dApp</a>
+        <a class="cta dark" href="https://testnet.snowtrace.io" target="_blank" rel="noreferrer">Snowtrace</a>
+      </div>
+    </section>
   </div>
-  <p class="fallback">Form not showing? Open it directly:
-    <a href="https://docs.google.com/forms/d/13qQDgd8soI8o_Vh9ks1lQqdspUCwSjXaxF_KaWUwGGo/viewform"
-       target="_blank" rel="noreferrer">docs.google.com/forms → register</a></p>
 </main>
 
 <footer>

@@ -4,7 +4,8 @@ import { Logo } from "./Logo";
 import { ThemeToggle } from "./ThemeToggle";
 import { Icon } from "./ui";
 
-const LINKS = [
+const LINKS: { label: string; href: string; internal?: boolean }[] = [
+  { label: "Demo", href: "/demo.html", internal: true },
   { label: "Builder Hub", href: BUILDER_HUB },
   { label: "Academy", href: ACADEMY },
   { label: "Docs", href: DOCS },
@@ -34,8 +35,8 @@ export function Nav() {
               <a
                 className="inline-flex items-center rounded-md p-2 text-sm text-muted transition-colors hover:text-fg"
                 href={l.href}
-                target="_blank"
-                rel="noreferrer"
+                target={l.internal ? undefined : "_blank"}
+                rel={l.internal ? undefined : "noreferrer"}
               >
                 {l.label}
               </a>
@@ -68,11 +69,11 @@ export function Nav() {
                 key={l.label}
                 className="flex items-center justify-between px-2 py-3 text-[15px] text-fg transition-colors hover:bg-hover"
                 href={l.href}
-                target="_blank"
-                rel="noreferrer"
+                target={l.internal ? undefined : "_blank"}
+                rel={l.internal ? undefined : "noreferrer"}
               >
                 {l.label}
-                <Icon name="external" className="size-3.5 text-muted" />
+                {!l.internal && <Icon name="external" className="size-3.5 text-muted" />}
               </a>
             ))}
           </div>

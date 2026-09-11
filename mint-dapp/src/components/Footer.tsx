@@ -138,6 +138,7 @@ export function Footer({ contract, isConfigured, onViewContract, padBottom = fal
               <li><FooterLink href={TELEGRAM_COMMUNITY}>Telegram · Avalanche VN community</FooterLink></li>
               <li><FooterLink href={TELEGRAM_BUILDERS}>Telegram · Team1 VN builders</FooterLink></li>
               <li><FooterLink href={X_ACCOUNT}>X @Team1VN</FooterLink></li>
+              <li><FooterLink href="/demo.html">Demo videos</FooterLink></li>
               <li><FooterLink href={GITHUB}>GitHub · source code</FooterLink></li>
               <li>
                 Generator <code className="font-mono text-xs text-fg">nullcat</code>
