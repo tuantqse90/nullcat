@@ -123,7 +123,7 @@ export function DeployPanel({ current, onGoMint }: Props) {
           <Eyebrow>{BYTECODE_SIZE.toLocaleString()} bytes</Eyebrow>
           <Eyebrow>{FUNCTION_COUNT} public functions</Eyebrow>
           <div className="grow" />
-          <Eyebrow dot={<PulseDot color="bg-emerald-500" ping={false} />} className="text-emerald-600 dark:text-emerald-400">
+          <Eyebrow dot={<PulseDot color="bg-emerald-500" ping={false} />} className="text-emerald-400">
             Compiled
           </Eyebrow>
         </div>

@@ -151,21 +151,13 @@ def load_catalog():
 CSS = """
 @import url("https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;900&family=Geist+Mono:wght@400;700&display=swap");
 :root {
-  color-scheme: light;
+  color-scheme: dark;
   --avax: #e6212f; --ink: #1f1f1f; --frost: #ebf0fa; --steel: #a2afb2;
-  --bg: #f5f5f5; --fg: #18181b; --muted: #71717a;
-  --line: #e4e4e7; --line-strong: #d4d4d8; --surface: #ffffff; --hover: #f4f4f5;
-  --green: #059669; --gold: #d97706; --blue: #2563eb; --purple: #7c3aed;
+  --bg: #0a0a0a; --fg: #fafafa; --muted: #a1a1aa;
+  --line: #27272a; --line-strong: #3f3f46; --surface: #09090b; --hover: #18181b;
+  --green: #34d399; --gold: #fbbf24; --blue: #60a5fa; --purple: #a78bfa;
   --sans: "Geist", ui-sans-serif, system-ui, -apple-system, sans-serif;
   --mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-}
-@media (prefers-color-scheme: dark) {
-  :root {
-    color-scheme: dark;
-    --bg: #0a0a0a; --fg: #fafafa; --muted: #a1a1aa;
-    --line: #27272a; --line-strong: #3f3f46; --surface: #09090b; --hover: #18181b;
-    --green: #34d399; --gold: #fbbf24; --blue: #60a5fa; --purple: #a78bfa;
-  }
 }
 * { box-sizing: border-box; }
 html { -webkit-tap-highlight-color: transparent; }
@@ -499,7 +491,7 @@ def build():
     h = []
     h.append('<meta charset="utf-8">\n'
              '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
-             "<title>AvaxCats — Team1 VN</title>\n<meta name=\"color-scheme\" content=\"light dark\">\n<meta name=\"theme-color\" media=\"(prefers-color-scheme: light)\" content=\"#f5f5f5\">\n<meta name=\"theme-color\" media=\"(prefers-color-scheme: dark)\" content=\"#0a0a0a\">\n<style>" + CSS + "</style>")
+             "<title>AvaxCats — Team1 VN</title>\n<meta name=\"color-scheme\" content=\"dark\">\n<meta name=\"theme-color\" content=\"#0a0a0a\">\n<style>" + CSS + "</style>")
 
     h.append(f'<div class="ticker"><div class="tk">{ticker}</div>'
              f'<div class="tk" aria-hidden="true">{ticker}</div></div>')

@@ -231,8 +231,6 @@ export type IconName =
   | "arrow"
   | "arrowRight"
   | "external"
-  | "sun"
-  | "moon"
   | "menu"
   | "x";
 
@@ -260,13 +258,6 @@ export function Icon({ name, className = "" }: { name: IconName; className?: str
         <path d="M12 9.5V13H3V4h3.5" />
       </>
     ),
-    sun: (
-      <>
-        <circle cx="8" cy="8" r="3" />
-        <path d="M8 1.5v1.5M8 13v1.5M1.5 8H3M13 8h1.5M3.4 3.4l1 1M11.6 11.6l1 1M3.4 12.6l1-1M11.6 4.4l1-1" />
-      </>
-    ),
-    moon: <path d="M13.5 9.5A6 6 0 0 1 6.5 2.5a6 6 0 1 0 7 7z" />,
     menu: <path d="M2.5 4.5h11M2.5 8h11M2.5 11.5h11" />,
     x: <path d="M4 4l8 8M12 4l-8 8" />,
   };

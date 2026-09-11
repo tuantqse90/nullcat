@@ -1,7 +1,5 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:where(.dark, .dark *));
-
 @theme {
   --font-sans:
     var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, sans-serif;
@@ -27,18 +25,7 @@
 }
 
 :root {
-  color-scheme: light;
-  --bg: #f5f5f5;
-  --fg: #18181b;
-  --muted: #71717a;
-  --line: #e4e4e7;
-  --line-strong: #d4d4d8;
-  --surface: rgb(255 255 255 / 0.8);
-  --surface-solid: #ffffff;
-  --hover: #f4f4f5;
-}
-
-.dark {
+  /* ❓ Sao chỉ có một bộ màu? → Site khoá cứng dark theme (không có light, không có nút đổi). */
   color-scheme: dark;
   --bg: #0a0a0a;
   --fg: #fafafa;

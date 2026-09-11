@@ -67,7 +67,7 @@ export function WalletBar() {
             />
           }
           valueClassName={
-            wrongChain ? "text-amber-600 dark:text-amber-400 text-[13px] md:text-base" : "text-[13px] md:text-base"
+            wrongChain ? "text-amber-400 text-[13px] md:text-base" : "text-[13px] md:text-base"
           }
           value={
             !mounted
@@ -125,7 +125,7 @@ export function WalletBar() {
 
       {online && empty && (
         <div className="border-t border-line bg-amber-500/10">
-          <div className="mx-auto flex w-full max-w-7xl items-center gap-2 px-5 py-2.5 text-[12.5px] text-amber-700 md:px-6 dark:text-amber-400">
+          <div className="mx-auto flex w-full max-w-7xl items-center gap-2 px-5 py-2.5 text-[12.5px] text-amber-400 md:px-6">
             <Icon name="alert" />
             {isLocal ? (
               <span>

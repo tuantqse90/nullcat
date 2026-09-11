@@ -155,15 +155,15 @@ export function MintPanel({
   const barStatus = busy
     ? { text: isLocal ? "Sending transaction…" : "Confirm in your wallet…", cls: "text-muted" }
     : success && tokenId !== undefined
-      ? { text: `Minted · token #${tokenId.toString()}`, cls: "text-emerald-600 dark:text-emerald-400" }
+      ? { text: `Minted · token #${tokenId.toString()}`, cls: "text-emerald-400" }
       : error
         ? { text: "Mint failed — see details below", cls: "text-avax" }
         : taken
-          ? { text: "Already minted — pick another cat", cls: "text-amber-600 dark:text-amber-400" }
+          ? { text: "Already minted — pick another cat", cls: "text-amber-400" }
           : !isConnected
-            ? { text: "Connect a wallet to mint", cls: "text-amber-600 dark:text-amber-400" }
+            ? { text: "Connect a wallet to mint", cls: "text-amber-400" }
             : wrongChain
-              ? { text: "Wrong network — switch first", cls: "text-amber-600 dark:text-amber-400" }
+              ? { text: "Wrong network — switch first", cls: "text-amber-400" }
               : { text: `${cat.attributes.length} traits · ready to mint`, cls: "text-muted" };
 
   return (

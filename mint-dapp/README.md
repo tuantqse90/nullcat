@@ -38,7 +38,6 @@ mint-dapp/
     │   ├── ui.tsx                # primitives: Button (sweep), Card, Pillar, Stat, Chapter, Eyebrow…
     │   ├── Nav.tsx / Footer.tsx  # Builder Hub shell: sticky nav, 4-column footer
     │   ├── Logo.tsx              # Avalanche logo (SVG)
-    │   ├── ThemeToggle.tsx       # light / dark (localStorage + prefers-color-scheme)
     │   ├── WalletBar.tsx         # stats strip: network · wallet · balance · minted + connect button
     │   ├── SupplyBadge.tsx       # reads totalMinted/MAX_SUPPLY on-chain
     │   ├── CatGrid.tsx           # grid of 48 cats

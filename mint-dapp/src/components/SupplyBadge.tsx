@@ -45,7 +45,7 @@ export function SupplyBadge({ className = "" }: { className?: string }) {
           ping={live}
         />
       }
-      valueClassName={error ? "text-amber-600 dark:text-amber-400 text-sm md:text-sm" : ""}
+      valueClassName={error ? "text-amber-400 text-sm md:text-sm" : ""}
       value={
         !isConfigured ? (
           <span className="text-muted">—</span>

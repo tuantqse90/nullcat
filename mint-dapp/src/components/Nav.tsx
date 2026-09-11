@@ -1,7 +1,6 @@
 import { CHAIN_LABEL, EXPLORER, FAUCET } from "@/lib/chains";
 import { ACADEMY, BUILDER_HUB, CONSOLE, CREATE_L1, DOCS, GITHUB } from "@/lib/links";
 import { Logo } from "./Logo";
-import { ThemeToggle } from "./ThemeToggle";
 import { Icon } from "./ui";
 
 const LINKS: { label: string; href: string; internal?: boolean }[] = [
@@ -58,8 +57,6 @@ export function Nav() {
           Create L1
           <Icon name="arrowRight" className="size-3.5" />
         </a>
-        <ThemeToggle />
-
         <details className="group lg:hidden">
           <summary
             className="grid size-9 cursor-pointer list-none place-items-center rounded-md text-muted transition-colors hover:bg-hover hover:text-fg"
