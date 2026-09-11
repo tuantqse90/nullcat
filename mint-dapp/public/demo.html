@@ -84,6 +84,15 @@
   .phone { display: flex; justify-content: center; padding: 24px 0; border-radius: 16px; background: var(--ink); }
   .phone video { width: min(100%, 320px); height: auto; max-height: 72vh; border-radius: 12px; background: #000; display: block; object-fit: contain; }
   .phone video:fullscreen, .phone video:-webkit-full-screen { width: 100%; height: 100%; max-height: none; border-radius: 0; object-fit: contain; }
+  /* ❓ Sao card 04 lại rộng cả hàng? → Clip Create L1 quay màn hình desktop (ngang 1280×672), không ép vào khung điện thoại được. */
+  .demo.wide { grid-column: 1 / -1; grid-row: auto; grid-template-rows: none; grid-template-columns: minmax(0, 1fr); }
+  @media (min-width: 900px) {
+    .demo.wide { grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); column-gap: 32px; }
+    .demo.wide .desk { grid-column: 2; grid-row: 1 / span 5; align-self: start; }
+  }
+  .desk { padding: 12px; border-radius: 16px; background: var(--ink); }
+  .desk video { width: 100%; height: auto; aspect-ratio: 1280 / 672; border-radius: 8px; background: #000; display: block; object-fit: contain; }
+  .desk video:fullscreen, .desk video:-webkit-full-screen { width: 100%; height: 100%; border-radius: 0; object-fit: contain; }
   ol.steps { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; font-size: 14px; }
   ol.steps li { display: flex; gap: 12px; }
   ol.steps li b { font: 400 11px var(--mono); letter-spacing: .18em; color: var(--avax); padding-top: 4px; flex: none; width: 24px; }
@@ -143,7 +152,7 @@
   <div class="wrap">
     <span class="eyebrow"><span class="dot"></span>Team Avalanche · Team1 VN · Demo</span>
     <h1 class="display">Watch it<br>end to end<span class="red">.</span></h1>
-    <p class="sub">Three short recordings from a phone, inside the Core app's browser: create your Builder Hub account, get test AVAX from the faucet, then deploy the AvaxCats contract and mint your cat on Fuji.</p>
+    <p class="sub">Three short recordings from a phone, inside the Core app's browser: create your Builder Hub account, get test AVAX from the faucet, then deploy the AvaxCats contract and mint your cat on Fuji. Then a desktop recording: launch your own L1 on Fuji from the Builder Console.</p>
   </div>
 </header>
 
@@ -215,6 +224,30 @@
       <div class="cta-row">
         <a class="cta" href="/">Open the mint dApp</a>
         <a class="cta dark" href="https://testnet.snowtrace.io" target="_blank" rel="noreferrer">Snowtrace</a>
+      </div>
+    </section>
+
+    <!-- ❓ Clip này khác gì 3 clip trên? → Quay trên desktop (Builder Console), full 8 bước tạo L1 trên Fuji, dài 2:05. -->
+    <section class="demo wide">
+      <div class="head">
+        <span class="eyebrow"><span class="red">04</span> · Your own L1</span>
+        <span class="eyebrow">2:05 · Desktop</span>
+      </div>
+      <h2>Create an L1 from the Builder Console</h2>
+      <p>Builder Console → Create L1 on Testnet. Basic setup is a one-click deploy: the Console creates the Subnet, deploys the Validator Manager on C-Chain, provisions a managed validator node, creates the chain and converts the Subnet to an L1. The whole thing takes a couple of minutes.</p>
+      <div class="desk">
+        <video controls playsinline preload="metadata" poster="/videos/create-l1-poster.jpg">
+          <source src="/videos/create-l1.mp4" type="video/mp4">
+        </video>
+      </div>
+      <ol class="steps">
+        <li><b>01</b><span>Open Console → Create L1, make sure the Console is on Testnet. Pick Basic setup (recommended) and answer the 4 questions.</span></li>
+        <li><b>02</b><span>Confirm the transactions in Core as they come: Creating Subnet, Deploying Validator Manager (C-Chain), Creating Chain, Converting Subnet to L1.</span></li>
+        <li><b>03</b><span>Wait for all 8 steps to turn green, ending with "Verifying L1 is Ready". Your new L1 then appears under My L1 Dashboard.</span></li>
+      </ol>
+      <div class="cta-row">
+        <a class="cta" href="https://build.avax.network/console/create-l1?ref=DSVUW&utm_source=team1" target="_blank" rel="noreferrer">Create your L1</a>
+        <a class="cta dark" href="https://build.avax.network/console/my-l1?ref=DSVUW&utm_source=team1" target="_blank" rel="noreferrer">My L1 Dashboard</a>
       </div>
     </section>
   </div>
